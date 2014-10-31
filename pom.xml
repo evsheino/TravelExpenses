@@ -69,6 +69,11 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.0.1</version>
+            </plugin>
             <!-- kopioidaan testien käännösvaiheessa templatet target-kansioon;
             testit eivät muuten löydä niitä (bugi) -->
             <plugin>
