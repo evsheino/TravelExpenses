@@ -1,3 +1,10 @@
 language: java
 after_success:
-  - mvn clean cobertura:cobertura coveralls:report
+- mvn clean cobertura:cobertura coveralls:report
+deploy:
+  provider: heroku
+  api_key:
+    secure: kUBOQZ72tQri0lZvFY3+rrHBPeU8p2qrEPTSJh7/XFUndEbOZbVINjyF8GCsJJZS5dNnAXJEHa9um/7hP2h1ohK+FQUh4MIBo1aLzPfMwZm8bkLsZfjxF9fGcIcgsniBkKn1xlq6pxHxIgp0PEIdFkFObPY/cI1Cptz+G1tu4Pc=
+  app: obscure-river-7179
+  on:
+    repo: evsheino/TravelExpenses
