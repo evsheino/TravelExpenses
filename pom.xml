@@ -6,7 +6,7 @@
 	<groupId>wad</groupId>
 	<artifactId>TravelExpenses</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>Travel Expense Reports</name>
 	<description>Web Application Development project</description>
