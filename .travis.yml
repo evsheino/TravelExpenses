@@ -8,3 +8,6 @@ deploy:
   app: obscure-river-7179
   on:
     repo: evsheino/TravelExpenses
+notifications:
+  slack:
+    secure: FIQ8ojj3UdUbx11mEW3FsXplyQf8FXm3xWHlwPKR3ILDMzPRwXCBTXUsApC9b463ndo39oHJH6wju44VkaehNRN/TPja4Aac1z0Z/PEI6/fnsw87B8r3TVThOtw91Oat+rb6LCgSD6JaLe2vw9PcnG6t6C9yIYvImwqVuvb1xu8=
