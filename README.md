@@ -4,7 +4,7 @@ TravelExpenses
 [![Build Status](https://travis-ci.org/evsheino/TravelExpenses.svg?branch=master)](https://travis-ci.org/evsheino/TravelExpenses)
 [![Coverage Status](https://img.shields.io/coveralls/evsheino/TravelExpenses.svg)](https://coveralls.io/r/evsheino/TravelExpenses)
 
-http://obscure-river-7179.herokuapp.com/
+http://mighty-dusk-3589.herokuapp.com/
 
 WePa-projekti
 

@@ -4,8 +4,8 @@ after_success:
 deploy:
   provider: heroku
   api_key:
-    secure: kUBOQZ72tQri0lZvFY3+rrHBPeU8p2qrEPTSJh7/XFUndEbOZbVINjyF8GCsJJZS5dNnAXJEHa9um/7hP2h1ohK+FQUh4MIBo1aLzPfMwZm8bkLsZfjxF9fGcIcgsniBkKn1xlq6pxHxIgp0PEIdFkFObPY/cI1Cptz+G1tu4Pc=
-  app: obscure-river-7179
+    secure: Z2AyRPmCpNykkn7EDVabdOwNc+v9pJl5kZelXZJPTKsv6GkJHaN/k69owOy7xUck4BY+DuJV+N9hN6cb15aorlYWO+y+WxCBtC8rUi0zQhfZtm/ngzTc9g7zzYVvBuOMqkYzOBL+ZfqU0I85X2mtTvSZvLx73VBgpfuwJp+kbs4=
+  app: mighty-dusk-3589
   on:
     repo: evsheino/TravelExpenses
 notifications:
