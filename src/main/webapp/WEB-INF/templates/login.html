@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>cyan Flat ui kit Website Template | Home :: w3layouts</title>
+    </head>
+    <body>
+        <h2>Sign in</h2>
+        <form method="POST" th:action="@{/authenticate}">
+            <label class="s-user"></label>
+            <input type="text" name="username" placeholder="Username" />
+            <input type="password" name="password" placeholder="password" /> 
+            <input type="submit" value="sign in" />
+        </form>
+            
+    </body>
+</html>

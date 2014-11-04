@@ -10,7 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class DefaultController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String view(Model model) {
+    public String viewIndex(Model model) {
         return "index";
+    }
+
+    @RequestMapping(value = "login", method = RequestMethod.GET)
+    public String viewLogin(Model model) {
+        return "login";
     }
 }
