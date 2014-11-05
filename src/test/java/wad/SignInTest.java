@@ -11,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,6 +42,8 @@ public class SignInTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
                 .addFilter(springSecurityFilterChain).build();
 
+        // Most of the tests don't require a user in the db
+        // but add the user to the db here anyway for now.
         User user = new User();
         user.setName("John Doe");
         user.setUsername("user");
@@ -58,7 +59,7 @@ public class SignInTest {
 
     @Test
     public void unauthenticatedUserIsRedirectedToLogin() throws Exception {
-        mockMvc.perform(get("/"))
+        mockMvc.perform(get("/index"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }
@@ -70,7 +71,7 @@ public class SignInTest {
     }
 
     @Test
-    public void userIsRedirectedAfterAuthentication() throws Exception {
+    public void userIsRedirectedAfterLogin() throws Exception {
         mockMvc.perform(formLogin("/authenticate"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/index"));
