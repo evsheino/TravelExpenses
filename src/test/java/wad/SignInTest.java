@@ -13,10 +13,17 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import wad.domain.Authority;
 import wad.domain.User;
+import wad.repository.AuthorityRepository;
 import wad.repository.UserRepository;
+
+import java.util.ArrayList;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 
@@ -25,6 +32,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class SignInTest {
+
+    private static final String USERNAME = "user";
+    private static final String PASSWORD = "password";
 
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
@@ -35,26 +45,42 @@ public class SignInTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
     private MockMvc mockMvc;
 
     @Before
     public void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
                 .addFilter(springSecurityFilterChain).build();
+        this.webAppContext.getServletContext()
+                .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
         // Most of the tests don't require a user in the db
         // but add the user to the db here anyway for now.
         User user = new User();
         user.setName("John Doe");
-        user.setUsername("user");
-        user.setPassword("password");
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user = userRepository.save(user);
+
+        Authority authority = new Authority();
+        authority.setAuthority(Authority.Role.USER);
+        authority.setUser(user);
+        authority = authorityRepository.save(authority);
+
+        user.setAuthorities(new ArrayList<Authority>());
+        user.getAuthorities().add(authority);
 
         userRepository.save(user);
     }
 
     @After
     public void cleanup() {
-        userRepository.deleteAll();
+        User user = userRepository.findByUsername(USERNAME);
+
+        userRepository.delete(user);
     }
 
     @Test
@@ -66,7 +92,7 @@ public class SignInTest {
 
     @Test
     public void authenticatedUserCanAccessIndex() throws Exception {
-        mockMvc.perform(get("/index").with(user("user")))
+        mockMvc.perform(get("/index").with(user(USERNAME)))
                 .andExpect(status().isOk());
     }
 

@@ -3,7 +3,7 @@ before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
 after_success:
-- mvn clean cobertura:cobertura coveralls:report
+- mvn cobertura:cobertura coveralls:report
 deploy:
   provider: heroku
   api_key:

@@ -41,6 +41,11 @@
             <version>1.2.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity3</artifactId>
+        </dependency>
+
         <!-- Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

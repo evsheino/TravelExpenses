@@ -19,8 +19,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.context.WebApplicationContext;
 import wad.Application;
+import wad.domain.Authority;
 import wad.domain.User;
+import wad.repository.AuthorityRepository;
 import wad.repository.UserRepository;
+
+import java.util.ArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -28,12 +32,18 @@ import wad.repository.UserRepository;
 @ActiveProfiles("test")
 public class SignInTest {
 
-    private WebDriver driver;
     private final String LOGIN_URI = "http://localhost:8080/login";
+    private static final String USERNAME = "user";
+    private static final String PASSWORD = "password";
+
+    private WebDriver driver;
     private ConfigurableApplicationContext context;
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AuthorityRepository authorityRepository;
 
     @Before
     public void setUp() {
@@ -45,15 +55,27 @@ public class SignInTest {
 
         User user = new User();
         user.setName("John Doe");
-        user.setUsername("user");
-        user.setPassword("password");
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user = userRepository.save(user);
+
+        Authority authority = new Authority();
+        authority.setAuthority(Authority.Role.USER);
+        authority.setUser(user);
+        authority = authorityRepository.save(authority);
+
+        user.setAuthorities(new ArrayList<Authority>());
+        user.getAuthorities().add(authority);
 
         userRepository.save(user);
+
     }
 
     @After
     public void cleanup() {
-        userRepository.deleteAll();
+        User user = userRepository.findByUsername(USERNAME);
+
+        userRepository.delete(user);
         context.close();
     }
     
@@ -64,13 +86,36 @@ public class SignInTest {
         assertTrue(driver.getPageSource().contains("Sign in"));
 
         WebElement element = driver.findElement(By.name("username"));
-        element.sendKeys("user");
+        element.sendKeys(USERNAME);
         element = driver.findElement(By.name("password"));
-        element.sendKeys("password");
+        element.sendKeys(PASSWORD);
 
         element.submit();
 
         assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+    }
+
+    @Test
+    public void logoutWorks() throws Exception {
+        driver.get(LOGIN_URI);
+
+        assertTrue(driver.getPageSource().contains("Sign in"));
+
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(USERNAME);
+        element = driver.findElement(By.name("password"));
+        element.sendKeys(PASSWORD);
+
+        element.submit();
+
+        assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+        assertTrue(driver.getPageSource().contains("Log out"));
+
+        element = driver.findElement(By.id("logout-form"));
+        element.submit();
+
+        assertTrue(driver.getPageSource().contains("Sign in"));
+
     }
 
 }

@@ -37,10 +37,7 @@ public class JpaAuthenticationProvider implements AuthenticationProvider {
             };
         }
 
-        List<GrantedAuthority> grantedAuths = new ArrayList<>();
-        grantedAuths.add(new SimpleGrantedAuthority("USER"));
-
-        return new UsernamePasswordAuthenticationToken(user.getUsername(), password, grantedAuths);
+        return new UsernamePasswordAuthenticationToken(user.getUsername(), password, user.getAuthorities());
     }
 
     @Override
