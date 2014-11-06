@@ -9,10 +9,17 @@ import javax.persistence.*;
 @Table(indexes={@Index(columnList="user_id, authority", unique = true)})
 public class Authority extends AbstractPersistable<Long> implements GrantedAuthority {
 
+    public static enum Auth {
+        USER,
+        SUPERVISOR,
+        ADMIN
+    }
+
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private Auth authority;
 
     public User getUser() {
         return user;
@@ -24,10 +31,10 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
 
     @Override
     public String getAuthority() {
-        return authority;
+        return authority.toString();
     }
 
-    public void setAuthority(String authority) {
+    public void setAuthority(Auth authority) {
         this.authority = authority;
     }
 
