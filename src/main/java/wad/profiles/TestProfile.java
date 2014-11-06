@@ -6,20 +6,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 @Configuration
-@Profile(value = {"dev", "default"})
-public class DevProfile {
-
+@Profile("test")
+public class TestProfile {
     @Bean
-    public ServletContextTemplateResolver templateResolver() {
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-        templateResolver.setPrefix("/WEB-INF/templates/");
+    public FileTemplateResolver templateResolver() {
+        FileTemplateResolver templateResolver = new FileTemplateResolver();
+        templateResolver.setPrefix("src/main/webapp/WEB-INF/templates/");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
         templateResolver.setCacheable(false);
-
+        
         return templateResolver;
     }
     

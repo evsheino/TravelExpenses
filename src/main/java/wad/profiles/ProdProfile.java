@@ -3,6 +3,7 @@ package wad.profiles;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.sql.DataSource;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,10 +13,41 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 @Configuration
 @Profile("prod")
 public class ProdProfile {
+
+    @Bean
+    public ServletContextTemplateResolver templateResolver() {
+        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
+        templateResolver.setPrefix("/WEB-INF/templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("HTML5");
+        templateResolver.setCacheable(false);
+
+        return templateResolver;
+    }
+    
+    @Bean
+    public SpringTemplateEngine templateEngine() {
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver());
+        templateEngine.addDialect(new LayoutDialect());
+
+        return templateEngine;
+    }
+
+    @Bean
+    ThymeleafViewResolver viewResolver(){
+        ThymeleafViewResolver viewResolver= new ThymeleafViewResolver();
+        viewResolver.setTemplateEngine(templateEngine());
+
+        return viewResolver;
+    } 
 
     @Bean
     public PlatformTransactionManager transactionManager() throws URISyntaxException {

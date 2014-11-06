@@ -33,14 +33,14 @@ public class SignInTest {
     private ConfigurableApplicationContext context;
 
     @Autowired
-    private WebApplicationContext webAppContext;
-
-    @Autowired
     UserRepository userRepository;
 
     @Before
     public void setUp() {
-        this.context = SpringApplication.run(Application.class);
+        SpringApplication app = new SpringApplication(Application.class);
+        app.setAdditionalProfiles("test");
+        this.context = app.run();
+
         this.driver = new HtmlUnitDriver();
 
         User user = new User();
