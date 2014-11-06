@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(indexes={@Index(columnList="user_id, authority", unique = true)})
 public class Authority extends AbstractPersistable<Long> implements GrantedAuthority {
 
-    public static enum Auth {
+    public static enum Role {
         USER,
         SUPERVISOR,
         ADMIN
@@ -19,7 +19,7 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
     @JoinColumn(name="user_id")
     private User user;
     @Enumerated(EnumType.STRING)
-    private Auth authority;
+    private Role authority;
 
     public User getUser() {
         return user;
@@ -34,7 +34,7 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
         return authority.toString();
     }
 
-    public void setAuthority(Auth authority) {
+    public void setAuthority(Role authority) {
         this.authority = authority;
     }
 

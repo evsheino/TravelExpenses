@@ -66,7 +66,7 @@ public class SignInTest {
         user = userRepository.save(user);
 
         Authority authority = new Authority();
-        authority.setAuthority(Authority.Auth.USER);
+        authority.setAuthority(Authority.Role.USER);
         authority.setUser(user);
         authority = authorityRepository.save(authority);
 

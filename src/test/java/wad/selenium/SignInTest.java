@@ -60,7 +60,7 @@ public class SignInTest {
         user = userRepository.save(user);
 
         Authority authority = new Authority();
-        authority.setAuthority(Authority.Auth.USER);
+        authority.setAuthority(Authority.Role.USER);
         authority.setUser(user);
         authority = authorityRepository.save(authority);
 
@@ -93,6 +93,29 @@ public class SignInTest {
         element.submit();
 
         assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+    }
+
+    @Test
+    public void logoutWorks() throws Exception {
+        driver.get(LOGIN_URI);
+
+        assertTrue(driver.getPageSource().contains("Sign in"));
+
+        WebElement element = driver.findElement(By.name("username"));
+        element.sendKeys(USERNAME);
+        element = driver.findElement(By.name("password"));
+        element.sendKeys(PASSWORD);
+
+        element.submit();
+
+        assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+        assertTrue(driver.getPageSource().contains("Log out"));
+
+        element = driver.findElement(By.id("logout-form"));
+        element.submit();
+
+        assertTrue(driver.getPageSource().contains("Sign in"));
+
     }
 
 }
