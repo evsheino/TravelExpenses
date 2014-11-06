@@ -16,6 +16,9 @@ public class User extends AbstractPersistable<Long> {
     private String name;
     private String password;
     private String salt;
+    
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Expense> expenses;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Authority> authorities;
@@ -59,6 +62,14 @@ public class User extends AbstractPersistable<Long> {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
     }
 
 }
