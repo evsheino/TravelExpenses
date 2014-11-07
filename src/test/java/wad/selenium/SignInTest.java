@@ -90,6 +90,7 @@ public class SignInTest {
         element = driver.findElement(By.name("password"));
         element.sendKeys(PASSWORD);
 
+        element = driver.findElement(By.id("login-form"));
         element.submit();
 
         assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
@@ -106,6 +107,7 @@ public class SignInTest {
         element = driver.findElement(By.name("password"));
         element.sendKeys(PASSWORD);
 
+        element = driver.findElement(By.id("login-form"));
         element.submit();
 
         assertEquals("http://localhost:8080/index", driver.getCurrentUrl());

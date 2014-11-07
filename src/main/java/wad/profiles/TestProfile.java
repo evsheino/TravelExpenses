@@ -1,44 +1,26 @@
 package wad.profiles;
 
-import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
 @Profile("test")
-public class TestProfile {
-    @Bean
-    public FileTemplateResolver templateResolver() {
-        FileTemplateResolver templateResolver = new FileTemplateResolver();
-        templateResolver.setPrefix("src/main/webapp/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCacheable(false);
-        
-        return templateResolver;
-    }
-    
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.addDialect(new LayoutDialect());
-        templateEngine.addDialect(new SpringSecurityDialect());
+public class TestProfile extends BaseProfile {
 
-        return templateEngine;
+    @Override
+    public String getTemplatePath() {
+        return "src/main/webapp/WEB-INF/templates/";
     }
 
-    @Bean
-    ThymeleafViewResolver viewResolver(){
-        ThymeleafViewResolver viewResolver= new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
+    @Override
+    public TemplateResolver getTemplateResolver() {
+        return new FileTemplateResolver();
+    }
 
-        return viewResolver;
-    } 
 }
 

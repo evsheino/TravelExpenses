@@ -7,19 +7,19 @@
     </head>
     <body>
         <div layout:fragment="content">
-        <h2>Sign in</h2>
-        <form method="POST" th:action="@{/authenticate}">
-            <div th:if="${param.error}" class="alert alert-error">    
-                Invalid username and password.
-            </div>
-            <div th:if="${param.logout}" class="alert alert-success"> 
-                You have been logged out.
-            </div>
-            <input type="text" name="username" placeholder="Username" />
-            <input type="password" name="password" placeholder="Password" /> 
-            <input type="submit" value="sign in" />
-        </form>
-            
+            <h2>Sign in</h2>
+            <form id="login-form" method="POST" th:action="@{/authenticate}">
+                <div th:if="${param.error}" class="alert alert-error">
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    You have been logged out.
+                </div>
+                <input type="text" name="username" placeholder="Username" />
+                <input type="password" name="password" placeholder="Password" />
+                <input type="submit" value="Sign in" style="display: none; visibility: hidden;"/>
+                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Sign in</a>
+            </form>
         </div>
     </body>
 </html>

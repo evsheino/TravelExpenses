@@ -79,7 +79,6 @@ public class SignInTest {
     @After
     public void cleanup() {
         User user = userRepository.findByUsername(USERNAME);
-
         userRepository.delete(user);
     }
 

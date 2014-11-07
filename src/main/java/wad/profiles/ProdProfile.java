@@ -1,9 +1,5 @@
 package wad.profiles;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.sql.DataSource;
-import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,43 +9,27 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
+
+import javax.sql.DataSource;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Configuration
 @Profile("prod")
-public class ProdProfile {
+public class ProdProfile extends BaseProfile {
 
-    @Bean
-    public ServletContextTemplateResolver templateResolver() {
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCacheable(false);
-
-        return templateResolver;
-    }
-    
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.addDialect(new LayoutDialect());
-        templateEngine.addDialect(new SpringSecurityDialect());
-
-        return templateEngine;
+    @Override
+    public String getTemplatePath() {
+        return "/WEB-INF/templates/";
     }
 
-    @Bean
-    ThymeleafViewResolver viewResolver(){
-        ThymeleafViewResolver viewResolver= new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
-
-        return viewResolver;
-    } 
+    @Override
+    public TemplateResolver getTemplateResolver() {
+        return new ServletContextTemplateResolver();
+    }
 
     @Bean
     public PlatformTransactionManager transactionManager() throws URISyntaxException {

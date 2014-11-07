@@ -1,45 +1,25 @@
 package wad.profiles;
 
-import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.view.ThymeleafViewResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
 @Profile(value = {"dev", "default"})
-public class DevProfile {
+public class DevProfile extends BaseProfile {
 
-    @Bean
-    public ServletContextTemplateResolver templateResolver() {
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver();
-        templateResolver.setPrefix("/WEB-INF/templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML5");
-        templateResolver.setCacheable(false);
-
-        return templateResolver;
-    }
-    
-    @Bean
-    public SpringTemplateEngine templateEngine() {
-        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.addDialect(new LayoutDialect());
-        templateEngine.addDialect(new SpringSecurityDialect());
-
-        return templateEngine;
+    @Override
+    public String getTemplatePath() {
+        return "/WEB-INF/templates/";
     }
 
-    @Bean
-    ThymeleafViewResolver viewResolver(){
-        ThymeleafViewResolver viewResolver= new ThymeleafViewResolver();
-        viewResolver.setTemplateEngine(templateEngine());
+    @Override
+    public TemplateResolver getTemplateResolver() {
+        return new ServletContextTemplateResolver();
+    }
 
-        return viewResolver;
-    } 
 }
 
