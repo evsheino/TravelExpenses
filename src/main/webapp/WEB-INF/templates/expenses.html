@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+Page for managing expenses. Under construction.
+-->
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
+        <title>Expenses</title>
+        <link rel="stylesheet" href="../../static/foundation-5.4.6/css/foundation.css"
+              th:href="@{/static/foundation-5.4.6/css/foundation.css}"/>
+        <link rel="stylesheet" href="../../static/foundation-5.4.6/css/expenses.css"
+              th:href="@{/static/foundation-5.4.6/css/expenses.css}"/>
+        <script src="../../static/foundation-5.4.6/js/vendor/modernizr.js"
+        th:href="@{/static/foundation-5.4.6/js/vendor/modernizr.js}"></script>        
+
+    </head>
+    <body>
+        <div>Page for managing expenses</div>
+        <div layout:fragment="content">
+            <h2>Add expense</h2>
+            <form id="login-form" method="POST">
+                <input type="number" name="cost" placeholder="amount" />
+                <input type="submit" value="Submit expense" style="display: none; visibility: hidden;"/>
+                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Submit expense</a>
+            </form>
+        </div>
+        <div layout:fragment="content">
+            <h2>Delete expense</h2>
+            <form id="login-form" method="POST">
+                <select th:field="*{type}">
+                    <option th:each="type : ${allTypes}" 
+                            th:value="${type}" 
+                            th:text="#{${'seedstarter.type.' + type}}">Expense to be deleted</option>
+                </select>
+                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Delete expense</a>
+            </form>
+        </div>
+        <div layout:fragment="content">
+            <h2>modify expense</h2>
+            <form id="login-form" method="POST">
+                <select th:field="*{type}">
+                    <option th:each="type : ${allTypes}" 
+                            th:value="${type}" 
+                            th:text="#{${'seedstarter.type.' + type}}">Expense to be modified</option>
+                </select>
+                <input type="number" name="cost" placeholder="amount" />
+                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">modify expense</a>
+            </form>
+        </div>
+        <div layout:fragment="content">
+            <h2>Validate expense</h2>
+            <form id="login-form" method="POST">
+                <select th:field="*{type}">
+                    <option th:each="type : ${allTypes}" 
+                            th:value="${type}" 
+                            th:text="#{${'seedstarter.type.' + type}}">Expense to be modified</option>
+                </select>
+                <input type="number" name="cost" placeholder="amount" />
+                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">modify expense</a>
+            </form>
+        </div>        
+    </body>
+</html>
