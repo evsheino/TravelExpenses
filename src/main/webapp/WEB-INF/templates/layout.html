@@ -18,8 +18,8 @@
         <li class="name"><h1><a href="#">TravelExpenses</a></h1></li>
         <li class="toggle-topbar menu-icon"><a href="#"><span>Valikko</span></a></li>
     </ul>
-    <section class="top-bar-section"> <!-- Right Nav Section -->
-        <ul th:if="${#authentication}" class="right">
+    <section class="top-bar-section" sec:authorize="isAuthenticated()"> <!-- Right Nav Section -->
+        <ul class="right">
             <li sec:authorize="hasRole('SUPERVISOR')"><a href="#">You</a></li>
             <li sec:authorize="hasRole('SUPERVISOR')"><a href="#">Others</a></li>
             <li class="has-dropdown"><a href="#" th:text="${#authentication.name}">Drop down</a>
