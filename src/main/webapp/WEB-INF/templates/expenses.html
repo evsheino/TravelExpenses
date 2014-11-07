@@ -18,48 +18,28 @@ Page for managing expenses. Under construction.
     </head>
     <body>
         <div>Page for managing expenses</div>
-        <div layout:fragment="content">
-            <h2>Add expense</h2>
-            <form id="login-form" method="POST">
-                <input type="number" name="cost" placeholder="amount" />
-                <input type="submit" value="Submit expense" style="display: none; visibility: hidden;"/>
-                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Submit expense</a>
-            </form>
+        <div>Expense information:
+            <ol>
+                <li>User: John Doe</li>
+                <li>Amount: 1500 $</li>
+                <li>Submission date: 15.3.2014</li>
+            </ol>
         </div>
         <div layout:fragment="content">
             <h2>Delete expense</h2>
-            <form id="login-form" method="POST">
-                <select th:field="*{type}">
-                    <option th:each="type : ${allTypes}" 
-                            th:value="${type}" 
-                            th:text="#{${'seedstarter.type.' + type}}">Expense to be deleted</option>
-                </select>
-                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Delete expense</a>
-            </form>
+            <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Delete expense</a>
         </div>
+
         <div layout:fragment="content">
             <h2>modify expense</h2>
             <form id="login-form" method="POST">
-                <select th:field="*{type}">
-                    <option th:each="type : ${allTypes}" 
-                            th:value="${type}" 
-                            th:text="#{${'seedstarter.type.' + type}}">Expense to be modified</option>
-                </select>
                 <input type="number" name="cost" placeholder="amount" />
                 <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">modify expense</a>
             </form>
         </div>
         <div layout:fragment="content">
             <h2>Validate expense</h2>
-            <form id="login-form" method="POST">
-                <select th:field="*{type}">
-                    <option th:each="type : ${allTypes}" 
-                            th:value="${type}" 
-                            th:text="#{${'seedstarter.type.' + type}}">Expense to be modified</option>
-                </select>
-                <input type="number" name="cost" placeholder="amount" />
-                <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">modify expense</a>
-            </form>
+            <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Validate expense</a>
         </div>        
     </body>
 </html>
