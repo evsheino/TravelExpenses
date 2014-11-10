@@ -33,11 +33,9 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User createUser(String name, String username, String password, Authority.Role... roles) {
-        User user = new User(name, username, password);
+    public User createUser(User user, Authority.Role... roles) {
         user = userRepository.save(user);
         user.setAuthorities(new ArrayList<Authority>());
-
         for(Authority.Role role : roles) {
             Authority authority  = new Authority();
             authority.setUser(user);
@@ -47,6 +45,11 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public User createUser(String name, String username, String password, Authority.Role... roles) {
+        User user = new User(name, username, password);
+        return createUser(user, roles);
     }
 
     public void deleteUser(String username) {

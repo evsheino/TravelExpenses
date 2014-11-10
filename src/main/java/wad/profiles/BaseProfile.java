@@ -15,6 +15,7 @@ import wad.domain.Expense;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import wad.repository.UserRepository;
+import wad.service.ExpenseService;
 import wad.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -35,6 +36,9 @@ public abstract class BaseProfile {
     private UserService userService;
 
     @Autowired
+    private ExpenseService expenseService;
+
+    @Autowired
     private ExpenseRepository expenseRepository;
 
     @Autowired
@@ -42,24 +46,22 @@ public abstract class BaseProfile {
 
     @PostConstruct
     public void init() {
-        User johnd = userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
-        User foob =userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
         userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
+        User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
+        generateExpenses(foob, 4);
+
+        User johnd = userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
+        generateExpenses(johnd, 10);
     }
 
     private User generateExpenses(User user, int numOfExpenses) {
         user.setExpenses(new ArrayList<Expense>());
-
         for(int i = 0; i < numOfExpenses; i++) {
-            Expense e = new Expense();
-            e.setDate(new Date());
-            e.setUser(user);
-            e.setAmount((i^2) + 11.99 + 1);
-            e = expenseRepository.save(e);
+            Expense e = expenseService.createExpense(user, new Date(), (i^2));
             user.getExpenses().add(e);
         }
-        return userRepository.save(user);
 
+        return userRepository.save(user);
     }
 
 

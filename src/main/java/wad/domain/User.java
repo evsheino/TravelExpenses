@@ -2,6 +2,7 @@ package wad.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -16,12 +17,19 @@ public class User extends AbstractPersistable<Long> {
     private String name;
     private String password;
     private String salt;
-    
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Expense> expenses;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> authorities;
+
+    @ManyToOne
+    @JoinColumn(name="supervisor_user_id")
+    private User supervisor;
+
+    @OneToMany(mappedBy = "supervisor")
+    private List<User> subordinates;
 
     public User() {
 
@@ -80,6 +88,22 @@ public class User extends AbstractPersistable<Long> {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public User getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(User supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public List<User> getSubordinates() {
+        return subordinates;
+    }
+
+    public void setSubordinates(List<User> subordinates) {
+        this.subordinates = subordinates;
     }
 
 }

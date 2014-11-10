@@ -1,11 +1,13 @@
 package wad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
 @Entity
+@Table(indexes={@Index(columnList="user_id, authority", unique = true)})
 public class Authority extends AbstractPersistable<Long> implements GrantedAuthority {
 
     public static enum Role {
@@ -14,7 +16,9 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
         ADMIN
     }
 
+    @JsonIgnore
     @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)

@@ -1,0 +1,23 @@
+.statistics span.color {
+	width:12px;
+	height:12px;
+	display:inline-block;
+	float:left;
+	margin: 0.3em 0.5em 0 0;
+}
+
+.statistics span.saved {
+    background:#78C8E6;
+}
+
+.statistics span.waiting {
+    background:#FCC244;
+}
+
+.statistics span.accepted {
+    background:#00CC0A;
+}
+
+.statistics span.returned {
+    background:#E06969;
+}

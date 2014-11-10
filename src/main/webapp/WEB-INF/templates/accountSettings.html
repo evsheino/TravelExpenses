@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout"  data-ng-app="indexPageApp">
+    <head>
+        <title>TravelExpenses | Account settings</title>
+        <script src="../../static/js/Chart.min.js" th:href="@{/static/js/Chart.min.js}"></script>
+    </head>
+    <body>
+        <div layout:fragment="content">
+
+            <div class="row">
+                <div class="large-8 columns">
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <h1>Account settings</h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="medium-2 columns">
+                            Name
+                        </div>
+                        <div class="medium-10 columns">
+                            <span th:text="${user.name}">Name</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="medium-2 columns">
+                            Username
+                        </div>
+                        <div class="medium-10 columns">
+                            <span th:text="${user.username}">Username</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="medium-12 columns">
+
+                            <form data-abide="" id="change-password-form" method="POST" th:action="@{/account/save}">
+                                <fieldset>
+                                    <legend>Password</legend>
+                                    <div class="old-password-field">
+                                        <label>Current password <small>required</small> <input type="password" id="old-password" name="oldPassword" required=""/> </label>
+                                        <small class="error">Your must give your current password</small>
+                                    </div>
+                                    <div class="password-field">
+                                        <label>Password <small>required</small> <input type="password" id="password" name="password" required=""/> </label>
+                                        <small class="error">Your password must match the requirements</small>
+                                    </div>
+                                    <div class="password-confirmation-field">
+                                        <label>Confirm Password <small>required</small> <input type="password" id="confirm-password" required="" data-equalto="password"/> </label>
+                                        <small class="error">The password did not match</small>
+                                    </div>
+                                    <button type="submit">Submit</button>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="statistics medium-4 columns">
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <h1>Statistics</h1>
+                        </div>
+                    </div>
+
+                    <div class="row" th:if="${user.supervisor} != null">
+                        <div class="small-2 columns">
+                            Supervisor
+                        </div>
+                        <div class="small-10 columns">
+                            <span th:text="${user.supervisor.name}">Username</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="small-12 columns">
+                            <canvas id="canvas" height="200" width="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-5 columns">
+                            <span class="color saved"> </span> Saved
+                        </div>
+                        <div class="small-3 columns">
+                            NN
+                        </div>
+                        <div class="small-4 columns">
+                            XX.xx€
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-5 columns">
+                            <span class="color waiting"> </span> Waiting
+                        </div>
+                        <div class="small-3 columns">
+                            NN
+                        </div>
+                        <div class="small-4 columns">
+                            XX.xx€
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-5 columns">
+                            <span class="color accepted"> </span> Accepted
+                        </div>
+                        <div class="small-3 columns">
+                            NN
+                        </div>
+                        <div class="small-4 columns">
+                            XX.xx€
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="small-5 columns">
+                            <span class="color returned"> </span> Returned
+                        </div>
+                        <div class="small-3 columns">
+                            NN
+                        </div>
+                        <div class="small-4 columns">
+                            XX.xx€
+                        </div>
+                    </div>
+                    <script>
+                        var doughnutData = [
+                                {
+                                    value: 11,
+                                    color:"#78C8E6"
+                                },
+                                {
+                                    value : 30,
+                                    color : "#FCC244"
+                                },
+                                {
+                                    value : 40,
+                                    color : "#00CC0A"
+                                },
+                                {
+                                    value : 3,
+                                    color : "#E06969"
+                                },
+                            ];
+                            var myDoughnut = new Chart(document.getElementById("canvas").getContext("2d")).Doughnut(doughnutData);
+                    </script>
+
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+</html>

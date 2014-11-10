@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/expences")
+@RequestMapping("/expenses")
 public class ExpensesController {
 
     @Autowired
@@ -30,7 +30,8 @@ public class ExpensesController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<Expense> listExpenses() {
         User user = userService.getCurrentUser();
-        return expenseRepository.findByUser(user);
+        user.getExpenses().size();
+        return user.getExpenses();
     }
 
 }
