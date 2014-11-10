@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import wad.domain.Authority;
+import wad.domain.Expense;
 import wad.domain.User;
 import wad.repository.AuthorityRepository;
+import wad.repository.ExpenseRepository;
 import wad.repository.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -21,6 +24,9 @@ public class UserService {
 
     @Autowired
     private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     public User getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -41,6 +47,11 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username);
+        userRepository.delete(user);
     }
 
 }

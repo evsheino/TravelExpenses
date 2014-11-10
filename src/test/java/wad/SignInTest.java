@@ -18,12 +18,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import wad.domain.Authority;
-import wad.domain.User;
 import wad.repository.AuthorityRepository;
 import wad.repository.UserRepository;
 import wad.service.UserService;
-
-import java.util.ArrayList;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
@@ -67,8 +64,7 @@ public class SignInTest {
 
     @After
     public void cleanup() {
-        User user = userRepository.findByUsername(USER_1_USERNAME);
-        userRepository.delete(user);
+        userService.deleteUser(USER_1_USERNAME);
     }
 
     @Test

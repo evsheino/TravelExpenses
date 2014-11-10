@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import wad.domain.Expense;
 import wad.domain.User;
+import wad.repository.ExpenseRepository;
 import wad.repository.UserRepository;
+import wad.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -20,25 +22,15 @@ import java.util.List;
 public class ExpensesController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    private List<Expense> generateTempData() {
-        List<Expense> expenses = new ArrayList<>();
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(username);
-
-        for(int i = 0; i < 10; i++) {
-            Expense e = new Expense();
-            e.setDate(new Date());
-            e.setUser(user);
-            e.setAmount((i^2) + 11.99 + 1);
-        }
-        return expenses;
-    }
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public List<Expense> listExpenses() {
-        return generateTempData();
+        User user = userService.getCurrentUser();
+        return expenseRepository.findByUser(user);
     }
 
 }

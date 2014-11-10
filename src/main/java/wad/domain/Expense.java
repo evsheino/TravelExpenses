@@ -21,7 +21,6 @@ public class Expense extends AbstractPersistable<Long> {
     private Date date;
     
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user")
     private User user;
 
     public double getAmount() {
