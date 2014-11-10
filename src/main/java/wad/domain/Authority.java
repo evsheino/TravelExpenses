@@ -18,6 +18,7 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;
+
     @Enumerated(EnumType.STRING)
     private Role authority;
 

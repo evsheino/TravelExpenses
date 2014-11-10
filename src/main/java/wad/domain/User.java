@@ -17,18 +17,20 @@ public class User extends AbstractPersistable<Long> {
     private String password;
     private String salt;
     
-    //@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-   // private List<Expense> expenses;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Expense> expenses;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Authority> authorities;
 
-    public List<Authority> getAuthorities() {
-        return authorities;
+    public User() {
+
     }
 
-    public void setAuthorities(List<Authority> authorities) {
-        this.authorities = authorities;
+    public User(String name, String username, String password) {
+        setName(name);
+        setUsername(username);
+        setPassword(password);
     }
 
     public String getName() {
@@ -63,7 +65,15 @@ public class User extends AbstractPersistable<Long> {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-/*
+
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     public List<Expense> getExpenses() {
         return expenses;
     }
@@ -71,5 +81,5 @@ public class User extends AbstractPersistable<Long> {
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
-*/
+
 }

@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
  * @author teemu
  */
 
-//@Entity
+@Entity
 public class Expense extends AbstractPersistable<Long> {
     
     private double amount;
@@ -47,7 +47,5 @@ public class Expense extends AbstractPersistable<Long> {
     public void setUser(User user) {
         this.user = user;
     }
-    
-    
-    
+
 }

@@ -21,6 +21,7 @@ import wad.domain.Authority;
 import wad.domain.User;
 import wad.repository.AuthorityRepository;
 import wad.repository.UserRepository;
+import wad.service.UserService;
 
 import java.util.ArrayList;
 
@@ -33,8 +34,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @ActiveProfiles("test")
 public class SignInTest {
 
-    private static final String USERNAME = "user";
-    private static final String PASSWORD = "password";
+    private static final String USER_1_NAME = "Test User1";
+    private static final String USER_1_USERNAME = "user";
+    private static final String USER_1_PASSWORD = "password";
 
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
@@ -48,6 +50,9 @@ public class SignInTest {
     @Autowired
     private AuthorityRepository authorityRepository;
 
+    @Autowired
+    private UserService userService;
+
     private MockMvc mockMvc;
 
     @Before
@@ -57,28 +62,12 @@ public class SignInTest {
         this.webAppContext.getServletContext()
                 .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
-        // Most of the tests don't require a user in the db
-        // but add the user to the db here anyway for now.
-        User user = new User();
-        user.setName("John Doe");
-        user.setUsername(USERNAME);
-        user.setPassword(PASSWORD);
-        user = userRepository.save(user);
-
-        Authority authority = new Authority();
-        authority.setAuthority(Authority.Role.USER);
-        authority.setUser(user);
-        authority = authorityRepository.save(authority);
-
-        user.setAuthorities(new ArrayList<Authority>());
-        user.getAuthorities().add(authority);
-
-        userRepository.save(user);
+        userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
     }
 
     @After
     public void cleanup() {
-        User user = userRepository.findByUsername(USERNAME);
+        User user = userRepository.findByUsername(USER_1_USERNAME);
         userRepository.delete(user);
     }
 
@@ -91,7 +80,7 @@ public class SignInTest {
 
     @Test
     public void authenticatedUserCanAccessIndex() throws Exception {
-        mockMvc.perform(get("/index").with(user(USERNAME)))
+        mockMvc.perform(get("/index").with(user(USER_1_USERNAME)))
                 .andExpect(status().isOk());
     }
 

@@ -17,14 +17,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.context.WebApplicationContext;
 import wad.Application;
 import wad.domain.Authority;
 import wad.domain.User;
 import wad.repository.AuthorityRepository;
 import wad.repository.UserRepository;
-
-import java.util.ArrayList;
+import wad.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -33,8 +31,10 @@ import java.util.ArrayList;
 public class SignInTest {
 
     private final String LOGIN_URI = "http://localhost:8080/login";
-    private static final String USERNAME = "user";
-    private static final String PASSWORD = "password";
+
+    private static final String USER_1_NAME = "Test User 1";
+    private static final String USER_1_USERNAME = "testuser_1";
+    private static final String USER_1_PASSWORD = "password_1";
 
     private WebDriver driver;
     private ConfigurableApplicationContext context;
@@ -45,6 +45,9 @@ public class SignInTest {
     @Autowired
     AuthorityRepository authorityRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Before
     public void setUp() {
         SpringApplication app = new SpringApplication(Application.class);
@@ -53,27 +56,13 @@ public class SignInTest {
 
         this.driver = new HtmlUnitDriver();
 
-        User user = new User();
-        user.setName("John Doe");
-        user.setUsername(USERNAME);
-        user.setPassword(PASSWORD);
-        user = userRepository.save(user);
-
-        Authority authority = new Authority();
-        authority.setAuthority(Authority.Role.USER);
-        authority.setUser(user);
-        authority = authorityRepository.save(authority);
-
-        user.setAuthorities(new ArrayList<Authority>());
-        user.getAuthorities().add(authority);
-
-        userRepository.save(user);
+        userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
 
     }
 
     @After
     public void cleanup() {
-        User user = userRepository.findByUsername(USERNAME);
+        User user = userRepository.findByUsername(USER_1_USERNAME);
 
         userRepository.delete(user);
         context.close();
@@ -86,9 +75,9 @@ public class SignInTest {
         assertTrue(driver.getPageSource().contains("Sign in"));
 
         WebElement element = driver.findElement(By.name("username"));
-        element.sendKeys(USERNAME);
+        element.sendKeys(USER_1_USERNAME);
         element = driver.findElement(By.name("password"));
-        element.sendKeys(PASSWORD);
+        element.sendKeys(USER_1_PASSWORD);
 
         element = driver.findElement(By.id("login-form"));
         element.submit();
@@ -103,9 +92,9 @@ public class SignInTest {
         assertTrue(driver.getPageSource().contains("Sign in"));
 
         WebElement element = driver.findElement(By.name("username"));
-        element.sendKeys(USERNAME);
+        element.sendKeys(USER_1_USERNAME);
         element = driver.findElement(By.name("password"));
-        element.sendKeys(PASSWORD);
+        element.sendKeys(USER_1_PASSWORD);
 
         element = driver.findElement(By.id("login-form"));
         element.submit();

@@ -1,6 +1,7 @@
 package wad.profiles;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -8,6 +9,10 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
+import wad.domain.Authority;
+import wad.service.UserService;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Created by nryytty@cs on 7.11.2014.
@@ -17,6 +22,16 @@ public abstract class BaseProfile {
     public abstract TemplateResolver getTemplateResolver();
 
     public abstract String getTemplatePath();
+
+    @Autowired
+    private UserService userService;
+
+    @PostConstruct
+    public void init() {
+        userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
+        userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
+        userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
+    }
 
     @Bean
     public ITemplateResolver templateResolver() {
