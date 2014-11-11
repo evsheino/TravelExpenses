@@ -1,23 +1,18 @@
 package wad.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import wad.domain.Expense;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
-import wad.repository.UserRepository;
 import wad.service.UserService;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@RestController
+@Controller
 @RequestMapping("/expenses")
 public class ExpensesController {
 
@@ -32,6 +27,12 @@ public class ExpensesController {
         User user = userService.getCurrentUser();
         user.getExpenses().size();
         return user.getExpenses();
+    }
+
+    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    public String showExpense(Model model, @PathVariable Long id) {
+        model.addAttribute("expense", expenseRepository.findOne(id));
+        return "expenses";
     }
 
 }
