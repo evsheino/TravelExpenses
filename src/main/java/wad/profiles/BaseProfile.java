@@ -32,39 +32,6 @@ public abstract class BaseProfile {
 
     public abstract String getTemplatePath();
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ExpenseService expenseService;
-
-    @Autowired
-    private ExpenseRepository expenseRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @PostConstruct
-    public void init() {
-        userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
-        User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
-        generateExpenses(foob, 4);
-
-        User johnd = userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
-        generateExpenses(johnd, 10);
-    }
-
-    private User generateExpenses(User user, int numOfExpenses) {
-        user.setExpenses(new ArrayList<Expense>());
-        for(int i = 0; i < numOfExpenses; i++) {
-            Expense e = expenseService.createExpense(user, new Date(), (i^2));
-            user.getExpenses().add(e);
-        }
-
-        return userRepository.save(user);
-    }
-
-
     @Bean
     public ITemplateResolver templateResolver() {
         TemplateResolver templateResolver = getTemplateResolver();

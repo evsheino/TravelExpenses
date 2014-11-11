@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import java.util.List;
 
 @Entity
+@Table(name = "app_user")
 public class User extends AbstractPersistable<Long> {
 
     @Column(unique = true)
