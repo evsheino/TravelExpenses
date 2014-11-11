@@ -27,7 +27,7 @@
             <li class="has-dropdown"><a href="#" th:text="${#authentication.name}">Drop down</a>
                 <ul class="dropdown">
                     <li><a href="#" th:href="@{/account}">Account settings</a></li>
-                    <li sec:authorize="hasRole('ADMIN')"><a href="#" th:href="@{/admin/system}">Manage system</a></li>
+                    <li sec:authorize="hasRole('ADMIN')"><a href="#" th:href="@{/admin/users}">Manage system</a></li>
                     <li><a id="button-logout" href="#" onclick="document.getElementById('logout-form').submit();">Log out</a></li>
                 </ul>
             </li>

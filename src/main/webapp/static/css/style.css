@@ -1,3 +1,6 @@
+
+/* Account settings */
+
 .statistics span.color {
 	width:12px;
 	height:12px;
@@ -20,4 +23,32 @@
 
 .statistics span.returned {
     background:#E06969;
+}
+
+
+/* Admin */
+
+.users-topic {
+    background-color: #eeeeee;
+    padding: 1em 0em 1em 0em;
+}
+
+.users-header {
+    padding: 1em 0em 1em 0em;
+    font-weight: bold;
+}
+
+.users {
+    padding: 1em 0em 1em 0em;
+}
+
+.user {
+    border-top: 1px solid #eeeeee;
+    padding:  1em 0em 1em 0em;
+    min-height: 5em;
+}
+
+/* Edit user */
+.admin-user-data {
+    margin-top: 1em;
 }

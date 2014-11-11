@@ -19,31 +19,36 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @ModelAttribute("user")
     private User getUser() {
         return new User();
     }
 
-    @RequestMapping(value="/system", method = RequestMethod.GET)
+    @RequestMapping(value="/users", method = RequestMethod.GET)
     public String viewAll(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "admin";
     }
 
     @RequestMapping(value="/user/save", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute User user, @RequestParam String[] roles) {
+    public String saveUser(@ModelAttribute("user") User user, @RequestParam String[] roles) {
         Authority.Role[] userRoles = new Authority.Role[roles.length];
         for(int i = 0; i < roles.length; i++) {
             userRoles[i] = Authority.Role.valueOf(roles[i]);
         }
         userService.createUser(user, userRoles);
-        return "redirect:/admin/system";
+        return "redirect:/admin/users";
+    }
+
+    @RequestMapping(value="/user/new", method = RequestMethod.GET)
+    public String newUser() {
+        return "edituser";
     }
 
     @RequestMapping(value="/user/{id}", method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable Long id) {
         model.addAttribute("user", userRepository.findOne(id));
-        model.addAttribute("users", userRepository.findAll());
-        return "admin";
+        return "edituser";
     }
 
 }
