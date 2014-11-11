@@ -8,94 +8,45 @@
     <body>
         <div layout:fragment="content">
 
-            <div class="row">
-                <div class="medium-12 columns">
-                    <div class="row">
-                        <div class="medium-12 columns">
-                            <h1>Create user</h1>
-                        </div>
-                    </div>
-
-                    <form data-abide="" id="admin-user-data-form" method="POST" th:action="@{/admin/user/save}">
-                            <div class="row">
-                                <div class="medium-12 columns">
-                                    <div class="name-field">
-                                        <label>Name <small>required</small> <input type="text" id="name" name="name" required=""/> </label>
-                                        <small class="error">Your must give name</small>
-                                    </div>
-                                    <div class="username-field">
-                                        <label>Username <small>required</small> <input type="text" id="username" name="username" required=""/> </label>
-                                        <small class="error">Your must give username</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="medium-6 columns">
-                                    <div class="password-field">
-                                        <label>Password <small>required</small> <input type="password" id="password" name="password" required=""/> </label>
-                                        <small class="error">Your password must match the requirements</small>
-                                    </div>
-                                </div>
-                                <div class="medium-6 columns">
-                                    <div class="password-confirmation-field">
-                                        <label>Confirm Password <small>required</small> <input type="password" required="" data-equalto="password"/> </label>
-                                        <small class="error">The password did not match</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="medium-12 columns">
-                                    <label>Authorities</label>
-                                    <input id="role-user" type="checkbox" name="roles" value="USER"/><label for="role-user">User</label>
-                                    <input id="role-admin" type="checkbox" name="roles" value="SUPERVISOR"/><label for="role-admin">Admin</label>
-                                    <input id="role-supervisor" type="checkbox" name="roles"  value="ADMIN"/><label for="role-supervisor">Supervisor</label>
-                                </div>
-                            </div>
-                            <button type="submit">Submit</button>
-                    </form>
+            <div class="row users-topic">
+                <div class="medium-9 columns">
+                    <h1>Users</h1>
+                </div>
+                <div class="medium-3 columns">
+                    <a href="#" th:href="@{/admin/user/new}" class="button">+ Add user</a>
                 </div>
             </div>
 
-            <div class="row users">
-                <div class="medium-12 columns">
-                    <div class="row">
-                        <div class="medium-12 columns">
-                            <h1>Users</h1>
-                        </div>
-                    </div>
-                    <div class="row users-header hide-for-small-only">
-                        <div class="medium-4 columns">
-                            Name
-                        </div>
-                        <div class="medium-4 columns">
-                            Username
-                        </div>
-                        <div class="medium-4 columns">
-                            Roles
-                        </div>
-                        <div class="medium-2 columns">
 
-                        </div>
-                    </div>
-
-                    <div class="row user" th:each="user : ${users}">
-                        <div class="medium-4 columns" th:text="${user.name}">
-                            Name
-                        </div>
-                        <div class="medium-3 columns" th:text="${user.username}">
-                            Username
-                        </div>
-                        <div class="medium-3 columns">
-                            <div th:each="auth : ${user.authorities}"> <span th:text="${auth.authority}">Authority </span></div>
-                        </div>
-                        <div class="medium-2 columns">
-                            <a href="#" th:href="@{/admin/user/} + ${user.id}" class="button">Modify</a>
-                        </div>
-                    </div>
+            <div class="row users-header hide-for-small-only">
+                <div class="medium-3 columns">
+                    Name
+                </div>
+                <div class="medium-3 columns">
+                    Username
+                </div>
+                <div class="medium-3 columns">
+                    Roles
+                </div>
+                <div class="medium-3 columns">
 
                 </div>
             </div>
+            <div class="row user" th:each="user : ${users}">
+                <div class="medium-3 columns" th:text="${user.name}">
+                    Name
+                </div>
+                <div class="medium-3 columns" th:text="${user.username}">
+                    Username
+                </div>
+                <div class="medium-3 columns">
+                    <div th:each="auth : ${user.authorities}"> <span th:text="${auth.authority}">Authority </span></div>
+                </div>
+                <div class="medium-3 columns">
+                    <a href="#" th:href="@{/admin/user/} + ${user.id}" class="button">Edit</a>
+                </div>
+            </div>
+
 
         </div>
 

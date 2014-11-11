@@ -9,36 +9,20 @@
     <body>
         <div layout:fragment="content">
 
-            <div class="row">
-                <div class="large-8 columns">
+            <div class="account-settings">
                     <div class="row">
                         <div class="medium-12 columns">
-                            <h1>Account settings</h1>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="medium-2 columns">
-                            Name
-                        </div>
-                        <div class="medium-10 columns">
-                            <span th:text="${user.name}">Name</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="medium-2 columns">
-                            Username
-                        </div>
-                        <div class="medium-10 columns">
-                            <span th:text="${user.username}">Username</span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="medium-12 columns">
+
+                            <h1>Account settings</h1>
+                            <label>Name <br/><h4 th:text="${user.name}">Name</h4></label>
+                            <label>Username <br/><h4 th:text="${user.username}">Username</h4></label>
 
                             <form data-abide="" id="change-password-form" method="POST" th:action="@{/account/save}">
-                                <fieldset>
-                                    <legend>Password</legend>
                                     <div class="old-password-field">
                                         <label>Current password <small>required</small> <input type="password" id="old-password" name="oldPassword" required=""/> </label>
                                         <small class="error">Your must give your current password</small>
@@ -52,14 +36,12 @@
                                         <small class="error">The password did not match</small>
                                     </div>
                                     <button type="submit">Submit</button>
-                                </fieldset>
                             </form>
                         </div>
                     </div>
-                </div>
+            </div>
 
-
-                <div class="statistics medium-4 columns">
+            <div class="statistics">
                     <div class="row">
                         <div class="small-12 columns">
                             <h1>Statistics</h1>
@@ -146,9 +128,7 @@
                             var myDoughnut = new Chart(document.getElementById("canvas").getContext("2d")).Doughnut(doughnutData);
                     </script>
 
-                </div>
             </div>
-
 
         </div>
     </body>
