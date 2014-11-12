@@ -29,17 +29,19 @@ public class ExpenseService {
        expenseRepository.delete(exp);
     }
 
-    public Expense createExpense(Date date, double amount, String description) {
-        return createExpense(userService.getCurrentUser(), date, amount, description);
+    public Expense createExpense(Date startDate, Date endDate, double amount, String description) {
+        return createExpense(userService.getCurrentUser(), startDate, endDate, amount, description);
     }
 
-    public Expense createExpense(User user, Date date, double amount, String description) {
+    public Expense createExpense(User user, Date startDate, Date endDate, double amount, String description) {
         Expense e = new Expense();
-        e.setDate(date);
-        e.setModified(e.getDate());
+        e.setStartDate(startDate);
+        e.setEndDate(endDate);
+        e.setModified(e.getStartDate());
         e.setUser(user);
         e.setAmount(amount);
         e.setDescription(description);
+        e.setStatus(Expense.Status.SAVED);
         return expenseRepository.save(e);
     }
 

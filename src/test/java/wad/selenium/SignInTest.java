@@ -1,10 +1,10 @@
 package wad.selenium;
 
-import org.junit.After;
+import org.junit.*;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -37,7 +37,7 @@ public class SignInTest {
     private static final String USER_1_PASSWORD = "password_1";
 
     private WebDriver driver;
-    private ConfigurableApplicationContext context;
+    private static ConfigurableApplicationContext context;
 
     @Autowired
     UserRepository userRepository;
@@ -48,11 +48,20 @@ public class SignInTest {
     @Autowired
     private UserService userService;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void onetimeSetUp() {
         SpringApplication app = new SpringApplication(Application.class);
         app.setAdditionalProfiles("test");
-        this.context = app.run();
+        context = app.run();
+    }
+
+    @AfterClass
+    public static void ontimeTearDown() {
+        context.close();
+    }
+
+    @Before
+    public void setUp() {
 
         this.driver = new HtmlUnitDriver();
 
@@ -63,7 +72,6 @@ public class SignInTest {
     @After
     public void cleanup() {
         userService.deleteUser(USER_1_USERNAME);
-        context.close();
     }
     
     @Test
