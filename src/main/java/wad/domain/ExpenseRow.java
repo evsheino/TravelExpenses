@@ -18,6 +18,17 @@ public class ExpenseRow extends AbstractPersistable<Long> {
     @Column(name = "expense_row_date")
     private Date date;
 
+    public ExpenseRow() {
+
+    }
+
+    public ExpenseRow(Expense expense, Double amount, String description, Date date) {
+        this.expense = expense;
+        this.amount = amount;
+        this.description = description;
+        this.date = date;
+    }
+
     public Double getAmount() {
         return amount;
     }

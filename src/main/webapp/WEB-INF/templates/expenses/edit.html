@@ -24,6 +24,9 @@ Page for managing expenses. Under construction.
                         <label>User
                             <input type="text" name="user" readonly="readonly" th:value="${expense.user.name}" />
                         </label>
+                        <label>Modified
+                            <input type="text" name="date" readonly="readonly" th:value="${expense.modified}" />
+                        </label>
                         <label>Description
                             <input type="text" name="user" th:value="${expense.description}" />
                         </label>
@@ -49,10 +52,41 @@ Page for managing expenses. Under construction.
                     </form>
                 </div>
             </div>
+            <hr />
             <div class="row">
-                <div class="large-4 columns">
+                <div class="large-10 columns">
+                    <h1>Rows</h1>
+                </div>
+                <div class="large-2 columns">
+                    <a href="#" class="button">+ Add row</a>
                 </div>
             </div>
+            <hr />
+
+            <div class="row">
+                <div class="large-2 columns">
+                    Amount
+                </div>
+                <div class="large-8 columns">
+                    Description
+                </div>
+                <div class="large-2 columns">
+                    Date
+                </div>
+            </div>
+
+            <div class="row" th:each="row,status : ${expense.expenseRows}">
+                <div class="large-2 columns" th:text="${row.amount}">
+                    XX.xx eur
+                </div>
+                <div class="large-8 columns" th:text="${row.description}">
+                    Blab blaablalblalblabla bla bla bla
+                </div>
+                <div class="large-2 columns" th:text="${row.date}">
+                    1.1.1900
+                </div>
+            </div>
+
         </div>
         <h2>Validate expense</h2>
         <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Validate expense</a>
