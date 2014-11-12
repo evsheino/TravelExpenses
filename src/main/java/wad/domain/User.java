@@ -2,20 +2,26 @@ package wad.domain;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.List;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "app_user")
 public class User extends AbstractPersistable<Long> {
 
+    @NotBlank
     @Column(unique = true)
     private String username;
-
+    
+    @NotBlank
     private String name;
+    
+    @NotBlank
+    @Length(min = 8)
     private String password;
     private String salt;
 

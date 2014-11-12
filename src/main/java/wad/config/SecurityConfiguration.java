@@ -43,6 +43,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(jpaAuthenticationProvider);
+            
+            auth.inMemoryAuthentication()
+                    .withUser("Teemu").password("sisaan").roles("USER");            
         }
     }
 }

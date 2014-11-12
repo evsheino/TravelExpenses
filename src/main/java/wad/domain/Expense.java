@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -23,7 +24,9 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
 
+    @NotBlank
     private double amount;
+    @NotBlank
     private String description;
 
     @Temporal(TemporalType.DATE)
@@ -35,6 +38,7 @@ public class Expense extends AbstractPersistable<Long> {
     @JoinColumn(name="user_id")
     private User user;
 
+    @NotBlank
     @Temporal(TemporalType.DATE)
     @Column(name = "expense_modified_date")
     private Date modified;

@@ -24,6 +24,10 @@ public class ExpenseService {
         exp.setModified(new Date());
         return expenseRepository.save(exp);
     }
+    
+    public void deleteExpense(Expense exp) {
+       expenseRepository.delete(exp);
+    }
 
     public Expense createExpense(Date date, double amount, String description) {
         return createExpense(userService.getCurrentUser(), date, amount, description);
