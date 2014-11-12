@@ -25,12 +25,8 @@ public class User extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Authority> authorities;
 
-    @ManyToOne
-    @JoinColumn(name="supervisor_user_id")
-    private User supervisor;
-
-    @OneToMany(mappedBy = "supervisor")
-    private List<User> subordinates;
+    @OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Expense> subordinatesExpenses;
 
     public User() {
 
@@ -91,20 +87,12 @@ public class User extends AbstractPersistable<Long> {
         this.expenses = expenses;
     }
 
-    public User getSupervisor() {
-        return supervisor;
+    public List<Expense> getSubordinatesExpenses() {
+        return subordinatesExpenses;
     }
 
-    public void setSupervisor(User supervisor) {
-        this.supervisor = supervisor;
-    }
-
-    public List<User> getSubordinates() {
-        return subordinates;
-    }
-
-    public void setSubordinates(List<User> subordinates) {
-        this.subordinates = subordinates;
+    public void setSubordinatesExpenses(List<Expense> subordinatesExpenses) {
+        this.subordinatesExpenses = subordinatesExpenses;
     }
 
 }

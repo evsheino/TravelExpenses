@@ -15,7 +15,8 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>Date</th>
+                                <th>Start date</th>
+                                <th>End date</th>
                                 <th>Description</th>
                                 <th>Amount</th>
                                 <th>Status</th>
@@ -23,7 +24,8 @@
                         </thead>
                         <tbody>
                             <tr th:each="expense : ${expenses}">
-                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.date}">2014-11-10</a></td>
+                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.startDate}">2014-11-10</a></td>
+                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.endDate}">2014-11-10</a></td>
                                 <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.description}">blaa blaa</a></td>
                                 <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.amount}">5000</a></td>
                                 <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.status}">SAVED</a></td>

@@ -24,8 +24,14 @@ Page for managing expenses. Under construction.
                         <label>User
                             <input type="text" name="user" readonly="readonly" th:value="${expense.user.name}" />
                         </label>
-                        <label>Submitted
-                            <input type="text" name="date" readonly="readonly" th:value="${expense.date}" />
+                        <label>Description
+                            <input type="text" name="user" th:value="${expense.description}" />
+                        </label>
+                        <label>Start date
+                            <input type="text" name="date" th:value="${expense.startDate}" />
+                        </label>
+                        <label>End date
+                            <input type="text" name="date" th:value="${expense.endDate}" />
                         </label>
                         <label>Amount
                             <input type="number" name="cost" placeholder="amount" th:value="${expense.amount}" />
