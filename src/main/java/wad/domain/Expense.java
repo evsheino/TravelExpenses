@@ -24,6 +24,7 @@ public class Expense extends AbstractPersistable<Long> {
     }
 
     private double amount;
+    private String description;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "expense_date")
@@ -70,4 +71,11 @@ public class Expense extends AbstractPersistable<Long> {
         this.user = user;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
