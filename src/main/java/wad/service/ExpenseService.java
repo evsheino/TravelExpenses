@@ -36,6 +36,7 @@ public class ExpenseService {
         e.setUser(user);
         e.setAmount(amount);
         e.setDescription(description);
+        e.setStatus(Expense.Status.SAVED);
         return expenseRepository.save(e);
     }
 
