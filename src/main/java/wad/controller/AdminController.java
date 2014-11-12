@@ -27,7 +27,7 @@ public class AdminController {
     @RequestMapping(value="/users", method = RequestMethod.GET)
     public String viewAll(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "admin";
+        return "admin/admin";
     }
 
     @RequestMapping(value="/user/save", method = RequestMethod.POST)
@@ -42,13 +42,13 @@ public class AdminController {
 
     @RequestMapping(value="/user/new", method = RequestMethod.GET)
     public String newUser() {
-        return "edituser";
+        return "admin/edituser";
     }
 
     @RequestMapping(value="/user/{id}", method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable Long id) {
         model.addAttribute("user", userRepository.findOne(id));
-        return "edituser";
+        return "admin/edituser";
     }
 
 }
