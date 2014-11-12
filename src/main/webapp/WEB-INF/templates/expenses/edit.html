@@ -52,38 +52,48 @@ Page for managing expenses. Under construction.
                     </form>
                 </div>
             </div>
+
             <hr />
             <div class="row">
                 <div class="large-10 columns">
                     <h1>Rows</h1>
                 </div>
-                <div class="large-2 columns">
-                    <a href="#" class="button">+ Add row</a>
-                </div>
             </div>
             <hr />
 
             <div class="row">
                 <div class="large-2 columns">
-                    Amount
+                    <label>Amount
+                        <input type="text" name="amount" />
+                    </label>
                 </div>
-                <div class="large-8 columns">
-                    Description
+                <div class="large-6 columns">
+                    <label>Description
+                        <input type="text" name="amount" />
+                    </label>
                 </div>
                 <div class="large-2 columns">
-                    Date
+                    <label>Date
+                        <input type="text" name="amount" />
+                    </label>
+                </div>
+                <div class="large-2 columns">
+                    <a href="#" class="button expand">+ Add row</a>
                 </div>
             </div>
 
-            <div class="row" th:each="row,status : ${expense.expenseRows}">
+            <div class="row expense-row" th:each="row,status : ${expense.expenseRows}">
                 <div class="large-2 columns" th:text="${row.amount}">
                     XX.xx eur
                 </div>
-                <div class="large-8 columns" th:text="${row.description}">
+                <div class="large-6 columns" th:text="${row.description}">
                     Blab blaablalblalblabla bla bla bla
                 </div>
                 <div class="large-2 columns" th:text="${row.date}">
                     1.1.1900
+                </div>
+                <div class="large-2 columns">
+                    <a href="#" class="button expand">Edit row</a>
                 </div>
             </div>
 
