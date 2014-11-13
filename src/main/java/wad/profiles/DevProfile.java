@@ -10,8 +10,10 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 import wad.domain.Authority;
 import wad.domain.Expense;
+import wad.domain.ExpenseRow;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
+import wad.repository.ExpenseRowRepository;
 import wad.repository.UserRepository;
 import wad.service.ExpenseService;
 import wad.service.UserService;
@@ -30,6 +32,9 @@ public class DevProfile extends BaseProfile {
     private ExpenseRepository expenseRepository;
 
     @Autowired
+    private ExpenseRowRepository expenseRowRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @PostConstruct
@@ -42,14 +47,20 @@ public class DevProfile extends BaseProfile {
         generateExpenses(johnd, 10);
     }
 
-    private User generateExpenses(User user, int numOfExpenses) {
+    private void generateExpenses(User user, int numOfExpenses) {
         user.setExpenses(new ArrayList<Expense>());
         for(int i = 0; i < numOfExpenses; i++) {
-            Expense e = expenseService.createExpense(user, new Date(), (i^2), user.getName() + " blaab");
-            user.getExpenses().add(e);
+            Expense e = expenseService.createExpense(user, new Date(), new Date(), (i^2), user.getName() + " blaab");
+            generateExpenseRows(e, i);
         }
+    }
 
-        return userRepository.save(user);
+    private void generateExpenseRows(Expense expense, int numOfRows) {
+        expense.setExpenseRows(new ArrayList<ExpenseRow>());
+        for(int i = 0; i < numOfRows; i++) {
+            ExpenseRow row = new ExpenseRow(expense, (i+0.99), "Unavoidable expense like lunch with frieds "+ 1, new Date() );
+            expenseRowRepository.save(row);
+        }
     }
 
     @Override

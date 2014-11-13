@@ -35,10 +35,26 @@
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <div style="border: solid black 1px">
+                        <form id="expense-submission-form" method="POST" action="/add">
+                            <input type="number" name="expense_size" placeholder="Amount"/>
+                            <input type="textarea" name="description" placeholder="Description of expense"/>
+                            <input type="submit" value="Submit expense"/>
+                        <!--     <a href="#" onclick="document.getElementById('expense-submission-form').submit();" class="button" role="button">Submit</a> -->
+                        </form>
+                    </div>
+
+                    <div id="Expense-list" style="border: solid black 1px">
+                        <p>Here goes list of submitted, non-validated expenses from any user.</p>
+
+                        <ol>
+                            <li th:each="expense : ${expenses}" th:text="${expense.date}"></li>
+                        </ol>
+                    </div>
+                </div>
             </div>
-
-
-
         </div>
     </body>
 </html>

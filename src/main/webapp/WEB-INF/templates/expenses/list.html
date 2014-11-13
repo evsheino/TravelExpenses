@@ -12,26 +12,45 @@
             <div class="row">
                 <div class="large-12 columns">
                     <h1>Expenses</h1>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="expense : ${expenses}">
-                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.date}">2014-11-10</a></td>
-                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.description}">blaa blaa</a></td>
-                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.amount}">5000</a></td>
-                                <td><a th:href="@{/expenses/} + ${expense.id}" th:text="${expense.status}">SAVED</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
+
+            <div class="row expenses-header">
+                <div class="large-2 columns">
+                    Start date
+                </div>
+                <div class="large-2 columns">
+                    End date
+                </div>
+                <div class="large-2 columns">
+                    Description
+                </div>
+                <div class="large-2 columns">
+                    Amount
+                </div>
+                <div class="large-2 columns">
+                    Status
+                </div>
+                <div class="large-2 columns">
+                </div>
+            </div>
+
+            <div class="row expenses" th:each="expense : ${expenses}">
+                <div class="large-2 columns" th:text="${expense.startDate}">
+                </div>
+                <div class="large-2 columns" th:text="${expense.endDate}">
+                </div>
+                <div class="large-2 columns" th:text="${expense.description}">
+                </div>
+                <div class="large-2 columns" th:text="${expense.amount}">
+                </div>
+                <div class="large-2 columns" th:text="${expense.status}">
+                </div>
+                <div class="large-2 columns">
+                    <a href="#" class="button expand" th:href="@{/expenses/} + ${expense.id}">Edit</a>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>

@@ -2,10 +2,12 @@ package wad.domain;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 /**
@@ -23,13 +25,18 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
 
-    private double amount;
+    @NotBlank
+    private Double amount;
     private String description;
     private Status status;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "expense_date")
-    private Date date;
+    @Column(name = "expense_start_date")
+    private Date startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "expense_end_date")
+    private Date endDate;
 
     @JsonIgnore
     @ManyToOne
@@ -40,6 +47,9 @@ public class Expense extends AbstractPersistable<Long> {
     @Column(name = "expense_modified_date")
     private Date modified;
 
+    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ExpenseRow> expenseRows;
+
     public Date getModified() {
         return modified;
     }
@@ -48,20 +58,36 @@ public class Expense extends AbstractPersistable<Long> {
         this.modified = modified;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<ExpenseRow> getExpenseRows() {
+        return expenseRows;
+    }
+
+    public void setExpenseRows(List<ExpenseRow> expenseRows) {
+        this.expenseRows = expenseRows;
     }
 
     public User getUser() {
@@ -86,5 +112,13 @@ public class Expense extends AbstractPersistable<Long> {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public User getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(User supervisor) {
+        this.supervisor = supervisor;
     }
 }
