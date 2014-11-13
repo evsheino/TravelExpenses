@@ -47,7 +47,7 @@ public class ExpensesController {
         return "redirect:/expenses/" + expense.getId();
     }
     
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String deleteExpense (@PathVariable Long id) {
         Expense e = expenseService.getExpense(id);
         expenseService.deleteExpense(e);
@@ -55,8 +55,8 @@ public class ExpensesController {
         return "redirect:/expenses";
     }
     
-    @RequestMapping(value = "{id}", method = RequestMethod.POST)
-    public String changeExpense (@PathVariable Long id, @ModelAttribute Expense updated, BindingResult bindingResult) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public String updateExpense (@PathVariable Long id, @ModelAttribute Expense updated, BindingResult bindingResult) {
         Expense expense = expenseService.updateExpense(id, updated);
         
         return "redirect:/expenses/" + expense.getId();
