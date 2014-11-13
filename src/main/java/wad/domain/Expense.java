@@ -1,12 +1,19 @@
 package wad.domain;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
@@ -25,26 +32,38 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
 
+    private double amount;
+
     @NotBlank
-    private Double amount;
     private String description;
+
+    @NotNull
     private Status status;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "supervisor_id")
+    private User supervisor;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "expense_start_date")
+    @NotNull
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "expense_end_date")
+    @NotNull
     private Date endDate;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="user_id")
+    @NotNull
     private User user;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "expense_modified_date")
+    @NotNull
     private Date modified;
 
     @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
