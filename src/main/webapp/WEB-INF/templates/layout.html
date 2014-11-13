@@ -28,6 +28,7 @@
             <li sec:authorize="hasRole('SUPERVISOR')"><a href="#">Subordinates</a></li>
             <li class="has-dropdown"><a href="#" th:text="${#authentication.name}">Drop down</a>
                 <ul class="dropdown">
+                    <li><a href="#" th:href="@{/expenses}">My expenses</a></li>
                     <li><a href="#" th:href="@{/account}">Account settings</a></li>
                     <li sec:authorize="hasRole('ADMIN')"><a href="#" th:href="@{/admin/users}">Manage users</a></li>
                     <li><a id="button-logout" href="#" onclick="document.getElementById('logout-form').submit();">Log out</a></li>
