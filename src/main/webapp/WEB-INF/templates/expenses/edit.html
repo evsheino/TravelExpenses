@@ -20,6 +20,7 @@ Page for managing expenses. Under construction.
                 
             <div class="row">
                 <div class="large-12 columns">
+                    
                     <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
                         <input type="hidden" name="id" th:value="${expense.id}" />
                         <label>User
@@ -38,10 +39,10 @@ Page for managing expenses. Under construction.
                             <input type="text" name="description" th:field="*{description}" />
                         </label>
                         <label>Start date
-                            <input type="date" name="startDate" th:field="*{startDate}" />
+                            <input type="date" class="fdatepicker" data-date-format="yyyy/mm/dd" name="startDate" th:field="*{startDate}" />
                         </label>
                         <label>End date
-                            <input type="date" name="endDate" th:field="*{endDate}" />
+                            <input type="date" class="fdatepicker" data-date-format="yyyy/mm/dd" name="endDate" th:field="*{endDate}" />
                         </label>
                         <label>Amount
                             <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
@@ -105,7 +106,5 @@ Page for managing expenses. Under construction.
             </div>
 
         </div>
-        <h2>Validate expense</h2>
-        <a href="#" onclick="document.getElementById('login-form').submit();" class="button" role="button">Validate expense</a>
     </body>
 </html>
