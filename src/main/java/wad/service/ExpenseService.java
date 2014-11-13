@@ -45,9 +45,20 @@ public class ExpenseService {
         return expenseRepository.save(e);
     }
 
-    public Expense updateExpense(Expense e) {
-        // Update expense report on background
-        return expenseRepository.save(e);
+    public Expense updateExpense(Long id, Expense updated) {
+        Expense expense = expenseRepository.findOne(id);
+
+        expense.setAmount(updated.getAmount());
+        expense.setDescription(updated.getDescription());
+        expense.setStartDate(updated.getStartDate());
+        expense.setEndDate(updated.getEndDate());
+        expense.setStatus(updated.getStatus());
+        expense.setSupervisor(updated.getSupervisor());
+        expense.setUser(updated.getUser());
+
+        expense.setModified(new Date());
+
+        return expenseRepository.save(expense);
     }
 
     public List<Expense> getExpensesByUser(User user) {

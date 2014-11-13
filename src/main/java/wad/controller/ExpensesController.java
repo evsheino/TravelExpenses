@@ -1,15 +1,14 @@
 package wad.controller;
 
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import wad.domain.Expense;
 import wad.domain.User;
 import wad.service.ExpenseService;
@@ -32,32 +31,34 @@ public class ExpensesController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public String showExpense(Model model, @PathVariable Long id) {
+        model.addAttribute("statuses", Expense.Status.values());
         model.addAttribute("expense", expenseService.getExpense(id));
         return "expenses/edit";
     }
     
-    // Ehkä kyseessä on hunosti määritelty polku?
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addExpense (@Valid @ModelAttribute Expense e) {
+    @RequestMapping(method = RequestMethod.POST)
+    public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult) {
+
         User u = userService.getCurrentUser();
-        e.setUser(u);
-        expenseService.saveExpense(e);
+        expense.setUser(u);
+
+        expenseService.saveExpense(expense);
         
-        return "redirect: expenses";
+        return "redirect:/expenses/" + expense.getId();
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public String deleteExpense (@PathVariable Long id) {
         Expense e = expenseService.getExpense(id);
         expenseService.deleteExpense(e);
         
-        return "redirect: expenses";
+        return "redirect:/expenses";
     }
     
-    @RequestMapping(method = RequestMethod.PUT)
-    public String changeExpense (@Valid @ModelAttribute Expense expense) {
-        expenseService.saveExpense(expense);
+    @RequestMapping(value = "{id}", method = RequestMethod.POST)
+    public String changeExpense (@PathVariable Long id, @ModelAttribute Expense updated, BindingResult bindingResult) {
+        Expense expense = expenseService.updateExpense(id, updated);
         
-        return "redirect: expenses/edit";
+        return "redirect:/expenses/" + expense.getId();
     }    
 }

@@ -20,24 +20,31 @@ Page for managing expenses. Under construction.
                 
             <div class="row">
                 <div class="large-12 columns">
-                    <form id="edit-form" method="POST">
+                    <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
+                        <input type="hidden" name="id" th:value="${expense.id}" />
                         <label>User
-                            <input type="text" name="user" readonly="readonly" th:value="${expense.user.name}" />
+                            <input type="hidden" name="user" th:value="${expense.user.id}" />
+                            <input type="text" name="userName" readonly="readonly" th:value="${expense.user.name}" />
                         </label>
                         <label>Modified
-                            <input type="text" name="date" readonly="readonly" th:value="${expense.modified}" />
+                            <input type="text" name="modified" readonly="readonly" th:field="*{modified}" />
+                        </label>
+                        <label>Status
+                            <select name="status" th:field="*{status}">
+                                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                            </select>
                         </label>
                         <label>Description
-                            <input type="text" name="user" th:value="${expense.description}" />
+                            <input type="text" name="description" th:field="*{description}" />
                         </label>
                         <label>Start date
-                            <input type="text" name="date" th:value="${expense.startDate}" />
+                            <input type="date" name="startDate" th:field="*{startDate}" />
                         </label>
                         <label>End date
-                            <input type="text" name="date" th:value="${expense.endDate}" />
+                            <input type="date" name="endDate" th:field="*{endDate}" />
                         </label>
                         <label>Amount
-                            <input type="number" name="cost" placeholder="amount" th:value="${expense.amount}" />
+                            <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
                         </label>
                         <a href="#" onclick="document.getElementById('edit-form').submit();" class="button" role="button">Save</a>
                         <a href="#" data-reveal-id="delete-confirm" class="button alert">Delete</a>
