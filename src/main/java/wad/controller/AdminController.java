@@ -36,7 +36,7 @@ public class AdminController {
         for(int i = 0; i < roles.length; i++) {
             userRoles[i] = Authority.Role.valueOf(roles[i]);
         }
-        userService.createUser(user, userRoles);
+        userService.saveUser(user, userRoles);
         return "redirect:/admin/users";
     }
 

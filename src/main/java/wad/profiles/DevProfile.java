@@ -39,11 +39,11 @@ public class DevProfile extends BaseProfile {
 
     @PostConstruct
     public void init() {
-        userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
-        User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
+        userService.saveUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
+        User foob = userService.saveUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
         generateExpenses(foob, 4);
 
-        User johnd = userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
+        User johnd = userService.saveUser("John Doe", "johnd", "johnd", Authority.Role.USER);
         generateExpenses(johnd, 10);
     }
 

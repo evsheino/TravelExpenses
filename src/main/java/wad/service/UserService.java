@@ -4,14 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import wad.domain.Authority;
-import wad.domain.Expense;
 import wad.domain.User;
 import wad.repository.AuthorityRepository;
 import wad.repository.ExpenseRepository;
 import wad.repository.UserRepository;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -33,7 +31,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User createUser(User user, Authority.Role... roles) {
+    public User saveUser(User user, Authority.Role... roles) {
         user = userRepository.save(user);
         user.setAuthorities(new ArrayList<Authority>());
         for(Authority.Role role : roles) {
@@ -47,9 +45,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User createUser(String name, String username, String password, Authority.Role... roles) {
+    public User saveUser(String name, String username, String password, Authority.Role... roles) {
         User user = new User(name, username, password);
-        return createUser(user, roles);
+        return this.saveUser(user, roles);
     }
 
     public void deleteUser(String username) {
