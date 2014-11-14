@@ -7,6 +7,7 @@ import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import java.util.Date;
 import java.util.List;
+import javax.validation.constraints.Null;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -47,6 +48,8 @@ public class ExpenseService {
 
     public Expense updateExpense(Long id, Expense updated) {
         Expense expense = expenseRepository.findOne(id);
+
+        if (expense == null) return null;
 
         expense.setAmount(updated.getAmount());
         expense.setDescription(updated.getDescription());

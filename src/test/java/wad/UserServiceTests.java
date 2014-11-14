@@ -37,6 +37,8 @@ public class UserServiceTests {
 
     @Before
     public void setUp() {
+        assertEquals(0, userRepository.count());
+
         this.user = new User();
 
         this.user.setName("John Doe");
@@ -48,6 +50,8 @@ public class UserServiceTests {
     public void cleanup() {
         userRepository.deleteAll();
     }
+
+    // TODO: Add test for getCurrentUser
 
     @Test
     public void saveUserCreatesANewUserWhenUserDoesNotExist() throws Exception {
@@ -67,6 +71,17 @@ public class UserServiceTests {
 
         assertEquals(1, userRepository.count());
         assertEquals(repoUser, serviceUser);
+    }
+
+    @Test
+    public void createUserCreatesANewUser() throws Exception {
+        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.USER);
+
+        assertEquals(1, userRepository.count());
+
+        User fetchedUser = userRepository.findOne(user.getId());
+
+        assertEquals(fetchedUser, user);
     }
 
     @Test
