@@ -1,12 +1,10 @@
 package wad;
 
-import java.util.Collection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +33,7 @@ import wad.repository.ExpenseRepository;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class ExpenseTests {
+    private final String DATE_FORMAT = "dd/MM/yyyy";
 
     @Autowired
     private WebApplicationContext webAppContext;
@@ -105,8 +104,16 @@ public class ExpenseTests {
 
         assertNotNull(res.getModelAndView().getModel().get("expense"));
 
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         Expense resFromModel = (Expense) res.getModelAndView().getModel().get("expense");
-        assertEquals(expense, resFromModel);
+        assertEquals(expense.getAmount(), resFromModel.getAmount());
+        assertEquals(expense.getDescription(), resFromModel.getDescription());
+        assertEquals(f.format(expense.getStartDate()), f.format(resFromModel.getStartDate()));
+        assertEquals(f.format(expense.getEndDate()), f.format(resFromModel.getEndDate()));
+        assertEquals(expense.getModified(), resFromModel.getModified());
+        assertEquals(expense.getStatus(), resFromModel.getStatus());
+        assertEquals(expense.getSupervisor(), resFromModel.getSupervisor());
+        assertEquals(expense.getId(), resFromModel.getId());
     }
 
     /*

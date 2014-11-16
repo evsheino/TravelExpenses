@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<!--
-Page for managing expenses. Under construction.
--->
 <html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
@@ -23,8 +20,8 @@ Page for managing expenses. Under construction.
                     
                     <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
                         <input type="hidden" name="id" th:value="${expense.id}" />
+                        <input type="hidden" name="user" th:value="${expense.user.id}" />
                         <label>User
-                            <input type="hidden" name="user" th:value="${expense.user.id}" />
                             <input type="text" name="userName" readonly="readonly" th:value="${expense.user.name}" />
                         </label>
                         <label>Modified
@@ -39,20 +36,20 @@ Page for managing expenses. Under construction.
                             <input type="text" name="description" th:field="*{description}" />
                         </label>
                         <label>Start date
-                            <input type="date" class="fdatepicker" data-date-format="yyyy/mm/dd" name="startDate" th:field="*{startDate}" />
+                            <input type="date" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
                         </label>
                         <label>End date
-                            <input type="date" class="fdatepicker" data-date-format="yyyy/mm/dd" name="endDate" th:field="*{endDate}" />
+                            <input type="date" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
                         </label>
                         <label>Amount
                             <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
                         </label>
-                        <a href="#" onclick="document.getElementById('edit-form').submit();" class="button" role="button">Save</a>
-                        <a href="#" data-reveal-id="delete-confirm" class="button alert">Delete</a>
+                        <a href="#" id="edit-form-submit" onclick="document.getElementById('edit-form').submit();" class="button" role="button">Save</a>
+                        <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert">Delete</a>
                     </form>
                     <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
                         <h2>Are you sure?</h2>
-                        <a href="#" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
+                        <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
                         <a class="close-reveal-modal">&#215;</a>
                     </div>
                     <form id="delete-form" hidden="hidden" method="DELETE" th:action="@{/expenses/${expense.id}}">

@@ -47,11 +47,13 @@ public class Expense extends AbstractPersistable<Long> {
     private User supervisor;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_start_date")
     @NotNull
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_end_date")
     @NotNull
     private Date endDate;
@@ -63,6 +65,7 @@ public class Expense extends AbstractPersistable<Long> {
     private User user;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
     @Column(name = "expense_modified_date")
     @NotNull
     private Date modified;
