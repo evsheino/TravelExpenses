@@ -7,7 +7,6 @@ import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import java.util.Date;
 import java.util.List;
-import javax.validation.constraints.Null;
 
 /**
  * Created by nryytty@cs on 10.11.2014.

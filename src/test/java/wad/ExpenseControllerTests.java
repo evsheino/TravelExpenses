@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -19,6 +21,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.*;
 
 import wad.repository.UserRepository;
 import wad.service.UserService;
@@ -33,8 +37,14 @@ import wad.repository.ExpenseRepository;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ExpenseTests {
+public class ExpenseControllerTests {
     private final String DATE_FORMAT = "dd/MM/yyyy";
+    private final String NAME = "John Doe";
+    private final String USERNAME = "user";
+    private final String PASSWORD = "password";
+
+    @Autowired
+    private FilterChainProxy springSecurityFilterChain;
 
     @Autowired
     private WebApplicationContext webAppContext;
@@ -53,16 +63,18 @@ public class ExpenseTests {
     private User user;
     private User user2;
     private Expense expense;
+    private MockHttpSession session;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         assertEquals(0, expenseRepository.count());
 
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webAppContext)
+                .addFilter(springSecurityFilterChain).build();
         this.webAppContext.getServletContext()
                 .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
-        user = userService.createUser("John Doe", "jd", "password", Authority.Role.USER);
+        user = userService.createUser(NAME, USERNAME, PASSWORD, Authority.Role.USER);
         user2 = userService.createUser("Ludwig Wittgenstein", "ludwig", "tractatus", Authority.Role.USER);
 
         userRepository.save(user);
@@ -76,6 +88,13 @@ public class ExpenseTests {
         expense.setModified(new Date());
         expense.setAmount(100.0);
 
+        session = (MockHttpSession) mockMvc.perform(formLogin("/authenticate"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/index"))
+                .andReturn()
+                .getRequest()
+                .getSession();
+        assertNotNull(session); 
     }
 
     @After
@@ -88,7 +107,7 @@ public class ExpenseTests {
     public void expensePageWorks() throws Exception {
         expense = expenseRepository.save(expense);
 
-        mockMvc.perform(get("/expenses/" + expense.getId()))
+        mockMvc.perform(get("/expenses/" + expense.getId()).session(session))
                 .andExpect(status().isOk());
     }
 
@@ -96,7 +115,7 @@ public class ExpenseTests {
     public void expensePageModelHasExpense() throws Exception {
         expense = expenseRepository.save(expense);
 
-        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()))
+        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(USERNAME)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("expense"))
                 .andExpect(view().name("expenses/edit")).andReturn();
@@ -119,15 +138,14 @@ public class ExpenseTests {
     public void postUpdatedExpenseUpdatesExpense() throws Exception {
         expense = expenseRepository.save(expense);
 
-        String url = "/expenses/" + expense.getId();
-
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
         String amount = "200";
         Expense.Status status = Expense.Status.APPROVED;
 
-        mockMvc.perform(post(url)
+        String url = "/expenses/" + expense.getId();
+        mockMvc.perform(post(url).session(session).with(csrf())
                 .param("user", user2.getId().toString())
                 .param("amount", amount)
                 .param("status", status.toString())
@@ -152,28 +170,31 @@ public class ExpenseTests {
         assertEquals(status, posted.getStatus());
     }
 
-    /*
-    TODO: Need to mock security context somehow so that current user is available.
-
     @Test
-    public void postNewExpenseSavesExpense() throws Exception {
-        mockMvc.perform(post("/expenses")
+    public void postNewExpenseCreatesNewExpense() throws Exception {
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+        String url = "/expenses/";
+        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("user", expense.getUser().getId().toString())
                 .param("amount", expense.getAmount().toString())
                 .param("status", expense.getStatus().toString())
-                .param("startDate", expense.getStartDate().toString())
-                .param("endDate", expense.getEndDate().toString())
-                .param("description", expense.getDescription()));
+                .param("startDate", f.format(expense.getStartDate()))
+                .param("endDate", f.format(expense.getEndDate()))
+                .param("description", expense.getDescription()))
+                .andExpect(status().is3xxRedirection()).andReturn();
 
-        assertEquals(1, expenseRepository.count());
+        assertEquals("There should be exactly 1 Expense in the database after creating the first Expense.",
+                1, expenseRepository.count());
 
         Expense posted = expenseRepository.findAll().get(0);
+
+        assertEquals("redirect:" + url + posted.getId(), res.getModelAndView().getViewName());
+
         assertEquals(expense.getAmount(), posted.getAmount());
-        assertEquals(expense.getDescription(), posted.getAmount());
+        assertEquals(expense.getDescription(), posted.getDescription());
         assertEquals(expense.getUser(), posted.getUser());
-        assertEquals(expense.getStartDate(), posted.getStartDate());
-        assertEquals(expense.getEndDate(), posted.getEndDate());
+        assertEquals(f.format(expense.getStartDate()), f.format(posted.getStartDate()));
+        assertEquals(f.format(expense.getEndDate()), f.format(posted.getEndDate()));
         assertEquals(expense.getStatus(), posted.getStatus());
     }
-    */
 }
