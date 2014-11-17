@@ -28,9 +28,10 @@
                             <input type="text" name="modified" readonly="readonly" th:field="*{modified}" />
                         </label>
                         <label>Status
-                            <select name="status" th:field="*{status}">
+                            <select sec:authorize="hasAnyRole('ADMIN')" name="status" th:field="*{status}">
                                 <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
                             </select>
+                            <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" name="status" th:field="*{status}" />
                         </label>
                         <label>Description
                             <input type="text" name="description" th:field="*{description}" />
@@ -52,8 +53,8 @@
                         <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
                         <a class="close-reveal-modal">&#215;</a>
                     </div>
-                    <form id="delete-form" hidden="hidden" method="DELETE" th:action="@{/expenses/${expense.id}}">
-                        <input class="button" type="submit" value="Save" />
+                    <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
+                        <input class="button" type="submit" value="Delete" />
                     </form>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import java.util.Date;
 import java.util.List;
+import wad.domain.Authority;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -45,22 +46,20 @@ public class ExpenseService {
         return expenseRepository.save(e);
     }
 
-    public Expense updateExpense(Long id, Expense updated) {
-        Expense expense = expenseRepository.findOne(id);
+    public Expense updateExpense(Expense old, Expense updated) {
+        if (old.getId() == null) return null;
 
-        if (expense == null) return null;
+        old.setAmount(updated.getAmount());
+        old.setDescription(updated.getDescription());
+        old.setStartDate(updated.getStartDate());
+        old.setEndDate(updated.getEndDate());
+        old.setStatus(updated.getStatus());
+        old.setSupervisor(updated.getSupervisor());
+        old.setUser(updated.getUser());
 
-        expense.setAmount(updated.getAmount());
-        expense.setDescription(updated.getDescription());
-        expense.setStartDate(updated.getStartDate());
-        expense.setEndDate(updated.getEndDate());
-        expense.setStatus(updated.getStatus());
-        expense.setSupervisor(updated.getSupervisor());
-        expense.setUser(updated.getUser());
+        old.setModified(new Date());
 
-        expense.setModified(new Date());
-
-        return expenseRepository.save(expense);
+        return expenseRepository.save(old);
     }
 
     public List<Expense> getExpensesByUser(User user) {

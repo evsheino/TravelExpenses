@@ -28,6 +28,7 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.util.NestedServletException;
 import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
@@ -146,7 +147,7 @@ public class ExpenseControllerTests {
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
-                .param("user", user2.getId().toString())
+                .param("user", user.getId().toString())
                 .param("amount", amount)
                 .param("status", status.toString())
                 .param("startDate", startDate)
@@ -166,8 +167,29 @@ public class ExpenseControllerTests {
         assertEquals(f.parse(endDate), posted.getEndDate());
         assertEquals(desc, posted.getDescription());
         assertEquals(200, posted.getAmount(), 0.001);
-        assertEquals(user2, posted.getUser());
+        assertEquals(user, posted.getUser());
         assertEquals(status, posted.getStatus());
+    }
+
+    @Test
+    public void updateAnotherUsersExpenseFails() throws Exception {
+        expense = expenseRepository.save(expense);
+
+        String desc = "new description";
+        String startDate = "09/09/2010";
+        String endDate = "21/09/2010";
+        String amount = "200";
+        Expense.Status status = Expense.Status.APPROVED;
+
+        String url = "/expenses/" + expense.getId();
+        mockMvc.perform(post(url).session(session).with(csrf())
+                .param("user", user2.getId().toString())
+                .param("amount", amount)
+                .param("status", status.toString())
+                .param("startDate", startDate)
+                .param("endDate", endDate)
+                .param("description", desc))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test

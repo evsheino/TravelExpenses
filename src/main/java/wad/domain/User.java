@@ -44,6 +44,14 @@ public class User extends AbstractPersistable<Long> {
         setPassword(password);
     }
 
+    public boolean isAdmin() {
+        for (Authority auth : this.getAuthorities()) {
+            if (auth.getAuthority().equals(Authority.Role.ADMIN.toString()))
+                return true;
+        }
+        return false;
+    }
+
     public String getName() {
         return name;
     }

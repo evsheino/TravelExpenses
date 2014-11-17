@@ -1,6 +1,7 @@
 package wad.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +48,7 @@ public class ExpensesController {
         return "redirect:/expenses/" + expense.getId();
     }
     
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public String deleteExpense (@PathVariable Long id) {
         Expense e = expenseService.getExpense(id);
         expenseService.deleteExpense(e);
@@ -57,7 +58,19 @@ public class ExpensesController {
     
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String updateExpense (@PathVariable Long id, @ModelAttribute Expense updated, BindingResult bindingResult) {
-        Expense expense = expenseService.updateExpense(id, updated);
+        User currentUser = userService.getCurrentUser();
+        Expense expense = expenseService.getExpense(id);
+
+        if (expense == null)
+            throw new ResourceNotFoundException();
+
+        // Only allow admins to edit any Expense - others can only edit 
+        // their own Expenses.
+        if (!currentUser.isAdmin()
+                && (currentUser != expense.getUser() || currentUser != updated.getUser())) {
+            throw new ResourceNotFoundException();
+        }
+        expense = expenseService.updateExpense(expense, updated);
         
         return "redirect:/expenses/" + expense.getId();
     }    

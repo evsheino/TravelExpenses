@@ -132,7 +132,7 @@ public class ExpenseServiceTests {
         expense.setStatus(Expense.Status.APPROVED);
         expense.setSupervisor(user2);
 
-        expense = expenseService.updateExpense(old.getId(), expense);
+        expense = expenseService.updateExpense(old, expense);
 
         assertEquals(1, expenseRepository.count());
 
@@ -143,7 +143,7 @@ public class ExpenseServiceTests {
 
     @Test
     public void updateExpenseReturnsNullIfExpenseNotFound() throws Exception {
-        assertNull(expenseService.updateExpense(1L, expense));
+        assertNull(expenseService.updateExpense(new Expense(), expense));
         assertEquals(0, expenseRepository.count());
     }
 

@@ -33,7 +33,7 @@ import wad.service.UserService;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class EspenseTests {
+public class ExpenseTests {
 
     private final String DATE_FORMAT = "dd/MM/yyyy";
 
@@ -154,8 +154,8 @@ public class EspenseTests {
         Expense updated = expenseRepository.findOne(expense.getId());
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
-        assertEquals(f.parse(startDate), updated.getStartDate());
-        assertEquals(f.parse(endDate), updated.getEndDate());
+        assertEquals(startDate, f.format(updated.getStartDate()));
+        assertEquals(endDate, f.format(updated.getEndDate()));
         assertEquals(desc, updated.getDescription());
         assertEquals(200, updated.getAmount(), 0.001);
 
