@@ -24,6 +24,7 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
+import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
@@ -50,6 +51,7 @@ public class ExpenseTests {
     private MockMvc mockMvc;
 
     private User user;
+    private User user2;
     private Expense expense;
 
     @Before
@@ -60,11 +62,8 @@ public class ExpenseTests {
         this.webAppContext.getServletContext()
                 .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
-        user = new User();
-
-        user.setName("John Doe");
-        user.setPassword("password");
-        user.setUsername("johnd");
+        user = userService.createUser("John Doe", "jd", "password", Authority.Role.USER);
+        user2 = userService.createUser("Ludwig Wittgenstein", "ludwig", "tractatus", Authority.Role.USER);
 
         userRepository.save(user);
 
@@ -114,6 +113,43 @@ public class ExpenseTests {
         assertEquals(expense.getStatus(), resFromModel.getStatus());
         assertEquals(expense.getSupervisor(), resFromModel.getSupervisor());
         assertEquals(expense.getId(), resFromModel.getId());
+    }
+
+    @Test
+    public void postUpdatedExpenseUpdatesExpense() throws Exception {
+        expense = expenseRepository.save(expense);
+
+        String url = "/expenses/" + expense.getId();
+
+        String desc = "new description";
+        String startDate = "09/09/2010";
+        String endDate = "21/09/2010";
+        String amount = "200";
+        Expense.Status status = Expense.Status.APPROVED;
+
+        mockMvc.perform(post(url)
+                .param("user", user2.getId().toString())
+                .param("amount", amount)
+                .param("status", status.toString())
+                .param("startDate", startDate)
+                .param("endDate", endDate)
+                .param("description", desc))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(url));
+
+        assertEquals("There should be exactly 1 Expense in the database after updating the only existing Expense.",
+                1, expenseRepository.count());
+
+        // Check that the Expense was updated.
+        Expense posted = expenseRepository.findAll().get(0);
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
+        assertEquals(f.parse(startDate), posted.getStartDate());
+        assertEquals(f.parse(endDate), posted.getEndDate());
+        assertEquals(desc, posted.getDescription());
+        assertEquals(200, posted.getAmount(), 0.001);
+        assertEquals(user2, posted.getUser());
+        assertEquals(status, posted.getStatus());
     }
 
     /*
