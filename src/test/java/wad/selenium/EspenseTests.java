@@ -78,7 +78,7 @@ public class EspenseTests {
 
     @Before
     public void setUp() {
-        //driver = new HtmlUnitDriver();
+        // Use FirefoxDriver for JavaScript support.
         driver = new FirefoxDriver();
 
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
@@ -144,9 +144,13 @@ public class EspenseTests {
         element = driver.findElement(By.id("edit-form-submit"));
         element.click();
 
-        assertEquals(EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
 
-        assertEquals(1, expenseRepository.count());
+        assertEquals("There should be exactly 1 Expense in the database after editing the only existing Expense.",
+                1, expenseRepository.count());
+
+        // Check that the Expense has been updated in the database.
         Expense updated = expenseRepository.findOne(expense.getId());
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
@@ -154,5 +158,14 @@ public class EspenseTests {
         assertEquals(f.parse(endDate), updated.getEndDate());
         assertEquals(desc, updated.getDescription());
         assertEquals(200, updated.getAmount(), 0.001);
+
+        // Check that the page has the updated Expense.
+        String content = driver.getPageSource();
+
+        assertTrue(content.contains(updated.getDescription()));
+        assertTrue(content.contains(updated.getAmount().toString()));
+        assertTrue(content.contains(f.format(updated.getStartDate())));
+        assertTrue(content.contains(f.format(updated.getEndDate())));
+        assertTrue(content.contains(updated.getUser().getName()));
     }
 }
