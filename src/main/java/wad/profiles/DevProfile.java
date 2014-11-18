@@ -45,6 +45,10 @@ public class DevProfile extends BaseProfile {
 
         User johnd = userService.createUser("John Doe", "johnd", "johnd", Authority.Role.USER);
         generateExpenses(johnd, 10);
+
+        userService.createUser("Teemu", "Teemu", "sisaan", Authority.Role.USER);
+        userService.createUser("Aku", "Aku", "password", Authority.Role.ADMIN);
+        userService.createUser("Tommi", "Tommi", "esimies", Authority.Role.SUPERVISOR);
     }
 
     private void generateExpenses(User user, int numOfExpenses) {

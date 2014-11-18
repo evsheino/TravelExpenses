@@ -31,11 +31,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.logout()
                 .permitAll()
                 .invalidateHttpSession(true);
-        
-        // Sulkee CSRF-suojauksen.
-        http
-            .csrf().disable();        
-
     }
 
     @Configuration
@@ -47,15 +42,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             auth.authenticationProvider(jpaAuthenticationProvider);
-            
-            auth.inMemoryAuthentication()
-                    .withUser("Teemu").password("sisaan").roles("USER");
-            
-            auth.inMemoryAuthentication()
-                    .withUser("Tommi").password("esimies").roles("SUPERVISOR");
-            
-            auth.inMemoryAuthentication()
-                    .withUser("Aku").password("password").roles("ADMIN");            
         }
     }
 }
