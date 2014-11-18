@@ -38,9 +38,9 @@
 
                 <div>
                     <div style="border: solid black 1px">
-                        <form id="expense-submission-form" method="POST" action="/add">
-                            <input type="number" name="expense_size" placeholder="Amount"/>
-                            <input type="textarea" name="description" placeholder="Description of expense"/>
+                        <form id="expense-submission-form" method="POST" th:action="@{/expenses}">
+                            <input type="number" min = "0" name="amount" placeholder="Amount"/>
+                            <input type="text" name="description" placeholder="Description of expense"/>
                             <input type="submit" value="Submit expense"/>
                         <!--     <a href="#" onclick="document.getElementById('expense-submission-form').submit();" class="button" role="button">Submit</a> -->
                         </form>

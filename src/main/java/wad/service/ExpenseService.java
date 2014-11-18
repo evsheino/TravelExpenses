@@ -70,5 +70,10 @@ public class ExpenseService {
         return expenseRepository.findOne(id);
     }
 
+    public Date getDate () {
+        Date date = new Date();
+        
+        return date;
+    }
 
 }

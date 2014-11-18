@@ -39,13 +39,21 @@ public class ExpensesController {
     
     @RequestMapping(method = RequestMethod.POST)
     public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult) {
-
+        if (bindingResult.hasErrors()) {
+            return "index";
+        }
+        
         User u = userService.getCurrentUser();
         expense.setUser(u);
+        expense.setStartDate(expenseService.getDate());
+        expense.setEndDate(expenseService.getDate());
+        expense.setStatus(Expense.Status.WAITING);
 
         expenseService.saveExpense(expense);
         
-        return "redirect:/expenses/" + expense.getId();
+        return "redirect:index"
+//                + "/expenses/" + expense.getId()
+                ;
     }
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
