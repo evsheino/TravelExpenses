@@ -16,7 +16,7 @@
             <!-- Just to show user authorities work -->
             <div class="row">
                 <div class="large-12 columns">
-                    <p>Tree columns below will show the authorities you have</p>
+                    <p>The columns below will show the authorities you have</p>
                     <div class="row">
                         <div class="large-4 medium-4 columns">
                             <div class="callout panel">
@@ -35,20 +35,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div>
-                    <div style="border: solid black 1px">
-                        <form id="expense-submission-form" method="POST" th:action="@{/expenses}">
-                            <input type="number" min = "0" name="amount" placeholder="Amount"/>
-                            <input type="text" name="description" placeholder="Description of expense"/>
-                            <input type="submit" value="Submit expense"/>
-                        <!--     <a href="#" onclick="document.getElementById('expense-submission-form').submit();" class="button" role="button">Submit</a> -->
-                        </form>
-                    </div>
+            <hr />
 
+            <div class="row">
+                <div class="large-12 columns">
+                    <h2>Add New Expense</h2>
+                    <div th:include="expenses/addForm :: addExpenseForm" />
+                    
                     <div id="Expense-list" style="border: solid black 1px">
                         <p>Here goes list of submitted, non-validated expenses from any user.</p>
-
+                          
                         <ol>
                             <li th:each="expense : ${expenses}" th:text="${expense.date}"></li>
                         </ol>
