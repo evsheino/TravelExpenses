@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Expense</title>
+    </head>
+    <body>
+        <div th:fragment="editExpenseForm">
+            <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
+                <input type="hidden" name="id" th:value="${expense.id}" />
+                <input type="hidden" name="user" th:value="${expense.user.id}" />
+                <label>User
+                    <input type="text" name="userName" readonly="readonly" th:value="${expense.user.name}" />
+                </label>
+                <label>Modified
+                    <input type="text" name="modified" readonly="readonly" th:field="*{modified}" />
+                </label>
+                <label>Status
+                    <select sec:authorize="hasAnyRole('ADMIN')" name="status" th:field="*{status}">
+                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+                    </select>
+                    <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" name="status" th:field="*{status}" />
+                </label>
+                <label>Description
+                    <input type="text" name="description" th:field="*{description}" />
+                </label>
+                <label>Start date
+                    <input type="date" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
+                </label>
+                <label>End date
+                    <input type="date" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
+                </label>
+                <label>Amount
+                    <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
+                </label>
+                <!-- 
+                The submit button is hidden so that additional buttons can be positioned nicely.
+                This may also be possible with the button visible and better css skills. 
+                Add a <label for="edit-form-submit-input">Save</label> element wherever including this in order to have
+                a submit button.
+                -->
+                <input id="edit-form-submit-input" type="submit" hidden="hidden" />
+            </form>
+        </div>
+    </body>
+</html>
