@@ -1,7 +1,7 @@
 package wad.controller;
 
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,21 +39,16 @@ public class ExpensesController {
     
     @RequestMapping(method = RequestMethod.POST)
     public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "index";
-        }
         
         User u = userService.getCurrentUser();
         expense.setUser(u);
-        expense.setStartDate(expenseService.getDate());
-        expense.setEndDate(expenseService.getDate());
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStartDate(new Date());
+        expense.setEndDate(new Date());
+        expense.setStatus(Expense.Status.SAVED);
 
-        expenseService.saveExpense(expense);
+        expense = expenseService.saveExpense(expense);
         
-        return "redirect:index"
-//                + "/expenses/" + expense.getId()
-                ;
+        return "redirect:/expenses/" + expense.getId();
     }
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)

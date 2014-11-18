@@ -69,11 +69,4 @@ public class ExpenseService {
     public Expense getExpense(Long id) {
         return expenseRepository.findOne(id);
     }
-
-    public Date getDate () {
-        Date date = new Date();
-        
-        return date;
-    }
-
 }

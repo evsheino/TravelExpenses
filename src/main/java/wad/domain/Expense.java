@@ -33,13 +33,13 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
     
-//    @NotNull    
+    @NotNull    
     private double amount;
 
-//    @NotBlank
+    @NotBlank
     private String description;
 
-//    @NotNull
+    @NotNull
     private Status status;
 
     @JsonIgnore
@@ -50,25 +50,25 @@ public class Expense extends AbstractPersistable<Long> {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_start_date")
-//    @NotNull
+    @NotNull
     private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_end_date")
-//    @NotNull
+    @NotNull
     private Date endDate;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="user_id")
-//    @NotNull
+    @NotNull
     private User user;
 
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss")
     @Column(name = "expense_modified_date")
-//    @NotNull
+    @NotNull
     private Date modified;
 
     @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
