@@ -9,7 +9,7 @@
     </head>
     <body>
         <div layout:fragment="content">
-            <div class="row">
+            <div class="row page-topic">
                 <div class="large-12 columns">
                     <h1>Expense information</h1>
                 </div>
@@ -33,13 +33,13 @@
                 </div>
             </div>
 
-            <hr />
-            <div class="row">
+            <div class="row page-topic" style="margin: 2em 0 2em 0">
                 <div class="large-10 columns">
                     <h1>Rows</h1>
                 </div>
             </div>
-            <hr />
+
+            <div style="margin: 2em 0 2em 0"> </div>
 
             <div class="row">
                 <div class="large-2 columns">
@@ -57,10 +57,12 @@
                         <input type="text" name="date" />
                     </label>
                 </div>
-                <div class="large-2 columns">
+                <div class="large-2 columns" style="text-align: right;">
                     <a href="#" class="button expand">+ Add row</a>
                 </div>
             </div>
+
+            <hr />
 
             <div class="row expense-row" th:each="row,status : ${expense.expenseRows}">
                 <div class="large-2 columns" th:text="${row.amount}">
@@ -72,7 +74,7 @@
                 <div class="large-2 columns" th:text="${row.date}">
                     1.1.1900
                 </div>
-                <div class="large-2 columns">
+                <div class="large-2 columns" style="text-align: right;">
                     <a href="#" class="button expand">Edit row</a>
                 </div>
             </div>

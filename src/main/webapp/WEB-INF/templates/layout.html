@@ -28,7 +28,6 @@
     <section class="top-bar-section" sec:authorize="isAuthenticated()"> <!-- Right Nav Section -->
         <ul class="right">
             <li><a href="#" th:href="@{/expenses}">My expenses</a></li>
-            <li sec:authorize="hasRole('SUPERVISOR')"><a href="#">You</a></li>
             <li sec:authorize="hasRole('SUPERVISOR')"><a href="#">Subordinates</a></li>
             <li class="has-dropdown"><a href="#" th:text="${#authentication.name}">Drop down</a>
                 <ul class="dropdown">

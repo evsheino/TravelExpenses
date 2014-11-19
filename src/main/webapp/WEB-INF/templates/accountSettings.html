@@ -10,15 +10,14 @@
         <div layout:fragment="content">
 
             <div class="account-settings">
-                    <div class="row">
+                    <div class="row page-topic">
                         <div class="medium-12 columns">
+                            <h1>Account settings</h1>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="medium-12 columns">
-
-                            <h1>Account settings</h1>
                             <label>Name <br/><h4 th:text="${user.name}">Name</h4></label>
                             <label>Username <br/><h4 th:text="${user.username}">Username</h4></label>
 
@@ -41,8 +40,9 @@
                     </div>
             </div>
 
+            <!--
             <div class="statistics">
-                    <div class="row">
+                    <div class="row  page-topic">
                         <div class="small-12 columns">
                             <h1>Statistics</h1>
                         </div>
@@ -119,6 +119,7 @@
                     </script>
 
             </div>
+            -->
 
         </div>
     </body>

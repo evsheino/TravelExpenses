@@ -28,12 +28,12 @@
 
 /* Admin */
 
-.users-topic {
+.page-topic {
     background-color: #eeeeee;
     padding: 1em 0em 1em 0em;
 }
 
-.users-header {
+.table-header {
     padding: 1em 0em 1em 0em;
     font-weight: bold;
 }

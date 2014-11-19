@@ -9,13 +9,13 @@
     </head>
     <body>
         <div layout:fragment="content">
-            <div class="row">
+            <div class="row page-topic">
                 <div class="large-12 columns">
                     <h1>Expenses</h1>
                 </div>
             </div>
 
-            <div class="row expenses-header">
+            <div class="row table-header">
                 <div class="large-2 columns">
                     Start date
                 </div>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="large-2 columns" th:text="${expense.status}">
                 </div>
-                <div class="large-2 columns">
+                <div class="large-2 columns" style="text-align: right;">
                     <a href="#" class="button expand" th:href="@{/expenses/} + ${expense.id}">Edit</a>
                 </div>
             </div>
