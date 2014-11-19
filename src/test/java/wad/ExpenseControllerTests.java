@@ -5,6 +5,7 @@ import java.util.Date;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,6 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.util.NestedServletException;
 import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
@@ -218,5 +218,56 @@ public class ExpenseControllerTests {
         assertEquals(f.format(expense.getStartDate()), f.format(posted.getStartDate()));
         assertEquals(f.format(expense.getEndDate()), f.format(posted.getEndDate()));
         assertEquals(expense.getStatus(), posted.getStatus());
+    }
+
+    @Test
+    public void deleteExpenseDeletesExpense() throws Exception {
+        expense = expenseRepository.save(expense);
+        assertEquals(1, expenseRepository.count());
+
+        String url = "/expenses/" + expense.getId() + "/delete";
+        mockMvc.perform(post(url).session(session).with(csrf()));
+
+        assertEquals("After deleting the Expense only Expense, there should be no Expenses in the database.",
+                0, expenseRepository.count());
+
+    }
+
+    @Test
+    public void deleteExpenseDeletesCorrectExpense() throws Exception {
+        String desc = "do not delete this";
+
+        expense.setDescription(desc);
+        expenseRepository.save(expense);
+
+        expense = new Expense();
+        expense.setUser(user);
+        expense.setStartDate(new Date());
+        expense.setEndDate(new Date());
+        expense.setDescription("DELETE THIS");
+        expense.setStatus(Expense.Status.SAVED);
+        expense.setModified(new Date());
+        expense.setAmount(100.0);
+        expense = expenseRepository.save(expense);
+
+        assertEquals(2, expenseRepository.count());
+
+        Long id = expense.getId();
+
+        String url = "/expenses/" + id + "/delete";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses"));
+
+        assertEquals("After deleting an Expense, there should be one less Expenses in the database.",
+                1, expenseRepository.count());
+        assertNull("After deleting an Expense, the deleted Expense should not be in the database.",
+                expenseRepository.findOne(id));
+
+        String actualDesc = expenseRepository.findAll().get(0).getDescription();
+
+        assertEquals("After deleting the other Expense, the one left in the database should have the description '"
+                + desc + "', but instead had '" + actualDesc + "'" , desc, actualDesc);
+
     }
 }
