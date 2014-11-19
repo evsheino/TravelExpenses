@@ -168,4 +168,26 @@ public class ExpenseTests {
         assertTrue(content.contains(f.format(updated.getEndDate())));
         assertTrue(content.contains(updated.getUser().getName()));
     }
+
+    @Test
+    public void userCanDeleteExpenseWithStatusSAVED() throws Exception {
+
+        driver.get(EXPENSES_URI + expense.getId());
+
+        WebElement element = driver.findElement(By.id("delete-button"));
+        element.click();
+
+        // Wait for the confirmation popup
+        Thread.sleep(1000);
+
+        // Confirmation
+        element = driver.findElement(By.id("delete-confirm-button"));
+        element.click();
+
+        assertEquals("The user should be redirected to the expense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI, driver.getCurrentUrl() + "/");
+
+        assertEquals("There should be no Expenses in the database after deleting the only existing Expense.",
+                0, expenseRepository.count());
+    }
 }
