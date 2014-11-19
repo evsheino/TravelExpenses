@@ -67,12 +67,9 @@ public class ExpensesController {
         if (expense == null)
             throw new ResourceNotFoundException();
 
-        // Only allow admins to edit any Expense - others can only edit 
-        // their own Expenses.
-        if (!currentUser.isAdmin()
-                && (currentUser != expense.getUser() || currentUser != updated.getUser())) {
+        if (!expense.isEditableBy(currentUser) || !updated.isEditableBy(currentUser))
             throw new ResourceNotFoundException();
-        }
+
         expense = expenseService.updateExpense(expense, updated);
         
         return "redirect:/expenses/" + expense.getId();

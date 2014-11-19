@@ -143,7 +143,7 @@ public class ExpenseControllerTests {
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
         String amount = "200";
-        Expense.Status status = Expense.Status.APPROVED;
+        Expense.Status status = Expense.Status.SAVED;
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())

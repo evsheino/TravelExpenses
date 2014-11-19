@@ -74,6 +74,20 @@ public class Expense extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ExpenseRow> expenseRows;
 
+    /**
+     * Check if the given User is allowed to edit this Expense.
+     * A user can edit an Expense iff she is an admin or owns the Expense and
+     * the status of the Expense is SAVED or RETURNED.
+     * 
+     * @param user The user to check.
+     * @return True if the user is allowed to edit the Expense, false otherwise.
+     */
+    public boolean isEditableBy(User user) {
+        return user.isAdmin()
+                || (user == getUser()
+                && (getStatus() == Status.SAVED || getStatus() == Status.RETURNED));
+    }
+
     public Date getModified() {
         return modified;
     }
