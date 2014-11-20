@@ -29,6 +29,7 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
+import wad.controller.ResourceNotFoundException;
 import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
@@ -221,7 +222,8 @@ public class ExpenseControllerTests {
     }
 
     @Test
-    public void deleteExpenseDeletesExpense() throws Exception {
+    public void deleteExpenseByOwnerDeletesExpenseWithStatusSAVED() throws Exception {
+        expense.setStatus(Expense.Status.SAVED);
         expense = expenseRepository.save(expense);
         assertEquals(1, expenseRepository.count());
 
@@ -237,6 +239,7 @@ public class ExpenseControllerTests {
     public void deleteExpenseDeletesCorrectExpense() throws Exception {
         String desc = "do not delete this";
 
+        expense.setStatus(Expense.Status.SAVED);
         expense.setDescription(desc);
         expenseRepository.save(expense);
 
@@ -269,5 +272,34 @@ public class ExpenseControllerTests {
         assertEquals("After deleting the other Expense, the one left in the database should have the description '"
                 + desc + "', but instead had '" + actualDesc + "'" , desc, actualDesc);
 
+    }
+
+    private void testDeleteFails(Expense expense) throws Exception {
+        long count = expenseRepository.count();
+
+        String url = "/expenses/" + expense.getId() + "/delete";
+        mockMvc.perform(post(url).session(session).with(csrf()));
+        assertEquals(count, expenseRepository.count());
+    }
+
+    @Test
+    public void deleteExpenseByNonOwnerNonAdminFails() throws Exception {
+        expense.setUser(user2);
+        expense = expenseRepository.save(expense);
+        testDeleteFails(expense);
+    }
+
+    @Test
+    public void deleteExpenseByOwnerWithStatusAPPROVEDFails() throws Exception {
+        expense.setStatus(Expense.Status.APPROVED);
+        expense = expenseRepository.save(expense);
+        testDeleteFails(expense);
+    }
+
+    @Test
+    public void deleteExpenseByOwnerWithStatusWAITINGFails() throws Exception {
+        expense.setStatus(Expense.Status.WAITING);
+        expense = expenseRepository.save(expense);
+        testDeleteFails(expense);
     }
 }

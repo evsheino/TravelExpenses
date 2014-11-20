@@ -36,10 +36,10 @@ public class ExpensesController {
         model.addAttribute("expense", expenseService.getExpense(id));
         return "expenses/edit";
     }
-    
+
     @RequestMapping(method = RequestMethod.POST)
     public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult) {
-        
+
         User u = userService.getCurrentUser();
         expense.setUser(u);
         expense.setStartDate(new Date());
@@ -47,18 +47,23 @@ public class ExpensesController {
         expense.setStatus(Expense.Status.SAVED);
 
         expense = expenseService.saveExpense(expense);
-        
+
         return "redirect:/expenses/" + expense.getId();
     }
-    
+
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public String deleteExpense (@PathVariable Long id) {
-        Expense e = expenseService.getExpense(id);
-        expenseService.deleteExpense(e);
-        
+        Expense expense = expenseService.getExpense(id);
+        User currentUser = userService.getCurrentUser();
+
+        if (!expense.isEditableBy(currentUser))
+            throw new ResourceNotFoundException();
+
+        expenseService.deleteExpense(expense);
+
         return "redirect:/expenses";
     }
-    
+
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public String updateExpense (@PathVariable Long id, @ModelAttribute Expense updated, BindingResult bindingResult) {
         User currentUser = userService.getCurrentUser();
@@ -67,11 +72,11 @@ public class ExpensesController {
         if (expense == null)
             throw new ResourceNotFoundException();
 
-        if (!expense.isEditableBy(currentUser) || !updated.isEditableBy(currentUser))
+        if (!(expense.isEditableBy(currentUser) && updated.isEditableBy(currentUser)))
             throw new ResourceNotFoundException();
 
         expense = expenseService.updateExpense(expense, updated);
-        
+
         return "redirect:/expenses/" + expense.getId();
-    }    
+    }
 }
