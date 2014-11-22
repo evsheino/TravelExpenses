@@ -41,9 +41,22 @@ import wad.repository.ExpenseRepository;
 @ActiveProfiles("test")
 public class ExpenseControllerTests {
     private final String DATE_FORMAT = "dd/MM/yyyy";
+
     private final String NAME = "John Doe";
     private final String USERNAME = "user";
     private final String PASSWORD = "password";
+
+    private final String NAME2 = "David Hume";
+    private final String USERNAME2 = "hume";
+    private final String PASSWORD2 = "treatise";
+
+    private final String ADMIN_NAME = "Immanuel Kant";
+    private final String ADMIN_USERNAME = "kant";
+    private final String ADMIN_PASSWORD = "dingansich";
+
+    private final String SUPERVISOR_NAME = "Ludwig Wittgenstein";
+    private final String SUPERVISOR_USERNAME = "ludwig";
+    private final String SUPERVISOR_PASSWORD = "tractatus";
 
     @Autowired
     private FilterChainProxy springSecurityFilterChain;
@@ -64,6 +77,9 @@ public class ExpenseControllerTests {
 
     private User user;
     private User user2;
+    private User admin;
+    private User supervisor;
+
     private Expense expense;
     private MockHttpSession session;
 
@@ -77,7 +93,9 @@ public class ExpenseControllerTests {
                 .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
         user = userService.createUser(NAME, USERNAME, PASSWORD, Authority.Role.USER);
-        user2 = userService.createUser("Ludwig Wittgenstein", "ludwig", "tractatus", Authority.Role.USER);
+        user2 = userService.createUser(NAME2, USERNAME2, PASSWORD2, Authority.Role.USER);
+        admin = userService.createUser(ADMIN_NAME, ADMIN_USERNAME, ADMIN_PASSWORD, Authority.Role.ADMIN);
+        supervisor = userService.createUser(SUPERVISOR_NAME, SUPERVISOR_USERNAME, SUPERVISOR_PASSWORD, Authority.Role.SUPERVISOR);
 
         userRepository.save(user);
 
@@ -90,13 +108,20 @@ public class ExpenseControllerTests {
         expense.setModified(new Date());
         expense.setAmount(100.0);
 
-        session = (MockHttpSession) mockMvc.perform(formLogin("/authenticate"))
+        session = createSession(user.getUsername(), PASSWORD);
+
+    }
+
+    private MockHttpSession createSession(String username, String password) throws Exception {
+        session = (MockHttpSession) mockMvc.perform(formLogin("/authenticate").user(username).password(password))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/index"))
                 .andReturn()
                 .getRequest()
                 .getSession();
         assertNotNull(session); 
+
+        return session;
     }
 
     @After
@@ -111,6 +136,39 @@ public class ExpenseControllerTests {
 
         mockMvc.perform(get("/expenses/" + expense.getId()).session(session))
                 .andExpect(status().isOk());
+    }
+
+    private void testCanBeViewedBy(String username) throws Exception {
+        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(username)))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("expense"))
+                .andExpect(view().name("expenses/edit")).andReturn();
+
+        assertNotNull(res.getModelAndView().getModel().get("expense"));
+    }
+
+    @Test
+    public void ownerCanViewExpense() throws Exception {
+        expense = expenseRepository.save(expense);
+        testCanBeViewedBy(USERNAME);
+    }
+
+    @Test
+    public void adminCanViewExpense() throws Exception {
+        expense = expenseRepository.save(expense);
+        testCanBeViewedBy(ADMIN_USERNAME);
+    }
+
+    @Test
+    public void supervisorCanViewExpense() throws Exception {
+        expense = expenseRepository.save(expense);
+        testCanBeViewedBy(SUPERVISOR_USERNAME);
+    }
+
+    @Test
+    public void NonOwnerUserCannotViewExpense() throws Exception {
+        mockMvc.perform(get("/expenses/" + expense.getId()).with(user(USERNAME2)))
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
