@@ -138,7 +138,8 @@ public class ExpenseControllerTests {
                 .andExpect(status().isOk());
     }
 
-    private void testCanBeViewedBy(String username) throws Exception {
+    private void testExpenseCanBeViewedBy(String username) throws Exception {
+        expense = expenseRepository.save(expense);
         MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(username)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("expense"))
@@ -149,20 +150,17 @@ public class ExpenseControllerTests {
 
     @Test
     public void ownerCanViewExpense() throws Exception {
-        expense = expenseRepository.save(expense);
-        testCanBeViewedBy(USERNAME);
+        testExpenseCanBeViewedBy(USERNAME);
     }
 
     @Test
     public void adminCanViewExpense() throws Exception {
-        expense = expenseRepository.save(expense);
-        testCanBeViewedBy(ADMIN_USERNAME);
+        testExpenseCanBeViewedBy(ADMIN_USERNAME);
     }
 
     @Test
     public void supervisorCanViewExpense() throws Exception {
-        expense = expenseRepository.save(expense);
-        testCanBeViewedBy(SUPERVISOR_USERNAME);
+        testExpenseCanBeViewedBy(SUPERVISOR_USERNAME);
     }
 
     @Test
