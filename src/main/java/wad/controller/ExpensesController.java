@@ -32,8 +32,13 @@ public class ExpensesController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public String showExpense(Model model, @PathVariable Long id) {
+        Expense expense = expenseService.getExpense(id);
+
+        if (expense == null || !expense.isViewableBy(userService.getCurrentUser()))
+            throw new ResourceNotFoundException();
+
         model.addAttribute("statuses", Expense.Status.values());
-        model.addAttribute("expense", expenseService.getExpense(id));
+        model.addAttribute("expense", expense);
         return "expenses/edit";
     }
 
@@ -56,7 +61,7 @@ public class ExpensesController {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
 
-        if (!expense.isEditableBy(currentUser))
+        if (expense == null || !expense.isEditableBy(currentUser))
             throw new ResourceNotFoundException();
 
         expenseService.deleteExpense(expense);
@@ -69,10 +74,8 @@ public class ExpensesController {
         User currentUser = userService.getCurrentUser();
         Expense expense = expenseService.getExpense(id);
 
-        if (expense == null)
-            throw new ResourceNotFoundException();
-
-        if (!(expense.isEditableBy(currentUser) && updated.isEditableBy(currentUser)))
+        if (expense == null || 
+                !(expense.isEditableBy(currentUser) && updated.isEditableBy(currentUser)))
             throw new ResourceNotFoundException();
 
         expense = expenseService.updateExpense(expense, updated);

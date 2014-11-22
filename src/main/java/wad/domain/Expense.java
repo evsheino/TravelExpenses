@@ -88,6 +88,18 @@ public class Expense extends AbstractPersistable<Long> {
                 && (getStatus() == Status.SAVED || getStatus() == Status.RETURNED));
     }
 
+    /**
+     * Check if the given User is allowed to view this Expense.
+     * A user can edit an Expense iff she is an admin or a supervisor, or owns the Expense
+     * 
+     * @param user The user to check.
+     * @return True if the user is allowed to view the Expense, false otherwise.
+     */
+    public boolean isViewableBy(User user) {
+        return user.isAdmin()
+                || (user == getUser() || user.isSupervisor());
+    }
+
     public Date getModified() {
         return modified;
     }

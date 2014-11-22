@@ -278,7 +278,8 @@ public class ExpenseControllerTests {
         long count = expenseRepository.count();
 
         String url = "/expenses/" + expense.getId() + "/delete";
-        mockMvc.perform(post(url).session(session).with(csrf()));
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is4xxClientError());
         assertEquals(count, expenseRepository.count());
     }
 
