@@ -1,12 +1,12 @@
 package wad.controller;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,12 +43,16 @@ public class ExpensesController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult) {
-
+    public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult, ModelMap model) {
+        // Error handling.
+        if (expenseService.checkStartAndEndDate(expense.getStartDate(), expense.getEndDate()) == false) {
+            model.addAttribute("error", "Valitse käypä päivämääräpari.");
+            return "redirect:/index";
+        }
+        
+        
         User u = userService.getCurrentUser();
         expense.setUser(u);
-        expense.setStartDate(new Date());
-        expense.setEndDate(new Date());
         expense.setStatus(Expense.Status.SAVED);
 
         expense = expenseService.saveExpense(expense);
