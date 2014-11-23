@@ -18,67 +18,40 @@
             <div class="row">
                 <div class="large-12 columns">
                   <div th:include="expenses/editForm :: editExpenseForm" />
-                    
-                    <label id="edit-form-submit" class="button" for="edit-form-submit-input">Save</label>
-                    <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert">Delete</a>
-
-                    <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
-                        <h2>Are you sure?</h2>
-                        <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
-                        <a class="close-reveal-modal">&#215;</a>
-                    </div>
-                    <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
-                        <input class="button" type="submit" value="Delete" />
-                    </form>
+                  <div class="row">
+                      <div class="large-2 columns">
+                          <label>Amount
+                              <input type="text" name="amount" />
+                          </label>
+                      </div>
+                      <div class="large-6 columns">
+                          <label>Description
+                              <input type="text" name="description" />
+                          </label>
+                      </div>
+                      <div class="large-2 columns">
+                          <label>Date
+                              <input type="text" name="date" />
+                          </label>
+                      </div>
+                      <div class="large-2 columns" style="text-align: right;">
+                          <a href="#" class="button expand">+ Add row</a>
+                      </div>
+                  </div>
+                        
+                  <label id="edit-form-submit" class="button" for="edit-form-submit-input">Save</label>
+                  <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert">Delete</a>
+                        
+                  <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
+                      <h2>Are you sure?</h2>
+                      <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
+                      <a class="close-reveal-modal">&#215;</a>
+                  </div>
+                  <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
+                      <input class="button" type="submit" value="Delete" />
+                  </form>
                 </div>
             </div>
-
-            <div class="row page-topic" style="margin: 2em 0 2em 0">
-                <div class="large-10 columns">
-                    <h1>Rows</h1>
-                </div>
-            </div>
-
-            <div style="margin: 2em 0 2em 0"> </div>
-
-            <div class="row">
-                <div class="large-2 columns">
-                    <label>Amount
-                        <input type="text" name="amount" />
-                    </label>
-                </div>
-                <div class="large-6 columns">
-                    <label>Description
-                        <input type="text" name="description" />
-                    </label>
-                </div>
-                <div class="large-2 columns">
-                    <label>Date
-                        <input type="text" name="date" />
-                    </label>
-                </div>
-                <div class="large-2 columns" style="text-align: right;">
-                    <a href="#" class="button expand">+ Add row</a>
-                </div>
-            </div>
-
-            <hr />
-
-            <div class="row expense-row" th:each="row,status : ${expense.expenseRows}">
-                <div class="large-2 columns" th:text="${row.amount}">
-                    XX.xx eur
-                </div>
-                <div class="large-6 columns" th:text="${row.description}">
-                    Blab blaablalblalblabla bla bla bla
-                </div>
-                <div class="large-2 columns" th:text="${row.date}">
-                    1.1.1900
-                </div>
-                <div class="large-2 columns" style="text-align: right;">
-                    <a href="#" class="button expand">Edit row</a>
-                </div>
-            </div>
-
         </div>
     </body>
 </html>

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class ExpenseRow extends AbstractPersistable<Long> {
@@ -15,6 +16,7 @@ public class ExpenseRow extends AbstractPersistable<Long> {
     private Expense expense;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_row_date")
     private Date date;
 

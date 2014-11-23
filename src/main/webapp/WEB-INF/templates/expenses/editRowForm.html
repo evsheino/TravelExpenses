@@ -9,28 +9,14 @@
     <body>
         <div th:fragment="editExpenseRowForm">
             <form id="edit-form" method="POST" th:object="${expenseRow}" th:action="@{/expenses/} + ${expense.id} + /rows/ + ${expenseRow.id}">
-                <input type="hidden" name="expense" th:value="${expense.id}" />
-                <input type="text" name="userName" readonly="readonly" th:value="${expense.user.name}" />
-                <label>Modified
-                    <input type="text" name="modified" readonly="readonly" th:field="*{modified}" />
-                </label>
-                <label>Status
-                    <select sec:authorize="hasAnyRole('ADMIN')" name="status" th:field="*{status}">
-                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
-                    </select>
-                    <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" name="status" th:field="*{status}" />
+                <label>Date
+                    <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" />
                 </label>
                 <label>Description
                     <input type="text" name="description" th:field="*{description}" />
                 </label>
-                <label>Start date
-                    <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
-                </label>
-                <label>End date
-                    <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
-                </label>
                 <label>Amount
-                    <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
+                    <input type="number" step="any" min="0" name="amount" placeholder="amount" th:field="*{amount}" />
                 </label>
                 <!-- 
                 The submit button is hidden so that additional buttons can be positioned nicely.

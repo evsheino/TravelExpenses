@@ -33,6 +33,38 @@
                 <label>Amount
                     <input type="number" step="any" min="0" placeholder="amount" th:field="*{amount}" />
                 </label>
+                
+                <div class="row page-topic" style="margin: 2em 0 2em 0">
+                    <div class="large-10 columns">
+                        <h1>Rows</h1>
+                    </div>
+                </div>
+
+                <div class="row" style="margin: 2em 0 2em 0">
+                    <div class="large-2 columns">
+                        <h3>Date</h3>
+                    </div>
+                    <div class="large-8 columns">
+                        <h3>Description</h3>
+                    </div>
+                    <div class="large-2 columns">
+                        <h3>Amount</h3>
+                    </div>
+                </div>
+                
+                <div style="margin: 2em 0 2em 0"> </div>
+                    
+                <div class="row" th:each="row, stat : *{expenseRows}">
+                    <div class="large-2 columns">
+                        <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{expenseRows[__${stat.index}__].date}" />
+                    </div>
+                    <div class="large-8 columns">
+                        <input type="text" name="description" th:field="*{expenseRows[__${stat.index}__].description}" />
+                    </div>
+                    <div class="large-2 columns">
+                        <input type="number" step="any" min="0" name="amount" placeholder="amount" th:field="*{expenseRows[__${stat.index}__].amount}" />
+                    </div>
+                </div>
                 <!-- 
                 The submit button is hidden so that additional buttons can be positioned nicely.
                 This may also be possible with the button visible and better css skills. 
