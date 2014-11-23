@@ -36,6 +36,7 @@ public class AdminController {
         for(int i = 0; i < roles.length; i++) {
             userRoles[i] = Authority.Role.valueOf(roles[i]);
         }
+        // get old account, update password to new one and then save
         userService.saveUser(user, userRoles);
         return "redirect:/admin/users";
     }

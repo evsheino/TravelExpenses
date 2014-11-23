@@ -41,7 +41,6 @@ public class UserService {
             authority = authorityRepository.save(authority);
             user.getAuthorities().add(authority);
         }
-
         return userRepository.save(user);
     }
 

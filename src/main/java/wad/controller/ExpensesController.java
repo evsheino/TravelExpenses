@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -66,7 +67,11 @@ public class ExpensesController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String addExpense(@ModelAttribute Expense expense, BindingResult bindingResult,
-            SessionStatus status) {
+            SessionStatus status, Model model) {
+        if (expenseService.checkStartAndEndDate(expense.getStartDate(), expense.getEndDate()) == false) {
+            model.addAttribute("error", "Chosen starting date must always be same or earlier than ending date.");
+            return "expenses/new";
+        }
         User u = userService.getCurrentUser();
         expense.setUser(u);
         expense.setStatus(Expense.Status.SAVED);

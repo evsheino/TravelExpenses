@@ -53,4 +53,12 @@ public class ExpenseService {
     public Expense getExpense(Long id) {
         return expenseRepository.findOne(id);
     }
+    
+    public boolean checkStartAndEndDate (Date start, Date end) {
+        if (start.after(end)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

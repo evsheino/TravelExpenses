@@ -41,4 +41,8 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
         this.authority = authority;
     }
 
+    public boolean isRole(Role role) {
+        return this.authority.equals(role);
+    }
+
 }
