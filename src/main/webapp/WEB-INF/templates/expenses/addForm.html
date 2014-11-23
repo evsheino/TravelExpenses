@@ -12,26 +12,26 @@
                 <div class="row">
                     <div class="medium-12 columns">
                         <label>Description
-                            <input type="text" name="description" th:field="*{description}" />
+                            <input type="text" th:field="*{description}" />
                         </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="medium-6 columns">
                         <label>Start date
-                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
+                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{startDate}" />
                         </label>
                     </div>
                     <div class="medium-6 columns">
                         <label>End date
-                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
+                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
                         </label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="medium-6 columns">
                         <label>Amount
-                            <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
+                            <input type="number" step="any" min="0" placeholder="amount" th:field="*{amount}" />
                         </label>
                     </div>
                 </div>

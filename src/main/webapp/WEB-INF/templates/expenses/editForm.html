@@ -31,7 +31,7 @@
                     <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
                 </label>
                 <label>Amount
-                    <input type="number" placeholder="amount" th:field="*{amount}" />
+                    <input type="number" step="any" min="0" placeholder="amount" th:field="*{amount}" />
                 </label>
                 <!-- 
                 The submit button is hidden so that additional buttons can be positioned nicely.
