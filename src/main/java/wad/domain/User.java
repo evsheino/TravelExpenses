@@ -46,8 +46,9 @@ public class User extends AbstractPersistable<Long> {
 
     private boolean hasRole(Authority.Role role) {
         for (Authority auth : this.getAuthorities()) {
-            if (auth.getAuthority().equals(role.toString()))
+            if (auth.isRole(role)) {
                 return true;
+            }
         }
         return false;
     }
