@@ -18,26 +18,29 @@
             <div class="row">
                 <div class="large-12 columns">
                   <div th:include="expenses/editForm :: editExpenseForm" />
+
+                  <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
                   <div class="row">
                       <div class="large-2 columns">
+                          <label>Date
+                              <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" />
+                          </label>
+                      </div>
+                      <div class="large-2 columns">
                           <label>Amount
-                              <input type="text" name="amount" />
+                              <input type="number" step="any" min="0" name="amount" th:field="*{amount}" />
                           </label>
                       </div>
                       <div class="large-6 columns">
                           <label>Description
-                              <input type="text" name="description" />
-                          </label>
-                      </div>
-                      <div class="large-2 columns">
-                          <label>Date
-                              <input type="text" name="date" />
+                              <input type="text" th:field="*{description}" />
                           </label>
                       </div>
                       <div class="large-2 columns" style="text-align: right;">
-                          <a href="#" class="button expand">+ Add row</a>
+                          <input type="submit" class="button" value="+ Add row" />
                       </div>
                   </div>
+                  </form>
                         
                   <label id="edit-form-submit" class="button" for="edit-form-submit-input">Save</label>
                   <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert">Delete</a>

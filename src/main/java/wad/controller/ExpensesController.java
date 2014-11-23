@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import wad.domain.Expense;
+import wad.domain.ExpenseRow;
 import wad.domain.User;
 import wad.service.ExpenseService;
 
@@ -54,6 +55,7 @@ public class ExpensesController {
 
         model.addAttribute("statuses", Expense.Status.values());
         model.addAttribute("expense", expense);
+        model.addAttribute("expenseRow", new ExpenseRow());
         return "expenses/edit";
     }
 
