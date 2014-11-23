@@ -58,7 +58,8 @@ public class ExpensesController {
     }
 
     @RequestMapping(value="/new", method = RequestMethod.GET)
-    public String newExpense() {
+    public String newExpense(Model model) {
+        model.addAttribute("expense", new Expense());
         return "expenses/new";
 
     }
