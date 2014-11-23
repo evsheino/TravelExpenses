@@ -9,37 +9,37 @@
     <body>
         <div th:fragment="addExpenseForm">
             <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/}">
-            <div class="row">
-                <div class="medium-12 columns">
-                    <label>Description
-                        <input type="text" name="description" th:field="*{description}" />
-                    </label>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <label>Description
+                            <input type="text" name="description" th:field="*{description}" />
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="medium-6 columns">
-                    <label>Start date
-                        <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
-                    </label>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <label>Start date
+                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="startDate" th:field="*{startDate}" />
+                        </label>
+                    </div>
+                    <div class="medium-6 columns">
+                        <label>End date
+                            <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
+                        </label>
+                    </div>
                 </div>
-                <div class="medium-6 columns">
-                    <label>End date
-                        <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" name="endDate" th:field="*{endDate}" />
-                    </label>
+                <div class="row">
+                    <div class="medium-6 columns">
+                        <label>Amount
+                            <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="medium-6 columns">
-                    <label>Amount
-                        <input type="number" name="amount" placeholder="amount" th:field="*{amount}" />
-                    </label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="medium-12 columns">
-                    <input id="edit-form-submit-input" type="submit" class="button" value="Submit" />
-                </div>
-            </div>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <input id="edit-form-submit-input" type="submit" class="button" value="Submit" />
+                    </div>
+                </div>              
             </form>
         </div>
     </body>
