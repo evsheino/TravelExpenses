@@ -46,8 +46,8 @@ public class ExpensesController {
     public String addExpense (@ModelAttribute Expense expense, BindingResult bindingResult, ModelMap model) {
         // Error handling.
         if (expenseService.checkStartAndEndDate(expense.getStartDate(), expense.getEndDate()) == false) {
-            model.addAttribute("error", "Valitse käypä päivämääräpari.");
-            return "redirect:/index";
+            model.addAttribute("error", "Chosen starting date must always be same or earlier than ending date.");
+            return "index";
         }
         
         
