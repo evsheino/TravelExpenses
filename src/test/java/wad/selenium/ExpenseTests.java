@@ -121,6 +121,7 @@ public class ExpenseTests {
 
     @Test
     public void expenseEditPageAllowsUserToEditExpense() throws Exception {
+        assertEquals(1, expenseRepository.count());
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";

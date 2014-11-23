@@ -11,8 +11,7 @@ import wad.domain.Expense;
 public class DefaultController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String viewIndex(Model model) {
-        model.addAttribute("expense", new Expense());
+    public String viewIndex() {
         return "index";
     }
 

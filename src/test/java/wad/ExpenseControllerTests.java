@@ -29,7 +29,6 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
-import wad.controller.ResourceNotFoundException;
 import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
@@ -80,7 +79,13 @@ public class ExpenseControllerTests {
     private User admin;
     private User supervisor;
 
+    // Persisted
     private Expense expense;
+    // Not persisted
+    private Expense unsavedExpense;
+
+    private long initialExpenseCount;
+
     private MockHttpSession session;
 
     @Before
@@ -107,12 +112,23 @@ public class ExpenseControllerTests {
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
         expense.setAmount(100.0);
+        expenseRepository.save(expense);
 
-        session = createSession(user.getUsername(), PASSWORD);
+        unsavedExpense = new Expense();
+        unsavedExpense.setUser(user);
+        unsavedExpense.setStartDate(new Date());
+        unsavedExpense.setEndDate(new Date());
+        unsavedExpense.setDescription("blaa blaa");
+        unsavedExpense.setStatus(Expense.Status.SAVED);
+        unsavedExpense.setModified(new Date());
+        unsavedExpense.setAmount(200.0);
 
+        session = createSession(user.getUsername(), PASSWORD, expense);
+
+        initialExpenseCount = expenseRepository.count();
     }
 
-    private MockHttpSession createSession(String username, String password) throws Exception {
+    private MockHttpSession createSession(String username, String password, Expense exp) throws Exception {
         session = (MockHttpSession) mockMvc.perform(formLogin("/authenticate").user(username).password(password))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/index"))
@@ -120,6 +136,7 @@ public class ExpenseControllerTests {
                 .getRequest()
                 .getSession();
         assertNotNull(session); 
+        session.setAttribute("expense", exp);
 
         return session;
     }
@@ -132,14 +149,11 @@ public class ExpenseControllerTests {
 
     @Test
     public void expensePageWorks() throws Exception {
-        expense = expenseRepository.save(expense);
-
         mockMvc.perform(get("/expenses/" + expense.getId()).session(session))
                 .andExpect(status().isOk());
     }
 
     private void testExpenseCanBeViewedBy(String username) throws Exception {
-        expense = expenseRepository.save(expense);
         MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(username)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("expense"))
@@ -171,8 +185,6 @@ public class ExpenseControllerTests {
 
     @Test
     public void expensePageModelHasExpense() throws Exception {
-        expense = expenseRepository.save(expense);
-
         MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(USERNAME)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("expense"))
@@ -194,8 +206,6 @@ public class ExpenseControllerTests {
 
     @Test
     public void postUpdatedExpenseUpdatesExpense() throws Exception {
-        expense = expenseRepository.save(expense);
-
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
@@ -213,8 +223,8 @@ public class ExpenseControllerTests {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(url));
 
-        assertEquals("There should be exactly 1 Expense in the database after updating the only existing Expense.",
-                1, expenseRepository.count());
+        assertEquals("The number of Expenses in the database should not change after updating an existing Expense.",
+                initialExpenseCount, expenseRepository.count());
 
         // Check that the Expense was updated.
         Expense posted = expenseRepository.findAll().get(0);
@@ -230,7 +240,7 @@ public class ExpenseControllerTests {
 
     @Test
     public void updateAnotherUsersExpenseFails() throws Exception {
-        expense = expenseRepository.save(expense);
+        session = createSession(USERNAME2, PASSWORD2, expense);
 
         String desc = "new description";
         String startDate = "09/09/2010";
@@ -251,43 +261,47 @@ public class ExpenseControllerTests {
 
     @Test
     public void postNewExpenseCreatesNewExpense() throws Exception {
+        expenseRepository.deleteAll();
+        assertEquals(0, expenseRepository.count());
+
+        session = createSession(USERNAME, PASSWORD, unsavedExpense);
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         String url = "/expenses/";
+
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("user", expense.getUser().getId().toString())
-                .param("amount", expense.getAmount().toString())
-                .param("status", expense.getStatus().toString())
-                .param("startDate", f.format(expense.getStartDate()))
-                .param("endDate", f.format(expense.getEndDate()))
-                .param("description", expense.getDescription()))
+                .param("amount", unsavedExpense.getAmount().toString())
+                .param("status", unsavedExpense.getStatus().toString())
+                .param("startDate", f.format(unsavedExpense.getStartDate()))
+                .param("endDate", f.format(unsavedExpense.getEndDate()))
+                .param("description", unsavedExpense.getDescription()))
                 .andExpect(status().is3xxRedirection()).andReturn();
 
-        assertEquals("There should be exactly 1 Expense in the database after creating the first Expense.",
+        assertEquals("There should be a new Expense in the database after creating an Expense.",
                 1, expenseRepository.count());
 
         Expense posted = expenseRepository.findAll().get(0);
 
         assertEquals("redirect:" + url + posted.getId(), res.getModelAndView().getViewName());
 
-        assertEquals(expense.getAmount(), posted.getAmount());
-        assertEquals(expense.getDescription(), posted.getDescription());
-        assertEquals(expense.getUser(), posted.getUser());
-        assertEquals(f.format(expense.getStartDate()), f.format(posted.getStartDate()));
-        assertEquals(f.format(expense.getEndDate()), f.format(posted.getEndDate()));
-        assertEquals(expense.getStatus(), posted.getStatus());
+        assertEquals(unsavedExpense.getAmount(), posted.getAmount());
+        assertEquals(unsavedExpense.getDescription(), posted.getDescription());
+        assertEquals(unsavedExpense.getUser(), posted.getUser());
+        assertEquals(f.format(unsavedExpense.getStartDate()), f.format(posted.getStartDate()));
+        assertEquals(f.format(unsavedExpense.getEndDate()), f.format(posted.getEndDate()));
+        assertEquals(unsavedExpense.getStatus(), posted.getStatus());
     }
 
     @Test
     public void deleteExpenseByOwnerDeletesExpenseWithStatusSAVED() throws Exception {
         expense.setStatus(Expense.Status.SAVED);
         expense = expenseRepository.save(expense);
-        assertEquals(1, expenseRepository.count());
+        assertEquals(initialExpenseCount, expenseRepository.count());
 
         String url = "/expenses/" + expense.getId() + "/delete";
         mockMvc.perform(post(url).session(session).with(csrf()));
 
-        assertEquals("After deleting the Expense only Expense, there should be no Expenses in the database.",
-                0, expenseRepository.count());
+        assertEquals("After deleting an Expense, there should be one less Expense in the database.",
+                initialExpenseCount - 1, expenseRepository.count());
 
     }
 
@@ -309,7 +323,7 @@ public class ExpenseControllerTests {
         expense.setAmount(100.0);
         expense = expenseRepository.save(expense);
 
-        assertEquals(2, expenseRepository.count());
+        assertEquals(initialExpenseCount + 1, expenseRepository.count());
 
         Long id = expense.getId();
 
@@ -319,7 +333,7 @@ public class ExpenseControllerTests {
                 .andExpect(redirectedUrl("/expenses"));
 
         assertEquals("After deleting an Expense, there should be one less Expenses in the database.",
-                1, expenseRepository.count());
+                initialExpenseCount, expenseRepository.count());
         assertNull("After deleting an Expense, the deleted Expense should not be in the database.",
                 expenseRepository.findOne(id));
 
@@ -331,12 +345,10 @@ public class ExpenseControllerTests {
     }
 
     private void testDeleteFails(Expense expense) throws Exception {
-        long count = expenseRepository.count();
-
         String url = "/expenses/" + expense.getId() + "/delete";
         mockMvc.perform(post(url).session(session).with(csrf()))
                 .andExpect(status().is4xxClientError());
-        assertEquals(count, expenseRepository.count());
+        assertEquals(initialExpenseCount, expenseRepository.count());
     }
 
     @Test

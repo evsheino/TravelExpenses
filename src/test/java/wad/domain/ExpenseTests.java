@@ -6,12 +6,16 @@ import java.util.Date;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import wad.repository.ExpenseRepository;
+import wad.repository.UserRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -24,6 +28,12 @@ public class ExpenseTests {
     private User user2;
     private User supervisor;
     private User admin;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
     
     @Before
     public void setUp() {
@@ -40,6 +50,7 @@ public class ExpenseTests {
         user.setUsername("johnd");
         user.setAuthorities(new ArrayList());
         user.getAuthorities().add(userAuth);
+        user = userRepository.save(user);
 
         user2 = new User();
         user2.setName("User2");
@@ -49,20 +60,23 @@ public class ExpenseTests {
         userAuth = new Authority();
         userAuth.setAuthority(Authority.Role.USER);
         user2.getAuthorities().add(userAuth);
+        user2 = userRepository.save(user2);
         
         admin = new User();
         admin.setName("Admin");
         admin.setPassword("password");
-        admin.setUsername("kant");
+        admin.setUsername("admin");
         admin.setAuthorities(new ArrayList());
         admin.getAuthorities().add(adminAuth);
+        admin = userRepository.save(admin);
 
         supervisor = new User();
-        supervisor.setName("Admin");
+        supervisor.setName("Supervisor");
         supervisor.setPassword("password");
-        supervisor.setUsername("kant");
+        supervisor.setUsername("supervisor");
         supervisor.setAuthorities(new ArrayList());
         supervisor.getAuthorities().add(supervisorAuth);
+        supervisor = userRepository.save(supervisor);
         
         expense = new Expense();
         expense.setUser(user);
@@ -72,7 +86,15 @@ public class ExpenseTests {
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
         expense.setAmount(100.0);
+        expense = expenseRepository.save(expense);
     }
+
+    @After
+    public void cleanup() {
+        expenseRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
     
     @Test
     public void isEditableByReturnsTrueForAdmin() throws Exception {

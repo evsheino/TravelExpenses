@@ -46,22 +46,6 @@ public class ExpenseService {
         return expenseRepository.save(e);
     }
 
-    public Expense updateExpense(Expense old, Expense updated) {
-        if (old.getId() == null) return null;
-
-        old.setAmount(updated.getAmount());
-        old.setDescription(updated.getDescription());
-        old.setStartDate(updated.getStartDate());
-        old.setEndDate(updated.getEndDate());
-        old.setStatus(updated.getStatus());
-        old.setSupervisor(updated.getSupervisor());
-        old.setUser(updated.getUser());
-
-        old.setModified(new Date());
-
-        return expenseRepository.save(old);
-    }
-
     public List<Expense> getExpensesByUser(User user) {
         return expenseRepository.findByUser(user);
     }

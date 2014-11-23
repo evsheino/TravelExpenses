@@ -84,7 +84,7 @@ public class Expense extends AbstractPersistable<Long> {
      */
     public boolean isEditableBy(User user) {
         return user.isAdmin()
-                || (user == getUser()
+                || (user.getId().equals(getUser().getId())
                 && (getStatus() == Status.SAVED || getStatus() == Status.RETURNED));
     }
 
@@ -97,7 +97,7 @@ public class Expense extends AbstractPersistable<Long> {
      */
     public boolean isViewableBy(User user) {
         return user.isAdmin()
-                || (user == getUser() || user.isSupervisor());
+                || (user.getId().equals(getUser().getId()) || user.isSupervisor());
     }
 
     public Date getModified() {

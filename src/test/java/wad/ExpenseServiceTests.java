@@ -117,8 +117,8 @@ public class ExpenseServiceTests {
     }
 
     @Test
-    public void updateExpenseUpdatesExpense() throws Exception {
-        Expense old = expenseRepository.save(expense);
+    public void saveExpenseUpdatesExpenseWhenExpenseExists() throws Exception {
+        expense = expenseRepository.save(expense);
 
         assertEquals(1, expenseRepository.count());
 
@@ -132,19 +132,13 @@ public class ExpenseServiceTests {
         expense.setStatus(Expense.Status.APPROVED);
         expense.setSupervisor(user2);
 
-        expense = expenseService.updateExpense(old, expense);
+        expense = expenseService.saveExpense(expense);
 
         assertEquals(1, expenseRepository.count());
 
         Expense updated = expenseRepository.findOne(expense.getId());
 
         assertEquals(updated, expense);
-    }
-
-    @Test
-    public void updateExpenseReturnsNullIfExpenseNotFound() throws Exception {
-        assertNull(expenseService.updateExpense(new Expense(), expense));
-        assertEquals(0, expenseRepository.count());
     }
 
     @Test

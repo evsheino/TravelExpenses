@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <title>TravelExpenses | Add Expense</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+
+            <div class="row page-topic">
+                <div class="large-12 columns">
+                    <h1>Add New Expense</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <div th:include="expenses/addForm :: addExpenseForm" />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
