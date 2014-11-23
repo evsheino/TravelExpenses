@@ -30,11 +30,11 @@
                         <div class="row">
                             <div class="medium-12 columns">
                                 <div class="name-field">
-                                    <label>Name <small>required</small> <input type="text" id="name" name="name" required="" th:value="${user.name}" autocomplete="off"/> </label>
+                                    <label>Name <small>required</small> <input type="text" id="name" name="name" required="" placeholder="Name" th:value="${user.name}" autocomplete="off"/> </label>
                                     <small class="error">Your must give name</small>
                                 </div>
                                 <div class="username-field">
-                                    <label>Username <small>required</small> <input type="text" id="username" name="username" required="" th:value="${user.username}" autocomplete="off"/> </label>
+                                    <label>Username <small>required</small> <input type="text" id="username" name="username" placeholder="Username" required="" th:value="${user.username}" autocomplete="off"/> </label>
                                     <small class="error">Your must give username</small>
                                 </div>
                             </div>
@@ -43,13 +43,13 @@
                         <div class="row" th:if="${user.id == null}">
                             <div class="medium-6 columns">
                                 <div class="password-field">
-                                    <label>Password <small>required</small> <input type="password" id="password" name="password" required="" autocomplete="off"/> </label>
+                                    <label>Password <small>required</small> <input type="password" id="password" name="password" placeholder="Password" required="" autocomplete="off"/> </label>
                                     <small class="error">Your password must match the requirements</small>
                                 </div>
                             </div>
                             <div class="medium-6 columns">
                                 <div class="password-confirmation-field">
-                                    <label>Confirm Password <small>required</small> <input type="password" required="" data-equalto="password" autocomplete="off"/> </label>
+                                    <label>Repeat password <small>required</small> <input type="password" required="" placeholder="Repeat password" data-equalto="password" autocomplete="off"/> </label>
                                     <small class="error">The password did not match</small>
                                 </div>
                             </div>
@@ -57,15 +57,37 @@
 
                         <div class="row">
                             <div class="medium-12 columns">
-                                <label>Authorities</label>
-                                <input id="role-user" type="checkbox" name="roles" value="USER"/><label for="role-user">User</label>
-                                <input id="role-admin" type="checkbox" name="roles" value="SUPERVISOR"/><label for="role-admin">Admin</label>
-                                <input id="role-supervisor" type="checkbox" name="roles"  value="ADMIN"/><label for="role-supervisor">Supervisor</label>
+                                <label>User</label>
+                                <div class="switch radius">
+                                    <input id="role-user" type="checkbox" name="roles" value="USER" th:checked="${user.isUser()}"/>
+                                    <label for="role-user"></label>
+                                </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label>Supervisor</label>
+                                <div class="switch radius">
+                                    <input id="role-admin" type="checkbox" name="roles" value="SUPERVISOR" th:checked="${user.isSupervisor()}"/>
+                                    <label for="role-admin"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="medium-12 columns">
+                                <label>Admin</label>
+                                <div class="switch radius">
+                                    <input id="role-supervisor" type="checkbox" name="roles" value="ADMIN" th:checked="${user.isAdmin()}"/>
+                                    <label for="role-supervisor"></label>
+                                </div>
+                            </div>
+                        </div>
+
                         <input type="submit" value="Sign in" style="display: none; visibility: hidden;"/>
-                        <a href="#" class="button" id="admin-user-data-form-submit">Save</a>
-                        <a href="#" class="button" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
+                        <a href="#" class="button radius" id="admin-user-data-form-submit">Save</a>
+                        <a href="#" class="button radius" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
                     </form>
 
             </div>
