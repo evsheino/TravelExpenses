@@ -4,11 +4,15 @@ import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import java.util.Date;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class ExpenseRow extends AbstractPersistable<Long> {
 
+    @NotNull
+    @Min(0)
     private Double amount;
     private String description;
 

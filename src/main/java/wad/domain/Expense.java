@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -33,7 +34,8 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
     
-    @NotNull    
+    @NotNull
+    @Min(0)
     private double amount;
 
     @NotBlank

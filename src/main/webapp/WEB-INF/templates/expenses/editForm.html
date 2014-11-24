@@ -10,10 +10,10 @@
         <div th:fragment="editExpenseForm">
             <form id="edit-form" th:method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
                 <label>User
-                    <input type="text" name="userName" readonly="readonly" th:value="${expense.user.name}" />
+                    <input type="text" readonly="readonly" th:value="${expense.user.name}" />
                 </label>
                 <label>Modified
-                    <input type="text" readonly="readonly" th:field="*{modified}" />
+                    <input type="text" required="required" readonly="readonly" th:field="*{modified}" />
                 </label>
                 <label>Status
                     <select sec:authorize="hasAnyRole('ADMIN')" th:field="*{status}">
@@ -21,25 +21,37 @@
                     </select>
                     <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" th:field="*{status}" />
                 </label>
-                <label>Description
-                    <input type="text"  th:field="*{description}" />
-                </label>
-                <label>Start date
-                    <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{startDate}" />
-                </label>
-                <label>End date
-                    <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
-                </label>
-                <label>Amount
-                    <input type="number" step="any" min="0" placeholder="amount" th:field="*{amount}" />
-                </label>
+                <div class="description-field" th:classappend="${#fields.hasErrors('description')} ? error">
+                    <label>Description
+                        <input type="text" required="required" th:field="*{description}" th:errorclass="error" />
+                    </label>
+                    <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                </div>
+                <div class="date-field" th:classappend="${#fields.hasErrors('startDate')} ? error">
+                    <label>Start date 
+                        <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{startDate}" />
+                    </label>
+                    <small class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Incorrect date</small>
+                </div>
+                <div class="date-field" th:classappend="${#fields.hasErrors('endDate')} ? error">
+                    <label>End date 
+                        <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
+                    </label>
+                    <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
+                </div>
+                <div class="amount-field" th:classappend="${#fields.hasErrors('amount')} ? error">
+                    <label>Amount
+                        <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{amount}" />
+                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Incorrect amount</small>
+                    </label>
+                </div>
                 
                 <div class="row page-topic" style="margin: 2em 0 2em 0">
                     <div class="large-10 columns">
                         <h1>Rows</h1>
                     </div>
                 </div>
-
+                
                 <div class="row" style="margin: 2em 0 2em 0">
                     <div class="large-2 columns">
                         <h3>Date</h3>
@@ -53,16 +65,25 @@
                 </div>
                 
                 <div style="margin: 2em 0 2em 0"> </div>
-                    
+                
                 <div class="row" th:each="row, stat : *{expenseRows}">
                     <div class="large-2 columns">
-                        <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{expenseRows[__${stat.index}__].date}" />
+                        <div class="date-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].date')} ? error">
+                            <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{expenseRows[__${stat.index}__].date}" />
+                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].date')}" th:errors="*{expenseRows[__${stat.index}__].date}">Incorrect amount</small>
+                        </div>
                     </div>
                     <div class="large-8 columns">
-                        <input type="text" name="description" th:field="*{expenseRows[__${stat.index}__].description}" />
+                        <div class="description-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].description')} ? error">
+                            <input type="text" required="required" th:field="*{expenseRows[__${stat.index}__].description}" th:errorclass="error" />
+                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].description')}" th:errors="*{expenseRows[__${stat.index}__].description}">Invalid description</small>
+                        </div>
                     </div>
                     <div class="large-2 columns">
-                        <input type="number" step="any" min="0" name="amount" placeholder="amount" th:field="*{expenseRows[__${stat.index}__].amount}" />
+                        <div class="amount-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')} ? error">
+                            <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{expenseRows[__${stat.index}__].amount}" />
+                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')}" th:errors="*{expenseRows[__${stat.index}__].amount}">Incorrect amount</small>
+                        </div>
                     </div>
                 </div>
                 <!-- 
