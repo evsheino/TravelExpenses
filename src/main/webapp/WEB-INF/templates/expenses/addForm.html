@@ -8,7 +8,7 @@
     </head>
     <body>
         <div th:fragment="addExpenseForm">
-            <form id="edit-form" method="POST" th:object="${expense}" th:action="@{/expenses/}">
+            <form id="add-expense-form" method="POST" th:object="${expense}" th:action="@{/expenses/}">
                 <div class="row">
                     <div class="medium-12 columns">
                         <label>Description

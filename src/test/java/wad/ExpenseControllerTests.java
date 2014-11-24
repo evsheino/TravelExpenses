@@ -104,24 +104,26 @@ public class ExpenseControllerTests {
 
         userRepository.save(user);
 
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
         expense = new Expense();
         expense.setUser(user);
-        expense.setStartDate(new Date());
-        expense.setEndDate(new Date());
+        expense.setStartDate(f.parse("20/09/2014"));
+        expense.setEndDate(f.parse("29/09/2014"));
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
-        expense.setAmount(100.0);
+        expense.setAmount(100.9);
         expenseRepository.save(expense);
 
         unsavedExpense = new Expense();
         unsavedExpense.setUser(user);
-        unsavedExpense.setStartDate(new Date());
-        unsavedExpense.setEndDate(new Date());
+        unsavedExpense.setStartDate(f.parse("01/10/2014"));
+        unsavedExpense.setEndDate(f.parse("20/11/2014"));
         unsavedExpense.setDescription("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.SAVED);
         unsavedExpense.setModified(new Date());
-        unsavedExpense.setAmount(200.0);
+        unsavedExpense.setAmount(200.55);
 
         session = createSession(user.getUsername(), PASSWORD, expense);
 

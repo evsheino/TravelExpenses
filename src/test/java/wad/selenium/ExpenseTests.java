@@ -77,12 +77,14 @@ public class ExpenseTests {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         // Use FirefoxDriver for JavaScript support.
         driver = new FirefoxDriver();
 
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
-        expense = expenseService.createExpense(user, new Date(), new Date(), 20.0, DESCRIPTION);
+        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("02/09/2014"), 20.0, DESCRIPTION);
 
         driver.get(LOGIN_URI);
 
@@ -190,5 +192,56 @@ public class ExpenseTests {
 
         assertEquals("There should be no Expenses in the database after deleting the only existing Expense.",
                 0, expenseRepository.count());
+    }
+
+    @Test
+    public void userCanAddANewExpense() throws Exception {
+        expenseRepository.deleteAll();
+
+        String desc = "new description";
+        String startDate = "09/09/2010";
+        String endDate = "21/09/2010";
+        String amount = "200";
+
+        driver.get(EXPENSES_URI + "new");
+
+        WebElement element = driver.findElement(By.name("description"));
+        element.clear();
+        element.sendKeys(desc);
+        element = driver.findElement(By.name("startDate"));
+        element.clear();
+        element.sendKeys(startDate);
+        element = driver.findElement(By.name("endDate"));
+        element.clear();
+        element.sendKeys(endDate);
+        element = driver.findElement(By.name("amount"));
+        element.clear();
+        element.sendKeys(amount);
+
+        element = driver.findElement(By.id("add-expense-form"));
+        element.submit();
+
+        assertEquals("There should be one more Expense in the database after creating a new one.",
+                1, expenseRepository.count());
+
+        Expense expense = expenseRepository.findAll().get(0);
+
+        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+        assertEquals(startDate, f.format(expense.getStartDate()));
+        assertEquals(endDate, f.format(expense.getEndDate()));
+        assertEquals(desc, expense.getDescription());
+        assertEquals(200, expense.getAmount(), 0.001);
+
+        // Check that the page has the correct information.
+        String content = driver.getPageSource();
+
+        assertTrue(content.contains(expense.getDescription()));
+        assertTrue(content.contains(expense.getAmount().toString()));
+        assertTrue(content.contains(f.format(expense.getStartDate())));
+        assertTrue(content.contains(f.format(expense.getEndDate())));
+        assertTrue(content.contains(expense.getUser().getName()));
     }
 }
