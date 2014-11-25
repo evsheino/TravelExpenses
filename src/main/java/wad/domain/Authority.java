@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @Entity
-@Table(indexes={@Index(columnList="user_id, authority", unique = true)})
+@Table(indexes={@Index(columnList="user_id, role", unique = true)})
 public class Authority extends AbstractPersistable<Long> implements GrantedAuthority {
 
     public static enum Role {
@@ -22,7 +22,16 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private Role authority;
+    private Role role;
+
+    public Authority() {
+
+    }
+
+    public Authority(User user, Role authority) {
+        this.user = user;
+        this.role = authority;
+    }
 
     public User getUser() {
         return user;
@@ -34,15 +43,15 @@ public class Authority extends AbstractPersistable<Long> implements GrantedAutho
 
     @Override
     public String getAuthority() {
-        return authority.toString();
+        return role.toString();
     }
 
-    public void setAuthority(Role authority) {
-        this.authority = authority;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public boolean isRole(Role role) {
-        return this.authority.equals(role);
+        return this.role.equals(role);
     }
 
 }

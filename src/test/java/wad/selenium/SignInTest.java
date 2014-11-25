@@ -88,7 +88,7 @@ public class SignInTest {
         element = driver.findElement(By.id("login-form"));
         element.submit();
 
-        assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+        assertEquals("http://localhost:8080/", driver.getCurrentUrl());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SignInTest {
         element = driver.findElement(By.id("login-form"));
         element.submit();
 
-        assertEquals("http://localhost:8080/index", driver.getCurrentUrl());
+        assertEquals("http://localhost:8080/", driver.getCurrentUrl());
         assertTrue(driver.getPageSource().contains("Log out"));
 
         element = driver.findElement(By.id("logout-form"));

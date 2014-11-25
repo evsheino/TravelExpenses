@@ -30,26 +30,46 @@ public class AdminController {
         return "admin/admin";
     }
 
-    @RequestMapping(value="/user/save", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("user") User user, @RequestParam String[] roles) {
+    @RequestMapping(value="/user/new", method = RequestMethod.GET)
+    public String newUser() {
+        return "admin/edituser";
+    }
+
+    @RequestMapping(value="/user/new/save", method = RequestMethod.POST)
+    public String saveNewUser(@RequestParam String name, @RequestParam String username, @RequestParam String[] roles) {
         Authority.Role[] userRoles = new Authority.Role[roles.length];
         for(int i = 0; i < roles.length; i++) {
             userRoles[i] = Authority.Role.valueOf(roles[i]);
         }
-        // get old account, update password to new one and then save
-        userService.saveUser(user, userRoles);
-        return "redirect:/admin/users";
-    }
 
-    @RequestMapping(value="/user/new", method = RequestMethod.GET)
-    public String newUser() {
-        return "admin/edituser";
+        User user = new User();
+        user.setName(name);
+        user.setUsername(username);
+        user.setPassword(username);
+        user.setPasswordExpired(true);
+        userService.saveUser(user, userRoles);
+
+        return "redirect:/admin/users";
     }
 
     @RequestMapping(value="/user/{id}", method = RequestMethod.GET)
     public String editUser(Model model, @PathVariable Long id) {
         model.addAttribute("user", userRepository.findOne(id));
         return "admin/edituser";
+    }
+
+    @RequestMapping(value="/user/{id}/save", method = RequestMethod.POST)
+    public String saveUser(@PathVariable Long id, @RequestParam String name, @RequestParam String username,  @RequestParam(defaultValue = "false") Boolean forcePasswordChange, @RequestParam String[] roles) {
+        Authority.Role[] userRoles = new Authority.Role[roles.length];
+        for(int i = 0; i < roles.length; i++) {
+            userRoles[i] = Authority.Role.valueOf(roles[i]);
+        }
+        User user = userRepository.findOne(id);
+        user.setName(user.getName());
+        user.setUsername(user.getUsername());
+        user.setPasswordExpired(forcePasswordChange);
+        userService.saveUser(user, userRoles);
+        return "redirect:/admin/users";
     }
 
 }

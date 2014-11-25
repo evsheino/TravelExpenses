@@ -34,6 +34,8 @@ public class User extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "supervisor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Expense> subordinatesExpenses;
 
+    private Boolean passwordExpired;
+
     public User() {
 
     }
@@ -122,4 +124,11 @@ public class User extends AbstractPersistable<Long> {
         this.subordinatesExpenses = subordinatesExpenses;
     }
 
+    public Boolean getPasswordExpired() {
+        return passwordExpired;
+    }
+
+    public void setPasswordExpired(Boolean passwordExpired) {
+        this.passwordExpired = passwordExpired;
+    }
 }

@@ -34,4 +34,19 @@ public class AccountSettingsController {
         return "redirect:/account";
     }
 
+    @RequestMapping(value = "/password/force", method = RequestMethod.GET)
+    public String forcePasswordChange() {
+        return "changepassword";
+    }
+
+    @RequestMapping(value = "/password", method = RequestMethod.GET)
+    public String changePassword() {
+        return "changepassword";
+    }
+
+    @RequestMapping(value = "/password/save", method = RequestMethod.POST)
+    public String changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        return "redirect:/index";
+    }
+
 }

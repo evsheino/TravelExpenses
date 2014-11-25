@@ -32,23 +32,27 @@ public class UserService {
     }
 
     public User saveUser(User user, Authority.Role... roles) {
-        user = userRepository.save(user);
+        // Assign empty list for user and save
         user.setAuthorities(new ArrayList<Authority>());
+        user = userRepository.save(user);
+        // Delete old authorities
+        authorityRepository.deleteAuthoritiesByUser(user);
+        //Assign new authorities
         for(Authority.Role role : roles) {
-            Authority authority  = new Authority();
-            authority.setUser(user);
-            authority.setAuthority(role);
-            authority = authorityRepository.save(authority);
-            user.getAuthorities().add(authority);
+            user.getAuthorities().add(new Authority(user, role));
         }
         return userRepository.save(user);
     }
 
     public User createUser(String name, String username, String password, Authority.Role... roles) {
-        User user = new User(name, username, password);
-        return this.saveUser(user, roles);
+        return this.createUser(name, username, password, false, roles);
     }
 
+    public User createUser(String name, String username, String password, boolean passwordExpired, Authority.Role... roles) {
+        User user = new User(name, username, password);
+        user.setPasswordExpired(passwordExpired);
+        return this.saveUser(user, roles);
+    }
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username);
         userRepository.delete(user);

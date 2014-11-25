@@ -84,7 +84,7 @@ public class SignInTest {
     public void userIsRedirectedAfterLogin() throws Exception {
         mockMvc.perform(formLogin("/authenticate"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/index"));
+                .andExpect(redirectedUrl("/"));
     }
 
     @Test

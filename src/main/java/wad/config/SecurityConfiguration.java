@@ -8,11 +8,15 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import wad.auth.ForcePasswordChangeAuthenticationSuccessHandler;
 import wad.auth.JpaAuthenticationProvider;
 
 @Configuration
 @EnableWebMvcSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private ForcePasswordChangeAuthenticationSuccessHandler forcePasswordChangeAuthenticationSuccessHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -26,10 +30,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/index")
                 .usernameParameter("username")
                 .passwordParameter("password")
+                .successHandler(forcePasswordChangeAuthenticationSuccessHandler)
                 .permitAll();
 
         http.logout()
                 .permitAll()
+                //.logoutSuccessUrl("/index")
                 .invalidateHttpSession(true);
     }
 

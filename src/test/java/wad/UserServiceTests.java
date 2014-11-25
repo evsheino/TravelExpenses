@@ -1,8 +1,7 @@
 package wad;
 
 import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +16,8 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import wad.domain.User;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
@@ -82,6 +83,23 @@ public class UserServiceTests {
         User fetchedUser = userRepository.findOne(user.getId());
 
         assertEquals(fetchedUser, user);
+    }
+
+    @Test
+    public void createUserAndUpdate() throws Exception {
+        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.USER);
+        User fetchedUser = userRepository.findOne(user.getId());
+
+        assertTrue(user.isUser() && fetchedUser.isUser());
+        assertFalse(user.isSupervisor() && fetchedUser.isSupervisor());
+        assertFalse(user.isAdmin() && fetchedUser.isAdmin());
+
+        user = userService.saveUser(user, Authority.Role.USER, Authority.Role.SUPERVISOR);
+        fetchedUser = userRepository.findOne(user.getId());
+
+        assertTrue(user.isUser() && fetchedUser.isUser());
+        assertTrue(user.isSupervisor() && fetchedUser.isSupervisor());
+        assertFalse(user.isAdmin() && fetchedUser.isAdmin());
     }
 
     @Test

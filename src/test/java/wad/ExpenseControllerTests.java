@@ -133,7 +133,7 @@ public class ExpenseControllerTests {
     private MockHttpSession createSession(String username, String password, Expense exp) throws Exception {
         session = (MockHttpSession) mockMvc.perform(formLogin("/authenticate").user(username).password(password))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/index"))
+                .andExpect(redirectedUrl("/"))
                 .andReturn()
                 .getRequest()
                 .getSession();
