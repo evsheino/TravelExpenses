@@ -6,9 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import wad.auth.ForcePasswordChangeAuthenticationSuccessHandler;
 import wad.domain.User;
 import wad.repository.UserRepository;
 import wad.service.UserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/account")
@@ -35,17 +38,21 @@ public class AccountSettingsController {
     }
 
     @RequestMapping(value = "/password/force", method = RequestMethod.GET)
-    public String forcePasswordChange() {
-        return "changepassword";
-    }
-
-    @RequestMapping(value = "/password", method = RequestMethod.GET)
-    public String changePassword() {
-        return "changepassword";
+    public String forcePasswordChange(Model model) {
+        model.addAttribute("user", userService.getCurrentUser());
+        return "forcechangepassword";
     }
 
     @RequestMapping(value = "/password/save", method = RequestMethod.POST)
-    public String changePassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+    public String changePassword(HttpServletRequest request, @RequestParam String newPassword) {
+        User user = userService.getCurrentUser();
+
+        user.setPassword(newPassword);
+        user.setPasswordExpired(Boolean.FALSE);
+        userRepository.save(user);
+
+        request.getSession().setAttribute(ForcePasswordChangeAuthenticationSuccessHandler.SESSION_KEY_FORCE_PASSWORD_CHANGE, Boolean.FALSE);
+
         return "redirect:/index";
     }
 

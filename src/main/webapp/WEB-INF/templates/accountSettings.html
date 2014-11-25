@@ -10,34 +10,28 @@
         <div layout:fragment="content">
 
             <div class="account-settings">
-                    <div class="row page-topic">
-                        <div class="medium-12 columns">
-                            <h1>Account settings</h1>
-                        </div>
+                <div class="row page-topic">
+                    <div class="medium-12 columns">
+                        <h1>Account settings</h1>
                     </div>
-
-                    <div class="row">
-                        <div class="medium-12 columns">
-                            <label>Name <br/><h4 th:text="${user.name}">Name</h4></label>
-                            <label>Username <br/><h4 th:text="${user.username}">Username</h4></label>
-
-                            <form data-abide="" id="change-password-form" method="POST" th:action="@{/account/save}">
-                                    <div class="old-password-field">
-                                        <label>Current password <small>required</small> <input type="password" id="old-password" name="oldPassword" required=""/> </label>
-                                        <small class="error">Your must give your current password</small>
-                                    </div>
-                                    <div class="password-field">
-                                        <label>Password <small>required</small> <input type="password" id="password" name="password" required=""/> </label>
-                                        <small class="error">Your password must match the requirements</small>
-                                    </div>
-                                    <div class="password-confirmation-field">
-                                        <label>Confirm Password <small>required</small> <input type="password" id="confirm-password" required="" data-equalto="password"/> </label>
-                                        <small class="error">The password did not match</small>
-                                    </div>
-                                    <button type="submit">Submit</button>
-                            </form>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <label>Name <br/><h4 th:text="${user.name}">Name</h4></label>
+                        <label>Username <br/><h4 th:text="${user.username}">Username</h4></label>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <hr/>
+                        <h2>Change password</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="medium-12 columns">
+                        <div th:include="changepasswordForm :: changePasswordForm" />
+                    </div>
+                </div>
             </div>
 
             <!--
