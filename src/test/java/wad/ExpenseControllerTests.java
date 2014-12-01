@@ -266,13 +266,12 @@ public class ExpenseControllerTests {
         expenseRepository.deleteAll();
         assertEquals(0, expenseRepository.count());
 
-        session = createSession(USERNAME, PASSWORD, unsavedExpense);
+        session = createSession(USERNAME, PASSWORD, new Expense());
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         String url = "/expenses/";
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("amount", unsavedExpense.getAmount().toString())
-                .param("status", unsavedExpense.getStatus().toString())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 .param("endDate", f.format(unsavedExpense.getEndDate()))
                 .param("description", unsavedExpense.getDescription()))
@@ -290,7 +289,92 @@ public class ExpenseControllerTests {
         assertEquals(unsavedExpense.getUser(), posted.getUser());
         assertEquals(f.format(unsavedExpense.getStartDate()), f.format(posted.getStartDate()));
         assertEquals(f.format(unsavedExpense.getEndDate()), f.format(posted.getEndDate()));
-        assertEquals(unsavedExpense.getStatus(), posted.getStatus());
+        assertEquals(Expense.Status.SAVED, posted.getStatus());
+    }
+
+    @Test
+    public void postNewExpenseWithoutDetailsDoesNotCreateANewExpense() throws Exception {
+        expenseRepository.deleteAll();
+        assertEquals(0, expenseRepository.count());
+
+        session = createSession(USERNAME, PASSWORD, new Expense());
+        String url = "/expenses/";
+
+        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf()))
+                .andReturn();
+
+        assertEquals("There should not be a new Expense in the database after trying to create an empty Expense.",
+                0, expenseRepository.count());
+
+        assertEquals("expenses/new", res.getModelAndView().getViewName());
+    }
+
+    @Test
+    public void postNewExpenseWithoutDescriptionDoesNotCreateANewExpense() throws Exception {
+        expenseRepository.deleteAll();
+        assertEquals(0, expenseRepository.count());
+
+        session = createSession(USERNAME, PASSWORD, new Expense());
+        String url = "/expenses/";
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
+        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
+                .param("amount", unsavedExpense.getAmount().toString())
+                .param("startDate", f.format(unsavedExpense.getStartDate()))
+                .param("endDate", f.format(unsavedExpense.getEndDate())))
+                // Missing description
+                .andReturn();
+
+        assertEquals("There should not be a new Expense in the database after trying to create an Expense without a description.",
+                0, expenseRepository.count());
+
+        assertEquals("expenses/new", res.getModelAndView().getViewName());
+    }
+
+    @Test
+    public void postNewExpenseWithoutStartDateDoesNotCreateANewExpense() throws Exception {
+        expenseRepository.deleteAll();
+        assertEquals(0, expenseRepository.count());
+
+        session = createSession(USERNAME, PASSWORD, new Expense());
+        String url = "/expenses/";
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
+        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
+                .param("amount", unsavedExpense.getAmount().toString())
+                .param("status", unsavedExpense.getStatus().toString())
+                // Missing startDate
+                .param("endDate", f.format(unsavedExpense.getEndDate()))
+                .param("description", unsavedExpense.getDescription()))
+                .andReturn();
+
+        assertEquals("There should not be a new Expense in the database after trying to create an Expense without a start date.",
+                0, expenseRepository.count());
+
+        assertEquals("expenses/new", res.getModelAndView().getViewName());
+    }
+
+    @Test
+    public void postNewExpenseWithoutEndDateDoesNotCreateANewExpense() throws Exception {
+        expenseRepository.deleteAll();
+        assertEquals(0, expenseRepository.count());
+
+        session = createSession(USERNAME, PASSWORD, new Expense());
+        String url = "/expenses/";
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
+        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
+                .param("amount", unsavedExpense.getAmount().toString())
+                .param("status", unsavedExpense.getStatus().toString())
+                .param("startDate", f.format(unsavedExpense.getStartDate()))
+                // Missing endDate
+                .param("description", unsavedExpense.getDescription()))
+                .andReturn();
+
+        assertEquals("There should not be a new Expense in the database after trying to create an Expense without an end date.",
+                0, expenseRepository.count());
+
+        assertEquals("expenses/new", res.getModelAndView().getViewName());
     }
 
     @Test

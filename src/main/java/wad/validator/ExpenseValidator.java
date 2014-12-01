@@ -14,7 +14,10 @@ public class ExpenseValidator implements Validator {
     @Override
     public void validate(Object obj, Errors e) {
         Expense expense = (Expense) obj;
-        if (expense.getStartDate().after(expense.getEndDate()))
-            e.rejectValue("endDate", "invalidvalue", "End date should not be earlier than start date.");
+        // Null values will be caught by the default validator
+        if (expense.getStartDate() != null && expense.getEndDate() != null) {
+            if (expense.getStartDate().after(expense.getEndDate()))
+                e.rejectValue("endDate", "invalidvalue", "End date should not be earlier than start date.");
+        }
     }
 }
