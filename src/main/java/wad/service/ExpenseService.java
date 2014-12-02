@@ -8,6 +8,7 @@ import wad.repository.ExpenseRepository;
 import java.util.Date;
 import java.util.List;
 import wad.domain.Authority;
+import wad.domain.ExpenseRow;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -52,5 +53,19 @@ public class ExpenseService {
 
     public Expense getExpense(Long id) {
         return expenseRepository.findOne(id);
+    }
+    
+    public void updateExpenseAmount (Expense expense) {
+        Double newSum;
+        double helpSum = 0;
+        
+        List<ExpenseRow> expenseRows = expense.getExpenseRows();
+        
+        for (ExpenseRow expenseRow : expenseRows) {
+            helpSum += expenseRow.getAmount();
+        }
+        newSum = (Double) helpSum;
+        expense.setAmount(newSum);
+        expenseRepository.save(expense);
     }
 }
