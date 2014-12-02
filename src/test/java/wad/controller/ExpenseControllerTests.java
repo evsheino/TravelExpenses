@@ -1,4 +1,4 @@
-package wad;
+package wad.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +29,7 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
+import wad.Application;
 import wad.domain.Authority;
 import wad.domain.Expense;
 import wad.domain.User;
@@ -114,7 +115,7 @@ public class ExpenseControllerTests {
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
         expense.setAmount(100.9);
-        expenseRepository.save(expense);
+        expense = expenseRepository.save(expense);
 
         unsavedExpense = new Expense();
         unsavedExpense.setUser(user);

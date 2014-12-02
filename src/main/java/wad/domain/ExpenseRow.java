@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -14,11 +15,15 @@ public class ExpenseRow extends AbstractPersistable<Long> {
     @NotNull
     @Min(0)
     private Double amount;
+
+    @NotEmpty
     private String description;
 
+    @NotNull
     @ManyToOne
     private Expense expense;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "expense_row_date")

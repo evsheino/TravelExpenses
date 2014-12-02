@@ -25,7 +25,7 @@
                     <label>Description
                         <input type="text" required="required" th:field="*{description}" th:errorclass="error" />
                     </label>
-                    <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                    <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid description</small>
                 </div>
                 <div class="date-field" th:classappend="${#fields.hasErrors('startDate')} ? error">
                     <label>Start date 
@@ -42,7 +42,7 @@
                 <div class="amount-field" th:classappend="${#fields.hasErrors('amount')} ? error">
                     <label>Amount
                         <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{amount}" />
-                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Incorrect amount</small>
+                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
                     </label>
                 </div>
                 
@@ -73,7 +73,7 @@
                             <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].date')}" th:errors="*{expenseRows[__${stat.index}__].date}">Incorrect amount</small>
                         </div>
                     </div>
-                    <div class="large-8 columns">
+                    <div class="large-7 columns">
                         <div class="description-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].description')} ? error">
                             <input type="text" required="required" th:field="*{expenseRows[__${stat.index}__].description}" th:errorclass="error" />
                             <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].description')}" th:errors="*{expenseRows[__${stat.index}__].description}">Invalid description</small>
@@ -85,6 +85,9 @@
                             <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')}" th:errors="*{expenseRows[__${stat.index}__].amount}">Incorrect amount</small>
                         </div>
                     </div>
+                    <div class="large-1 columns">
+                        <a th:id="'delete-row-confirm-button-' + ${expense.expenseRows[__${stat.index}__].id}" th:onclick="'javascript:var f = $(\'#delete-row-form\'); f.attr(\'action\', \'' + @{/expenses/} + *{id} + @{/rows/} + *{expenseRows[__${stat.index}__].id} + @{/delete} + '\'); f.submit();'" class="button alert" role="button">X</a>
+                    </div>
                 </div>
                 <!-- 
                 The submit button is hidden so that additional buttons can be positioned nicely.
@@ -93,6 +96,11 @@
                 a submit button.
                 -->
                 <input id="edit-form-submit-input" type="submit" hidden="hidden" />
+            </form>
+
+            <!-- Hidden row delete form -->
+            <form hidden="hidden" id="delete-row-form" method="POST" th:action="@{/}" >
+                <input class="button" type="submit" value="Delete" />
             </form>
         </div>
     </body>
