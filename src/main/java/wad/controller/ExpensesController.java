@@ -163,7 +163,8 @@ public class ExpensesController {
         }
 
         expenseRowRepository.save(expenseRow);
-
+        expenseService.updateExpenseAmount(expense);
+        
         return "redirect:/expenses/" + expense.getId();
     }
 }

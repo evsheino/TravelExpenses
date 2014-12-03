@@ -73,6 +73,7 @@ public class ExpenseRowController {
             throw new ResourceNotFoundException();
 
         expenseRowRepository.delete(id);
+        expenseService.updateExpenseAmount(expense);
 
         return "redirect:/expenses/" + expense.getId();
     }
