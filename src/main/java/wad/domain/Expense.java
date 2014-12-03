@@ -77,10 +77,11 @@ public class Expense extends AbstractPersistable<Long> {
     private List<ExpenseRow> expenseRows;
 
     /**
-     * Check if the given User is allowed to edit this Expense. A user can edit
-     * an Expense if she is an admin or owns the Expense and the status of the
-     * Expense is SAVED or RETURNED.
-     *
+
+     * Check if the given User is allowed to edit this Expense.
+     * A user can edit an Expense if she is an admin or owns the Expense and
+     * the status of the Expense is SAVED or RETURNED.
+     * 
      * @param user The user to check.
      * @return True if the user is allowed to edit the Expense, false otherwise.
      */

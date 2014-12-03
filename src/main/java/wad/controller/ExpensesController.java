@@ -3,13 +3,13 @@ package wad.controller;
 import java.util.Date;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,19 +28,9 @@ import wad.validator.ExpenseValidator;
 @SessionAttributes("expense")
 public class ExpensesController {
     
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-        dataBinder.setDisallowedFields("id");
-        dataBinder.setDisallowedFields("user");
-    }
-
-    @InitBinder("expense")
-    public void expenseInitBinder(WebDataBinder dataBinder) {
-        dataBinder.addValidators(new ExpenseValidator());
-    }
-
     @Autowired
-    private Validator validator;
+    @Qualifier("expenseValidator")
+    ExpenseValidator expenseValidator;
 
     @Autowired
     private UserService userService;
@@ -50,6 +40,18 @@ public class ExpensesController {
 
     @Autowired
     private ExpenseRowRepository expenseRowRepository;
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+        dataBinder.setDisallowedFields("user");
+        dataBinder.setDisallowedFields("status");
+    }
+
+    @InitBinder("expense")
+    public void expenseInitBinder(WebDataBinder dataBinder) {
+        dataBinder.setValidator(expenseValidator);
+    }
     
     @ModelAttribute("expense")
     private Expense getExpense() {
@@ -96,10 +98,7 @@ public class ExpensesController {
         // Set modified here to pass validation
         expense.setModified(new Date());
 
-        // Validate with both the default validator and ExpenseValidator.
-        // There's probably a way to combine these two.
-        validator.validate(expense, bindingResult);
-        new ExpenseValidator().validate(expense, bindingResult);
+        expenseValidator.validate(expense, bindingResult);
 
         if (bindingResult.hasErrors())
             return "expenses/new";

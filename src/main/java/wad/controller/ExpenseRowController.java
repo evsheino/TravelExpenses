@@ -5,19 +5,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wad.domain.Expense;
 import wad.domain.ExpenseRow;
 import wad.domain.User;
 import wad.repository.ExpenseRowRepository;
 import wad.service.ExpenseService;
+import wad.validator.ExpenseRowValidator;
 
 @Controller
+@SessionAttributes("expense")
 @RequestMapping("/expenses/{expenseId}/rows")
 public class ExpenseRowController {
 
@@ -31,14 +32,13 @@ public class ExpenseRowController {
     private ExpenseRowRepository expenseRowRepository;
 
     @Autowired
-    private Validator validator;
+    private ExpenseRowValidator validator;
 
     @ModelAttribute("expenseRow")
     private ExpenseRow getExpenseRow() {
         return new ExpenseRow();
     }
 
-    /*
     @RequestMapping(method = RequestMethod.POST)
     public String addExpenseRow (@PathVariable Long expenseId, @ModelAttribute ExpenseRow expenseRow,
             BindingResult bindingResult, RedirectAttributes attrs) {
@@ -58,10 +58,11 @@ public class ExpenseRowController {
         }
 
         expenseRowRepository.save(expenseRow);
+        expenseService.updateExpenseAmount(expense);
+        expenseService.saveExpense(expense);
 
         return "redirect:/expenses/" + expense.getId();
     }
-    */
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
     public String deleteExpenseRow (@PathVariable Long expenseId, @PathVariable Long id) {
