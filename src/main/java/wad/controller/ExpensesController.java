@@ -1,6 +1,7 @@
 package wad.controller;
 
 import java.util.Date;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class ExpensesController {
     public void initBinder(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
         dataBinder.setDisallowedFields("user");
+        dataBinder.setDisallowedFields("status");
     }
 
     @InitBinder("expense")
@@ -134,6 +136,18 @@ public class ExpensesController {
         
         if (expense == null || !expense.isEditableBy(currentUser))
             throw new ResourceNotFoundException();
+
+        List<ExpenseRow> rowList = expense.getExpenseRows();
+
+        if (rowList != null) {
+            int rowCount = rowList.size();
+            for (int i=0; i < rowCount; i++) {
+                bindingResult.pushNestedPath("expenseRows[" + i + "]");
+                ExpenseRow row = rowList.get(i);
+                validator.validate(row, bindingResult);
+                bindingResult.popNestedPath();
+            }
+        }
 
         if (bindingResult.hasErrors())
             return "expenses/edit";

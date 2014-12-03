@@ -242,8 +242,31 @@ public class ExpenseControllerTests {
     }
 
     @Test
-    public void updateAnotherUsersExpenseFails() throws Exception {
-        session = createSession(USERNAME2, PASSWORD2, expense);
+    public void changingStatusInOrderToEditDoesNotWork() throws Exception {
+        expense.setStatus(Expense.Status.APPROVED);
+        expense = expenseRepository.save(expense);
+        session = createSession(USERNAME, PASSWORD, expense);
+
+        String desc = "new description";
+        String startDate = "09/09/2010";
+        String endDate = "21/09/2010";
+        String amount = "200";
+        Expense.Status status = Expense.Status.SAVED;
+
+        String url = "/expenses/" + expense.getId();
+        mockMvc.perform(post(url).session(session).with(csrf())
+                .param("user", user.getId().toString())
+                .param("amount", amount)
+                .param("status", status.toString())
+                .param("startDate", startDate)
+                .param("endDate", endDate)
+                .param("description", desc))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void changingStatusFromSAVEDToAPPROVEDDoesNotWork() throws Exception {
+        session = createSession(USERNAME, PASSWORD, expense);
 
         String desc = "new description";
         String startDate = "09/09/2010";
@@ -253,13 +276,16 @@ public class ExpenseControllerTests {
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
-                .param("user", user2.getId().toString())
+                .param("user", user.getId().toString())
                 .param("amount", amount)
                 .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
                 .param("description", desc))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is3xxRedirection());
+
+        Expense posted = expenseRepository.findOne(expense.getId());
+        assertEquals(Expense.Status.SAVED, posted.getStatus());
     }
 
     @Test
