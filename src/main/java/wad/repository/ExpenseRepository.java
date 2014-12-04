@@ -13,4 +13,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>{
 
     public List<Expense> findByUser(User user);
 
+    public List<Expense> findExpensesByStatusOrderByModifiedAsc(Expense.Status status);
+
+    public List<Expense> findExpensesByUserAndStatus(User user, Expense.Status status);
+
 }

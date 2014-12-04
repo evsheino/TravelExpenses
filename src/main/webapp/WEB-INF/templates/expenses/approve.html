@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Expense</title>
+    </head>
+    <body>
+
+        <div layout:fragment="content">
+            <div class="row page-topic">
+                <div class="large-12 columns">
+                    <h1>Expense information</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="large-12 columns">
+                    <label id="approve-form-submit-label" class="button radius small" for="approve-form-submit">Save</label>
+                    <label id="reject-form-submit-label" class="button alert radius small" for="reject-form-submit">Reject</label>
+
+                    <p>Plop</p>
+
+                    <a href="#" class="button radius small" onclick="document.getElementById('approve-form').submit();">Save</a>
+                    <a href="#" class="button radius alert small" onclick="document.getElementById('reject-form').submit();">Reject</a>
+                </div>
+            </div>
+
+
+            <form id="approve-form" hidden="hidden" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/approve}">
+                <input id="approve-form-submit" class="button" type="submit" value="Approve" />
+            </form>
+            <form id="reject-form" hidden="hidden" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/reject}">
+                <input id="reject-form-submit" class="button" type="submit" value="Reject" />
+            </form>
+        </div>
+    </body>
+</html>

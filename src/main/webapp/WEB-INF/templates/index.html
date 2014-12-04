@@ -11,7 +11,7 @@
             <div class="row page-topic">
                 <div class="large-12 columns">
                     <h1>Travel Expenses</h1>
-                    <a th:href="@{/expenses/new}" class="button">Add New Expense</a>
+
                 </div>
             </div>
 
@@ -44,13 +44,7 @@
 
             <div class="row">
                 <div class="large-12 columns">
-                    <div id="Expense-list" style="border: solid black 1px">
-                        <p>Here goes list of submitted, non-validated expenses from any user.</p>
-                          
-                        <ol>
-                            <li th:each="expense : ${expenses}" th:text="${expense.date}"></li>
-                        </ol>
-                    </div>
+
                 </div>
             </div>
         </div>
