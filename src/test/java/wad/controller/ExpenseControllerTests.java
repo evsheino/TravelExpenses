@@ -114,7 +114,6 @@ public class ExpenseControllerTests {
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
-        expense.setAmount(100.9);
         expense = expenseRepository.save(expense);
 
         unsavedExpense = new Expense();
@@ -124,7 +123,6 @@ public class ExpenseControllerTests {
         unsavedExpense.setDescription("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.SAVED);
         unsavedExpense.setModified(new Date());
-        unsavedExpense.setAmount(200.55);
 
         session = createSession(user.getUsername(), PASSWORD, expense);
 
@@ -212,14 +210,10 @@ public class ExpenseControllerTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        String amount = "200";
-        Expense.Status status = Expense.Status.SAVED;
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
                 .param("user", user.getId().toString())
-                .param("amount", amount)
-                .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
                 .param("description", desc))
@@ -236,9 +230,7 @@ public class ExpenseControllerTests {
         assertEquals(f.parse(startDate), posted.getStartDate());
         assertEquals(f.parse(endDate), posted.getEndDate());
         assertEquals(desc, posted.getDescription());
-        assertEquals(200, posted.getAmount(), 0.001);
         assertEquals(user, posted.getUser());
-        assertEquals(status, posted.getStatus());
     }
 
     @Test
@@ -250,13 +242,11 @@ public class ExpenseControllerTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        String amount = "200";
         Expense.Status status = Expense.Status.SAVED;
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
                 .param("user", user.getId().toString())
-                .param("amount", amount)
                 .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
@@ -271,13 +261,11 @@ public class ExpenseControllerTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        String amount = "200";
         Expense.Status status = Expense.Status.APPROVED;
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
                 .param("user", user.getId().toString())
-                .param("amount", amount)
                 .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
@@ -298,7 +286,6 @@ public class ExpenseControllerTests {
         String url = "/expenses/";
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("amount", unsavedExpense.getAmount().toString())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 .param("endDate", f.format(unsavedExpense.getEndDate()))
                 .param("description", unsavedExpense.getDescription()))
@@ -346,7 +333,6 @@ public class ExpenseControllerTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("amount", unsavedExpense.getAmount().toString())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 .param("endDate", f.format(unsavedExpense.getEndDate())))
                 // Missing description
@@ -368,7 +354,6 @@ public class ExpenseControllerTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("amount", unsavedExpense.getAmount().toString())
                 .param("status", unsavedExpense.getStatus().toString())
                 // Missing startDate
                 .param("endDate", f.format(unsavedExpense.getEndDate()))
@@ -391,7 +376,6 @@ public class ExpenseControllerTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("amount", unsavedExpense.getAmount().toString())
                 .param("status", unsavedExpense.getStatus().toString())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 // Missing endDate
@@ -433,7 +417,6 @@ public class ExpenseControllerTests {
         expense.setDescription("DELETE THIS");
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
-        expense.setAmount(100.0);
         expense = expenseRepository.save(expense);
 
         assertEquals(initialExpenseCount + 1, expenseRepository.count());

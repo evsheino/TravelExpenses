@@ -110,7 +110,7 @@ public class ExpensesController {
     }
     
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteExpense (@PathVariable Long id) {
+    public String deleteExpense (@PathVariable Long id, SessionStatus status) {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
         
@@ -118,6 +118,7 @@ public class ExpensesController {
             throw new ResourceNotFoundException();
         
         expenseService.deleteExpense(expense);
+        status.setComplete();
         
         return "redirect:/expenses";
     }

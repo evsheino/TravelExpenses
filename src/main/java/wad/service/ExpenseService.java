@@ -41,7 +41,6 @@ public class ExpenseService {
         e.setEndDate(endDate);
         e.setModified(e.getStartDate());
         e.setUser(user);
-        e.setAmount(amount);
         e.setDescription(description);
         e.setStatus(Expense.Status.SAVED);
         return expenseRepository.save(e);
@@ -53,19 +52,5 @@ public class ExpenseService {
 
     public Expense getExpense(Long id) {
         return expenseRepository.findOne(id);
-    }
-    
-    public void updateExpenseAmount (Expense expense) {
-        Double newSum;
-        double helpSum = 0;
-        
-        List<ExpenseRow> expenseRows = expense.getExpenseRows();
-        
-        for (ExpenseRow expenseRow : expenseRows) {
-            helpSum += expenseRow.getAmount();
-        }
-        newSum = (Double) helpSum;
-        expense.setAmount(newSum);
-        expenseRepository.save(expense);
     }
 }

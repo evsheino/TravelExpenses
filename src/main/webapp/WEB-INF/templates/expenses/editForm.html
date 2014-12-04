@@ -39,10 +39,9 @@
                     </label>
                     <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
                 </div>
-                <div class="amount-field" th:classappend="${#fields.hasErrors('amount')} ? error">
+                <div class="amount-field">
                     <label>Amount
-                        <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{amount}" />
-                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
+                        <input type="text" readonly="readonly" th:value="${expense.amount}" />
                     </label>
                 </div>
                 

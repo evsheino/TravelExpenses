@@ -75,7 +75,6 @@ public class ExpenseServiceTests {
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
-        expense.setAmount(100.0);
     }
 
     @After
@@ -125,7 +124,6 @@ public class ExpenseServiceTests {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date d = sdf.parse("21/12/2012");
 
-        expense.setAmount(22.0);
         expense.setDescription("blah");
         expense.setStartDate(d);
         expense.setEndDate(d);

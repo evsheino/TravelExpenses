@@ -120,7 +120,6 @@ public class ExpenseRowControllerTests {
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.SAVED);
         expense.setModified(new Date());
-        expense.setAmount(100.9);
 
         unsavedExpense = new Expense();
         unsavedExpense.setUser(user);
@@ -129,7 +128,6 @@ public class ExpenseRowControllerTests {
         unsavedExpense.setDescription("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.SAVED);
         unsavedExpense.setModified(new Date());
-        unsavedExpense.setAmount(200.55);
 
         row = new ExpenseRow();
         row.setAmount(20.0);

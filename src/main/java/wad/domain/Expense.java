@@ -34,10 +34,6 @@ public class Expense extends AbstractPersistable<Long> {
         APPROVED // Supervisor approved expense
     }
 
-    @NotNull
-    @Min(0)
-    private double amount;
-
     @NotBlank
     private String description;
 
@@ -73,7 +69,7 @@ public class Expense extends AbstractPersistable<Long> {
     @NotNull
     private Date modified;
 
-    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "expense", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ExpenseRow> expenseRows;
 
     /**
@@ -102,21 +98,24 @@ public class Expense extends AbstractPersistable<Long> {
                 || (user.getId().equals(getUser().getId()) || user.isSupervisor());
     }
 
+    public Double getAmount() {
+        if (expenseRows == null) return 0.0;
+
+        double sum = 0;
+
+        for (ExpenseRow expenseRow : expenseRows) {
+            sum += expenseRow.getAmount();
+        }
+        return sum;
+    }
+
+
     public Date getModified() {
         return modified;
     }
 
     public void setModified(Date modified) {
         this.modified = modified;
-    }
-
-    public Double getAmount() {
-//        updateExpenseAmount();
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
     }
 
     public Date getStartDate() {

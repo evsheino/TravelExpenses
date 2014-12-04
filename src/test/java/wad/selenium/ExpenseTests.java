@@ -127,7 +127,6 @@ public class ExpenseTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        String amount = "200";
 
         driver.get(EXPENSES_URI + expense.getId());
 
@@ -140,9 +139,6 @@ public class ExpenseTests {
         element = driver.findElement(By.name("endDate"));
         element.clear();
         element.sendKeys(endDate);
-        element = driver.findElement(By.name("amount"));
-        element.clear();
-        element.sendKeys(amount);
 
         element = driver.findElement(By.id("edit-form-submit"));
         element.click();
@@ -160,7 +156,6 @@ public class ExpenseTests {
         assertEquals(startDate, f.format(updated.getStartDate()));
         assertEquals(endDate, f.format(updated.getEndDate()));
         assertEquals(desc, updated.getDescription());
-        assertEquals(200, updated.getAmount(), 0.001);
 
         // Check that the page has the updated Expense.
         String content = driver.getPageSource();
@@ -201,7 +196,6 @@ public class ExpenseTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        String amount = "200";
 
         driver.get(EXPENSES_URI + "new");
 
@@ -214,9 +208,6 @@ public class ExpenseTests {
         element = driver.findElement(By.name("endDate"));
         element.clear();
         element.sendKeys(endDate);
-        element = driver.findElement(By.name("amount"));
-        element.clear();
-        element.sendKeys(amount);
 
         element = driver.findElement(By.id("add-expense-form"));
         element.submit();
@@ -233,7 +224,7 @@ public class ExpenseTests {
         assertEquals(startDate, f.format(expense.getStartDate()));
         assertEquals(endDate, f.format(expense.getEndDate()));
         assertEquals(desc, expense.getDescription());
-        assertEquals(200, expense.getAmount(), 0.001);
+        assertEquals(0, expense.getAmount(), 0.001);
 
         // Check that the page has the correct information.
         String content = driver.getPageSource();

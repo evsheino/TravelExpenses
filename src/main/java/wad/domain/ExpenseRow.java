@@ -14,7 +14,7 @@ public class ExpenseRow extends AbstractPersistable<Long> {
 
     @NotNull
     @Min(0)
-    private Double amount;
+    private double amount;
 
     @NotEmpty
     private String description;

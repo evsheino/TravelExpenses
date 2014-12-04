@@ -58,8 +58,6 @@ public class ExpenseRowController {
         }
 
         expenseRowRepository.save(expenseRow);
-        expenseService.updateExpenseAmount(expense);
-        expenseService.saveExpense(expense);
 
         return "redirect:/expenses/" + expense.getId();
     }
@@ -73,8 +71,8 @@ public class ExpenseRowController {
         if (expense == null || !expense.isEditableBy(currentUser))
             throw new ResourceNotFoundException();
 
-        expenseRowRepository.delete(id);
-        expenseService.updateExpenseAmount(expense);
+        expense.getExpenseRows().remove(row);
+        expenseRowRepository.delete(row);
 
         return "redirect:/expenses/" + expense.getId();
     }
