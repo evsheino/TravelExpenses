@@ -142,28 +142,4 @@ public class ExpensesController {
         
         return "redirect:/expenses/" + expense.getId();
     }
-
-    @RequestMapping(value = "/{id}/rows", method = RequestMethod.POST)
-    public String addExpenseRow (@PathVariable Long id, @ModelAttribute ExpenseRow expenseRow,
-            BindingResult bindingResult) {
-
-        User user = userService.getCurrentUser();
-        Expense expense = expenseService.getExpense(id);
-
-        if (expense == null || !expense.isEditableBy(user))
-            throw new ResourceNotFoundException();
-
-        expenseRow.setExpense(expense);
-
-        validator.validate(expenseRow, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return "expenses/edit";
-        }
-
-        expenseRowRepository.save(expenseRow);
-        expenseService.updateExpenseAmount(expense);
-        
-        return "redirect:/expenses/" + expense.getId();
-    }
 }
