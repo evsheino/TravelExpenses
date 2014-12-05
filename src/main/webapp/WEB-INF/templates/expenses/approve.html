@@ -10,24 +10,88 @@
     <body>
 
         <div layout:fragment="content">
+
             <div class="row page-topic">
                 <div class="large-12 columns">
-                    <h1>Expense information</h1>
+                    <h1>Approve</h1>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="table">
+
+                <div class="row table-topic">
+                    <div class="large-12 columns">
+                        Expense
+                    </div>
+                </div>
+
+                <div class="row expense-description">
+                    <div class="large-12 columns" th:text="${expense.description}">
+                    </div>
+                </div>
+
+                <div class="row table-header">
+                    <div class="large-3 columns">
+                        Start date
+                    </div>
+                    <div class="large-3 columns">
+                        End date
+                    </div>
+                    <div class="large-4 columns">
+                        Modified
+                    </div>
+                    <div class="large-2 columns">
+                        Status
+                    </div>
+                </div>
+
+                <div class="row table-row">
+                    <div class="large-3 columns" th:text="${expense.startDate}">
+                    </div>
+                    <div class="large-3 columns" th:text="${expense.endDate}">
+                    </div>
+                    <div class="large-4 columns" th:text="${expense.modified}">
+                    </div>
+                    <div class="large-2 columns" th:text="${expense.status}">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="table">
+                <div class="row table-topic">
+                    <div class="large-12 columns">
+                        Rows
+                    </div>
+                </div>
+                <div class="row table-header">
+                    <div class="large-2 columns">
+                        Date
+                    </div>
+                    <div class="large-8 columns">
+                        Description
+                    </div>
+                    <div class="large-2 columns">
+                        Amount
+                    </div>
+                </div>
+                <div class="row table-row" th:each="row, stat : ${expense.expenseRows}">
+                    <div class="large-2 columns" th:text="${row.date}">
+                    </div>
+                    <div class="large-8 columns" th:text="${row.description}">
+                    </div>
+                    <div class="large-2 columns" th:text="${row.amount}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row buttons">
                 <div class="large-12 columns">
-                    <label id="approve-form-submit-label" class="button radius small" for="approve-form-submit">Save</label>
+                    <label id="approve-form-submit-label" class="button radius small" for="approve-form-submit">Approve</label>
                     <label id="reject-form-submit-label" class="button alert radius small" for="reject-form-submit">Reject</label>
-
-                    <p>Plop</p>
-
-                    <a href="#" class="button radius small" onclick="document.getElementById('approve-form').submit();">Save</a>
-                    <a href="#" class="button radius alert small" onclick="document.getElementById('reject-form').submit();">Reject</a>
                 </div>
             </div>
-
 
             <form id="approve-form" hidden="hidden" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/approve}">
                 <input id="approve-form-submit" class="button" type="submit" value="Approve" />

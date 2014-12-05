@@ -33,9 +33,31 @@
     padding: 1em 0em 1em 0em;
 }
 
+.table {
+    margin: 1em 0em 2em 0em;
+}
+
+.table-topic {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
 .table-header {
     padding: 1em 0em 1em 0em;
     font-weight: bold;
+    font-size: 0.7em;
+    color: white;
+    background-color: #303030;
+}
+
+.table-row {
+    padding: 0.4em 0em 0.4em 0em;
+    border-bottom: solid 1px #008cba;
+    font-size: 0.9em;
+}
+
+.table-row:nth-child(2n) {
+    background-color: #ecfaff;
 }
 
 .users {

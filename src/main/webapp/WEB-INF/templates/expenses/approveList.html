@@ -11,48 +11,54 @@
         <div layout:fragment="content">
             <div class="row page-topic">
                 <div class="large-12 columns">
-                    <h1>Approve expenses</h1>
+                    <h1>Approve</h1>
                 </div>
             </div>
 
-            <div class="row table-header">
-                <div class="large-2 columns">
-                    Start date
+            <div class="table">
+                <div class="row table-topic">
+                    <div class="large-12 columns">
+                        Expenses
+                    </div>
                 </div>
-                <div class="large-2 columns">
-                    End date
+                <div class="row table-header">
+                    <div class="large-2 columns">
+                        Start date
+                    </div>
+                    <div class="large-2 columns">
+                        End date
+                    </div>
+                    <div class="large-2 columns">
+                        Modified
+                    </div>
+                    <div class="large-2 columns">
+                        Description
+                    </div>
+                    <div class="large-2 columns">
+                        Amount
+                    </div>
+                    <div class="large-1 columns">
+                        Status
+                    </div>
+                    <div class="large-1 columns">
+                    </div>
                 </div>
-                <div class="large-2 columns">
-                    Modified
-                </div>
-                <div class="large-2 columns">
-                    Description
-                </div>
-                <div class="large-2 columns">
-                    Amount
-                </div>
-                <div class="large-1 columns">
-                    Status
-                </div>
-                <div class="large-1 columns">
-                </div>
-            </div>
-
-            <div class="row expenses" th:each="expense : ${expenses}">
-                <div class="large-2 columns" th:text="${expense.startDate}">
-                </div>
-                <div class="large-2 columns" th:text="${expense.endDate}">
-                </div>
-                <div class="large-2 columns" th:text="${expense.modified}">
-                </div>
-                <div class="large-2 columns" th:text="${expense.description}">
-                </div>
-                <div class="large-2 columns" th:text="${expense.amount}">
-                </div>
-                <div class="large-1 columns" th:text="${expense.status}">
-                </div>
-                <div class="large-1 columns" style="text-align: right;">
-                    <a href="#" class="button radius small" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
+                <div class="row expenses table-row" th:each="expense : ${expenses}">
+                    <div class="large-2 columns" th:text="${expense.startDate}">
+                    </div>
+                    <div class="large-2 columns" th:text="${expense.endDate}">
+                    </div>
+                    <div class="large-2 columns" th:text="${expense.modified}">
+                    </div>
+                    <div class="large-2 columns" th:text="${expense.description}">
+                    </div>
+                    <div class="large-2 columns" th:text="${expense.amount}">
+                    </div>
+                    <div class="large-1 columns" th:text="${expense.status}">
+                    </div>
+                    <div class="large-1 columns" style="text-align: right;">
+                        <a href="#" class="button radius small" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
+                    </div>
                 </div>
             </div>
 
