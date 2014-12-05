@@ -45,17 +45,18 @@
                     </div>
                 </div>
 
-                <div class="row table-row">
-                    <div class="large-3 columns" th:text="${expense.startDate}">
-                    </div>
-                    <div class="large-3 columns" th:text="${expense.endDate}">
-                    </div>
-                    <div class="large-4 columns" th:text="${expense.modified}">
-                    </div>
-                    <div class="large-2 columns" th:text="${expense.status}">
+                <div class="table-rows">
+                    <div class="row table-row">
+                        <div class="large-3 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
+                        </div>
+                        <div class="large-3 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
+                        </div>
+                        <div class="large-4 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
+                        </div>
+                        <div class="large-2 columns" th:text="${expense.status}">
+                        </div>
                     </div>
                 </div>
-
             </div>
 
 
@@ -76,12 +77,15 @@
                         Amount
                     </div>
                 </div>
-                <div class="row table-row" th:each="row, stat : ${expense.expenseRows}">
-                    <div class="large-2 columns" th:text="${row.date}">
-                    </div>
-                    <div class="large-8 columns" th:text="${row.description}">
-                    </div>
-                    <div class="large-2 columns" th:text="${row.amount}">
+                <div class="table-rows">
+                    <div class="row table-row" th:each="row, stat : ${expense.expenseRows}">
+                        <div class="large-2 columns" th:text="${#calendars.format(row.date,'dd.MM.yyyy')}">
+                        </div>
+                        <div class="large-8 columns" th:text="${row.description}">
+                        </div>
+                        <div class="large-2 columns">
+                            <span th:text="${#numbers.formatDecimal(row.amount, 0, 'COMMA', 2, 'POINT')}"></span> €
+                        </div>
                     </div>
                 </div>
             </div>

@@ -35,21 +35,23 @@
 
             </div>
         </div>
-        <div class="row table-row" th:each="user : ${users}">
-            <div class="medium-3 columns" th:text="${user.name}">
-                Name
-            </div>
-            <div class="medium-2 columns" th:text="${user.username}">
-                Username
-            </div>
-            <div class="medium-2 columns">
-                <div th:each="auth : ${user.authorities}"> <span th:text="${auth.authority}">Authority </span></div>
-            </div>
-            <div class="medium-3 columns">
-                <span th:if="${user.getPasswordExpired()}">Yes</span>
-            </div>
-            <div class="medium-2 columns" style="text-align: right;">
-                <a href="#" th:href="@{/admin/user/} + ${user.id}" class="button radius small">Edit</a>
+        <div class="table-rows">
+            <div class="row table-row" th:each="user : ${users}">
+                <div class="medium-3 columns" th:text="${user.name}">
+                    Name
+                </div>
+                <div class="medium-2 columns" th:text="${user.username}">
+                    Username
+                </div>
+                <div class="medium-2 columns">
+                    <div th:each="auth : ${user.authorities}"> <span th:text="${auth.authority}">Authority </span></div>
+                </div>
+                <div class="medium-3 columns">
+                    <span th:if="${user.getPasswordExpired()}">Yes</span>
+                </div>
+                <div class="medium-2 columns" style="text-align: right;">
+                    <a href="#" th:href="@{/admin/user/} + ${user.id}" class="button radius small">Edit</a>
+                </div>
             </div>
         </div>
     </div>

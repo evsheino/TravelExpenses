@@ -42,7 +42,7 @@
     font-weight: bold;
 }
 
-.table-header {
+.table .table-header {
     padding: 1em 0em 1em 0em;
     font-weight: bold;
     font-size: 0.7em;
