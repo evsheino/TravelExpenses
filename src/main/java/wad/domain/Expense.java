@@ -13,7 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -72,6 +71,8 @@ public class Expense extends AbstractPersistable<Long> {
     @OneToMany(mappedBy = "expense", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ExpenseRow> expenseRows;
 
+    @OneToMany
+    private List<Receipt> receipts;    
     /**
      * Check if the given User is allowed to edit this Expense.
      * A user can edit an Expense if she is an admin or owns the Expense and
@@ -190,4 +191,14 @@ public class Expense extends AbstractPersistable<Long> {
         }
 
     }
+
+    public List<Receipt> getReceipts() {
+        return receipts;
+    }
+
+    public void setReceipts(List<Receipt> receipts) {
+        this.receipts = receipts;
+    }
+    
+    
 }

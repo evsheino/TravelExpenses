@@ -8,6 +8,7 @@
     </head>
     <body>
         <div th:fragment="editExpenseForm">
+
             <form id="edit-form" th:method="POST" th:object="${expense}" th:action="@{/expenses/} + ${expense.id}">
                 <label>User
                     <input type="text" readonly="readonly" th:value="${expense.user.name}" />
@@ -44,13 +45,13 @@
                         <input type="text" readonly="readonly" th:value="${expense.amount}" />
                     </label>
                 </div>
-                
+
                 <div class="row page-topic" style="margin: 2em 0 2em 0">
                     <div class="large-10 columns">
                         <h1>Rows</h1>
                     </div>
                 </div>
-                
+
                 <div class="row" style="margin: 2em 0 2em 0">
                     <div class="large-2 columns">
                         <h3>Date</h3>
@@ -62,9 +63,9 @@
                         <h3>Amount</h3>
                     </div>
                 </div>
-                
+
                 <div style="margin: 2em 0 2em 0"> </div>
-                
+
                 <div class="row" th:each="row, stat : *{expenseRows}">
                     <div class="large-2 columns">
                         <div class="date-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].date')} ? error">
@@ -95,6 +96,10 @@
                 a submit button.
                 -->
                 <input id="edit-form-submit-input" type="submit" hidden="hidden" />
+            </form>
+            <form method="POST" action="@{/receipts/}" enctype="multipart/form-data">
+                <input type="file" name="file"/>
+                <input type="submit" value="Add receipt"/>
             </form>
 
             <!-- Hidden row delete form -->
