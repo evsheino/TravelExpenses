@@ -21,15 +21,15 @@
                     <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small dropdown">Status</button>
                     <br/>
                     <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
-                        <li><a href="#">Draft</a></li>
-                        <li><a href="#">Sent</a></li>
-                        <li><a href="#">Rejected</a></li>
-                        <li><a href="#">Accepted</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=DRAFT)}">Draft</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=SENT)}">Sent</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=REJECTED)}">Rejected</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=APPROVED)}">Approved</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${expenses})"></div>
+            <div th:include="expenses/listFragment :: expenseList (${status}, ${expenses})"></div>
 
         </div>
     </body>

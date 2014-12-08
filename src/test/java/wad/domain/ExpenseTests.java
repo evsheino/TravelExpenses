@@ -22,7 +22,7 @@ import wad.repository.UserRepository;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class ExpenseTests {
-    
+
     private Expense expense;
     private User user;
     private User user2;
@@ -34,7 +34,7 @@ public class ExpenseTests {
 
     @Autowired
     private ExpenseRepository expenseRepository;
-    
+
     @Before
     public void setUp() {
         Authority adminAuth = new Authority();
@@ -43,7 +43,7 @@ public class ExpenseTests {
         supervisorAuth.setRole(Authority.Role.SUPERVISOR);
         Authority userAuth = new Authority();
         userAuth.setRole(Authority.Role.USER);
-        
+
         user = new User();
         user.setName("User");
         user.setPassword("password");
@@ -61,7 +61,7 @@ public class ExpenseTests {
         userAuth.setRole(Authority.Role.USER);
         user2.getAuthorities().add(userAuth);
         user2 = userRepository.save(user2);
-        
+
         admin = new User();
         admin.setName("Admin");
         admin.setPassword("password");
@@ -77,13 +77,13 @@ public class ExpenseTests {
         supervisor.setAuthorities(new ArrayList());
         supervisor.getAuthorities().add(supervisorAuth);
         supervisor = userRepository.save(supervisor);
-        
+
         expense = new Expense();
         expense.setUser(user);
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
         expense.setDescription("blaa blaa");
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
     }
@@ -94,16 +94,16 @@ public class ExpenseTests {
         userRepository.deleteAll();
     }
 
-    
+
     @Test
     public void isEditableByReturnsTrueForAdmin() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         assertTrue(expense.isEditableBy(admin));
 
-        expense.setStatus(Expense.Status.RETURNED);
+        expense.setStatus(Expense.Status.REJECTED);
         assertTrue(expense.isEditableBy(admin));
 
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         assertTrue(expense.isEditableBy(admin));
 
         expense.setStatus(Expense.Status.APPROVED);
@@ -112,13 +112,13 @@ public class ExpenseTests {
 
     @Test
     public void isEditableByReturnsTrueForOwnerWhenStatusIsSAVED() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         assertTrue(expense.isEditableBy(user));
     }
 
     @Test
     public void isEditableByReturnsTrueForOwnerWhenStatusIsRETURNED() throws Exception {
-        expense.setStatus(Expense.Status.RETURNED);
+        expense.setStatus(Expense.Status.REJECTED);
         assertTrue(expense.isEditableBy(user));
     }
 
@@ -127,22 +127,22 @@ public class ExpenseTests {
         expense.setStatus(Expense.Status.APPROVED);
         assertFalse(expense.isEditableBy(user));
     }
-    
+
     @Test
     public void isEditableByReturnsFalseForOwnerWhenStatusIsWAITING() throws Exception {
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         assertFalse(expense.isEditableBy(user));
     }
 
     @Test
     public void isEditableByReturnsFalseForNonOwnerUser() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         assertFalse(expense.isEditableBy(user2));
 
-        expense.setStatus(Expense.Status.RETURNED);
+        expense.setStatus(Expense.Status.REJECTED);
         assertFalse(expense.isEditableBy(user2));
 
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         assertFalse(expense.isEditableBy(user2));
 
         expense.setStatus(Expense.Status.APPROVED);
@@ -151,13 +151,13 @@ public class ExpenseTests {
 
     @Test
     public void isEditableByReturnsFalseForNonOwnerSupervisor() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         assertFalse(expense.isEditableBy(supervisor));
 
-        expense.setStatus(Expense.Status.RETURNED);
+        expense.setStatus(Expense.Status.REJECTED);
         assertFalse(expense.isEditableBy(supervisor));
 
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         assertFalse(expense.isEditableBy(supervisor));
 
         expense.setStatus(Expense.Status.APPROVED);

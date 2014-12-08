@@ -26,9 +26,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Expense extends AbstractPersistable<Long> {
 
     public static enum Status {
-        SAVED, // Saved, not sent yet to supervisor
-        WAITING, // Sent to supervisor
-        RETURNED, // Supervisor asks more info
+        DRAFT, // Saved, not sent yet to supervisor
+        SENT, // Sent to supervisor
+        REJECTED, // Supervisor asks more info
         APPROVED // Supervisor approved expense
     }
 
@@ -83,7 +83,7 @@ public class Expense extends AbstractPersistable<Long> {
     public boolean isEditableBy(User user) {
         return user.isAdmin()
                 || (user.getId().equals(getUser().getId())
-                && (getStatus() == Status.SAVED || getStatus() == Status.RETURNED));
+                && (getStatus() == Status.DRAFT || getStatus() == Status.REJECTED));
     }
 
     /**

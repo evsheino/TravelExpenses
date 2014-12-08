@@ -112,7 +112,7 @@ public class ExpenseControllerTests {
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
         expense.setDescription("blaa blaa");
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
 
@@ -121,7 +121,7 @@ public class ExpenseControllerTests {
         unsavedExpense.setStartDate(f.parse("01/10/2014"));
         unsavedExpense.setEndDate(f.parse("20/11/2014"));
         unsavedExpense.setDescription("blaa blaa");
-        unsavedExpense.setStatus(Expense.Status.SAVED);
+        unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 
         session = createSession(user.getUsername(), PASSWORD, expense);
@@ -136,7 +136,7 @@ public class ExpenseControllerTests {
                 .andReturn()
                 .getRequest()
                 .getSession();
-        assertNotNull(session); 
+        assertNotNull(session);
         session.setAttribute("expense", exp);
 
         return session;
@@ -242,7 +242,7 @@ public class ExpenseControllerTests {
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
-        Expense.Status status = Expense.Status.SAVED;
+        Expense.Status status = Expense.Status.DRAFT;
 
         String url = "/expenses/" + expense.getId();
         mockMvc.perform(post(url).session(session).with(csrf())
@@ -273,7 +273,7 @@ public class ExpenseControllerTests {
                 .andExpect(status().is3xxRedirection());
 
         Expense posted = expenseRepository.findOne(expense.getId());
-        assertEquals(Expense.Status.SAVED, posted.getStatus());
+        assertEquals(Expense.Status.DRAFT, posted.getStatus());
     }
 
     @Test
@@ -303,7 +303,7 @@ public class ExpenseControllerTests {
         assertEquals(unsavedExpense.getUser(), posted.getUser());
         assertEquals(f.format(unsavedExpense.getStartDate()), f.format(posted.getStartDate()));
         assertEquals(f.format(unsavedExpense.getEndDate()), f.format(posted.getEndDate()));
-        assertEquals(Expense.Status.SAVED, posted.getStatus());
+        assertEquals(Expense.Status.DRAFT, posted.getStatus());
     }
 
     @Test
@@ -390,7 +390,7 @@ public class ExpenseControllerTests {
 
     @Test
     public void deleteExpenseByOwnerDeletesExpenseWithStatusSAVED() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense = expenseRepository.save(expense);
         assertEquals(initialExpenseCount, expenseRepository.count());
 
@@ -406,7 +406,7 @@ public class ExpenseControllerTests {
     public void deleteExpenseDeletesCorrectExpense() throws Exception {
         String desc = "do not delete this";
 
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setDescription(desc);
         expenseRepository.save(expense);
 
@@ -415,7 +415,7 @@ public class ExpenseControllerTests {
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
         expense.setDescription("DELETE THIS");
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
 
@@ -463,7 +463,7 @@ public class ExpenseControllerTests {
 
     @Test
     public void deleteExpenseByOwnerWithStatusWAITINGFails() throws Exception {
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         expense = expenseRepository.save(expense);
         testDeleteFails(expense);
     }

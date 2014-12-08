@@ -9,8 +9,6 @@ import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import java.util.Date;
 import java.util.List;
-import wad.domain.Authority;
-import wad.domain.ExpenseRow;
 
 /**
  * Created by nryytty@cs on 10.11.2014.
@@ -44,7 +42,7 @@ public class ExpenseService {
         e.setModified(e.getStartDate());
         e.setUser(user);
         e.setDescription(description);
-        e.setStatus(Expense.Status.SAVED);
+        e.setStatus(Expense.Status.DRAFT);
         return expenseRepository.save(e);
     }
 
@@ -58,7 +56,7 @@ public class ExpenseService {
 
     public Page<Expense> getPagedExpensesByUser(User user, Expense.Status status, Integer pageNumber, Integer perPage) {
         if(status == null) {
-            status = Expense.Status.SAVED;
+            status = Expense.Status.DRAFT;
         }
 
         if(pageNumber == null) {

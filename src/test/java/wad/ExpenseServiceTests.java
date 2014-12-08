@@ -73,7 +73,7 @@ public class ExpenseServiceTests {
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
         expense.setDescription("blaa blaa");
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
     }
 
@@ -156,7 +156,7 @@ public class ExpenseServiceTests {
             e.setStartDate(new Date());
             e.setEndDate(new Date());
             e.setDescription("blaa blaa" + i);
-            e.setStatus(Expense.Status.SAVED);
+            e.setStatus(Expense.Status.DRAFT);
             e.setModified(new Date());
 
             list.add(e);
@@ -180,7 +180,7 @@ public class ExpenseServiceTests {
         expense = expenseRepository.save(expense);
         assertEquals(expense, expenseService.getExpense(expense.getId()));
     }
-    
+
     @Test
     public void getExpenseReturnsNullIfExpenseNotFound() throws Exception {
         assertNull(expenseService.getExpense(1L));

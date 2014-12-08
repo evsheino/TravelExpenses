@@ -14,23 +14,40 @@
                 </div>
             </div>
 
-            <div class="row page-toolbar">
+            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
+            <div class="row">
                 <div class="large-12 columns">
-                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small dropdown">Status</button>
-                    <br/>
-                    <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
-                        <li><a href="#">Draft</a></li>
-                        <li><a href="#">Sent</a></li>
-                        <li><a href="#">Rejected</a></li>
-                        <li><a href="#">Accepted</a></li>
-                    </ul>
+                    <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts</a>
                 </div>
             </div>
 
-            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
+            <hr />
+
             <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="#" th:href="@{/expenses(status=SENT)}">View all sent</a>
+                </div>
+            </div>
+
+            <hr />
+
             <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected</a>
+                </div>
+            </div>
+
+            <hr />
+
             <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved</a>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>

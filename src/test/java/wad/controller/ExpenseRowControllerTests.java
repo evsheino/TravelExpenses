@@ -118,7 +118,7 @@ public class ExpenseRowControllerTests {
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
         expense.setDescription("blaa blaa");
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
 
         unsavedExpense = new Expense();
@@ -126,7 +126,7 @@ public class ExpenseRowControllerTests {
         unsavedExpense.setStartDate(f.parse("01/10/2014"));
         unsavedExpense.setEndDate(f.parse("20/11/2014"));
         unsavedExpense.setDescription("blaa blaa");
-        unsavedExpense.setStatus(Expense.Status.SAVED);
+        unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 
         row = new ExpenseRow();
@@ -149,7 +149,7 @@ public class ExpenseRowControllerTests {
                 .andReturn()
                 .getRequest()
                 .getSession();
-        assertNotNull(session); 
+        assertNotNull(session);
         session.setAttribute("expense", exp);
 
         return session;
@@ -258,7 +258,7 @@ public class ExpenseRowControllerTests {
 
     @Test
     public void deleteExpenseRowByOwnerDeletesExpenseRowWithStatusSAVED() throws Exception {
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense = expenseRepository.save(expense);
         row.setExpense(expense);
         row = rowRepository.save(row);
@@ -281,7 +281,7 @@ public class ExpenseRowControllerTests {
     public void deleteExpenseRowDeletesCorrectExpenseRow() throws Exception {
         String desc = "do not delete this";
 
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         expense.setDescription("expense desc");
         expense = expenseRepository.save(expense);
 
@@ -352,7 +352,7 @@ public class ExpenseRowControllerTests {
 
     @Test
     public void deleteExpenseByOwnerWithStatusWAITINGFails() throws Exception {
-        expense.setStatus(Expense.Status.WAITING);
+        expense.setStatus(Expense.Status.SENT);
         expense = expenseRepository.save(expense);
         row.setExpense(expense);
         rowRepository.save(row);

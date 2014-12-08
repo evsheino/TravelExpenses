@@ -60,6 +60,7 @@ public class ExpensesController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listExpenses(Model model, @RequestParam(required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
+        model.addAttribute("status", status.toString());
         model.addAttribute("expenses", expenseService.getPagedExpenses(status, pageNumber, 10).getContent());
         return "expenses/list";
     }
@@ -89,7 +90,7 @@ public class ExpensesController {
 
         User u = userService.getCurrentUser();
         expense.setUser(u);
-        expense.setStatus(Expense.Status.SAVED);
+        expense.setStatus(Expense.Status.DRAFT);
         // Set modified here to pass validation
         expense.setModified(new Date());
 

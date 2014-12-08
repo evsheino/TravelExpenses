@@ -1,27 +1,11 @@
 package wad.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
-import wad.domain.Authority;
 import wad.domain.Expense;
-import wad.domain.ExpenseRow;
-import wad.domain.User;
 import wad.repository.ExpenseRepository;
-import wad.repository.ExpenseRowRepository;
-import wad.service.ExpenseService;
-import wad.service.UserService;
-import wad.validator.ExpenseValidator;
-
-import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
-import java.util.Date;
 
 @Controller
 @RequestMapping("/expenses/approve")
@@ -32,7 +16,7 @@ public class ApproveExpensesController {
 
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public String listExpenses(Model model) {
-        model.addAttribute("expenses", expenseRepository.findExpensesByStatusOrderByModifiedAsc(Expense.Status.SAVED));
+        model.addAttribute("expenses", expenseRepository.findExpensesByStatusOrderByModifiedAsc(Expense.Status.DRAFT));
         return "expenses/approveList";
     }
 
@@ -50,7 +34,7 @@ public class ApproveExpensesController {
 
     @RequestMapping(value="/{id}/reject", method = RequestMethod.POST)
     public String rejectExpense(Model model, @PathVariable Long id) {
-        updateStatus(id, Expense.Status.RETURNED);
+        updateStatus(id, Expense.Status.REJECTED);
         return "redirect:/expenses/approve/list";
     }
 
