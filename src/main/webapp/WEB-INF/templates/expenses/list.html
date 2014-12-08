@@ -11,16 +11,14 @@
         <div layout:fragment="content">
 
             <div class="row page-topic">
-                <div class="large-12 columns">
+                <div class="large-9 columns">
                     <h1>Expenses</h1>
                 </div>
-            </div>
-
-            <div class="row page-toolbar">
-                <div class="large-12 columns">
-                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small dropdown">Status</button>
+                <div class="large-3 columns" style="padding-top: 0.8em;">
+                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small expand dropdown">Status</button>
                     <br/>
                     <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                        <li><a href="#" th:href="@{/expenses}">View all</a></li>
                         <li><a href="#" th:href="@{/expenses(status=DRAFT)}">Draft</a></li>
                         <li><a href="#" th:href="@{/expenses(status=SENT)}">Sent</a></li>
                         <li><a href="#" th:href="@{/expenses(status=REJECTED)}">Rejected</a></li>
@@ -29,7 +27,15 @@
                 </div>
             </div>
 
-            <div th:include="expenses/listFragment :: expenseList (${status}, ${expenses})"></div>
+            <div class="row page-toolbar">
+                <div class="large-4 columns" th:include="expenses/paginationFragment :: pagination (${status}, ${paging})"></div>
+            </div>
+
+            <div th:include="expenses/listFragment :: expenseList (${status}, ${page.getContent()})"></div>
+
+            <div class="row page-toolbar">
+                <div class="large-4 columns" th:include="expenses/paginationFragment :: pagination (${status}, ${paging})"></div>
+            </div>
 
         </div>
     </body>

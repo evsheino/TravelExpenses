@@ -15,6 +15,8 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>{
 
     public List<Expense> findByUser(User user);
 
+    public Page<Expense> findAllByUser(User user, Pageable pageable);
+
     public Page<Expense> findAllByUserAndStatus(User user, Expense.Status status, Pageable pageable);
 
     public List<Expense> findExpensesByStatusOrderByModifiedAsc(Expense.Status status);

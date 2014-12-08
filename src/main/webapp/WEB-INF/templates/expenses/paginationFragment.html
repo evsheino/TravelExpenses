@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Expenses</title>
+</head>
+<body>
+
+    <!-- Pagination Bar -->
+    <div th:fragment="pagination (status, paging)">
+
+        <ul class="pagination" role="menubar" aria-label="Pagination">
+            <!-- Prev -->
+            <li th:class="${paging.isFirstPage()} ? 'arrow unavailable' : 'arrow'" th:attr="aria-disabled=${paging.isFirstPage()}">
+                <a th:if="${not paging.isFirstPage()}" href="" th:href="@{/expenses(status=${status}, pageNumber=(${paging.getCurrentPage()}-1))}">&laquo; Previous</a>
+                <a th:if="${paging.isFirstPage()}" href="#">&laquo; Previous</a>
+            </li>
+
+            <li th:each="prev : ${paging.getPrevPages()}"><a href="" th:href="@{/expenses(status=${status}, pageNumber=${prev})}" th:text="(${prev} + 1)">n</a></li>
+            <li class="current"><a href="" th:text="(${paging.getCurrentPage()} + 1)">n</a></li>
+            <li th:each="next : ${paging.getNextPages()}"><a href="" th:href="@{/expenses(status=${status}, pageNumber=${next})}" th:text="(${next} + 1)">n</a></li>
+
+            <!-- <li class="unavailable" aria-disabled="true"><a href="">&hellip;</a></li> -->
+
+            <!-- Next -->
+            <li th:class="${paging.isLastPage()} ? 'arrow unavailable' : 'arrow'" th:attr="aria-disabled=${paging.isLastPage()}">
+                <a th:if="${not paging.isLastPage()}" href="#" th:href="@{/expenses(status=${status}, pageNumber=(${paging.getCurrentPage()}+1))}">Next &raquo;</a>
+                <a th:if="${paging.isLastPage()}" href="#">Next &raquo;</a>
+            </li>
+        </ul>
+
+        <!--
+
+        <div>
+            <ul class="pagination" role="menubar" aria-label="Pagination">
+                <li th:class="${page.isFirst()} ? 'disabled' : ''">
+                    <span th:if="${page.isFirst()}">? First</span>
+                    <a th:if="${not page.isFirst()}" href="#">? First</a>
+                </li>
+                <li th:class="${page.hasPrevious()} ? '' : 'disabled'">
+                    <span th:if="${not page.hasPrevious()}">«</span>
+                    <a th:if="${page.hasPrevious()}" href="#" title="Go to previous page">«</a>
+                </li>
+
+
+                <li th:class="${page.hasNext()} ? '' : 'disabled'">
+                    <span th:if="${not page.hasNext()}">»</span>
+                    <a th:if="${page.hasNext()}" href="#" title='Go to next page'>»</a>
+                </li>
+                <li th:class="${page.isLast()} ? 'disabled' : ''">
+                    <span th:if="${page.isLast()}">Last ?</span>
+                    <a th:if="${not page.isLast()}" href="#">Last ?</a>
+                </li>
+            </ul>
+        </div>
+        -->
+    </div>
+
+</body>
+</html>

@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wad.service.UserService;
@@ -16,6 +17,7 @@ import wad.domain.ExpenseRow;
 import wad.domain.User;
 import wad.repository.ExpenseRowRepository;
 import wad.service.ExpenseService;
+import wad.util.PagingHelper;
 import wad.validator.ExpenseValidator;
 
 @Controller
@@ -60,8 +62,21 @@ public class ExpensesController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String listExpenses(Model model, @RequestParam(required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
-        model.addAttribute("status", status.toString());
-        model.addAttribute("expenses", expenseService.getPagedExpenses(status, pageNumber, 10).getContent());
+
+        String statusDescription = null;
+        Page<Expense> page = null;
+        if(status == null) {
+            statusDescription = "All";
+            page = expenseService.getPagedExpenses(pageNumber, 10);
+        } else {
+            statusDescription = status.toString();
+            page = expenseService.getPagedExpenses(status, pageNumber, 10);
+        }
+
+        model.addAttribute("paging", new PagingHelper(page));
+        model.addAttribute("page", page);
+        model.addAttribute("status", statusDescription);
+
         return "expenses/list";
     }
 

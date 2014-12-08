@@ -50,6 +50,10 @@ public class ExpenseService {
         return expenseRepository.findByUser(user);
     }
 
+    public Page<Expense> getPagedExpenses(Integer pageNumber, Integer perPage) {
+        return getPagedExpensesByUser(userService.getCurrentUser(), null, pageNumber, perPage);
+    }
+
     public Page<Expense> getPagedExpenses(Expense.Status status, Integer pageNumber, Integer perPage) {
         return getPagedExpensesByUser(userService.getCurrentUser(), status, pageNumber, perPage);
     }
@@ -67,7 +71,12 @@ public class ExpenseService {
             perPage = 10;
         }
 
-        Page<Expense> page = expenseRepository.findAllByUserAndStatus(user, status, new PageRequest(pageNumber, perPage));
+        Page<Expense> page = null;
+        if(status == null) {
+            page = expenseRepository.findAllByUser(user, new PageRequest(pageNumber, perPage));
+        } else {
+            page = expenseRepository.findAllByUserAndStatus(user, status, new PageRequest(pageNumber, perPage));
+        }
         return page;
     }
 

@@ -45,7 +45,7 @@
                         <div class="large-2 columns" th:text="${expense.description}">
                         </div>
                         <div class="large-2 columns">
-                            <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span> €
+                            <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span>
                         </div>
                         <div class="large-2 columns" th:text="${expense.status}">
                         </div>

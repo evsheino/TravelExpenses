@@ -17,7 +17,7 @@
             <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
             <div class="row">
                 <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts</a>
+                    <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts &raquo;</a>
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
             <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
             <div class="row">
                 <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=SENT)}">View all sent</a>
+                    <a href="#" th:href="@{/expenses(status=SENT)}">View all sent &raquo;</a>
                 </div>
             </div>
 
@@ -35,7 +35,7 @@
             <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
             <div class="row">
                 <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected</a>
+                    <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected &raquo;</a>
                 </div>
             </div>
 
@@ -44,7 +44,7 @@
             <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
             <div class="row">
                 <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved</a>
+                    <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved &raquo;</a>
                 </div>
             </div>
 
