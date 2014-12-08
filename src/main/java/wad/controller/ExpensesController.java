@@ -83,14 +83,19 @@ public class ExpensesController {
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public String showExpense(Model model, @PathVariable Long id) {
         Expense expense = expenseService.getExpense(id);
+        User currentUser = userService.getCurrentUser();
 
-        if (expense == null || !expense.isViewableBy(userService.getCurrentUser()))
+        if (expense == null || !expense.isViewableBy(currentUser))
             throw new ResourceNotFoundException();
 
         model.addAttribute("statuses", Expense.Status.values());
         model.addAttribute("expense", expense);
         model.addAttribute("expenseRow", new ExpenseRow());
-        return "expenses/edit";
+
+        if (expense.isEditableBy(currentUser))
+            return "expenses/edit";
+        else
+            return "expenses/view";
     }
 
     @RequestMapping(value="/new", method = RequestMethod.GET)

@@ -28,7 +28,7 @@ import wad.service.UserService;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class SignInTest {
+public class SignInSeleniumTests {
 
     private final String LOGIN_URI = "http://localhost:8080/login";
 

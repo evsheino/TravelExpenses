@@ -154,7 +154,7 @@ public class ExpenseControllerTests {
                 .andExpect(status().isOk());
     }
 
-    private void testExpenseCanBeViewedBy(String username) throws Exception {
+    private void testExpenseEditFormCanBeViewedBy(String username) throws Exception {
         MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(username)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("expense"))
@@ -163,14 +163,23 @@ public class ExpenseControllerTests {
         assertNotNull(res.getModelAndView().getModel().get("expense"));
     }
 
+    private void testExpenseCanBeViewedBy(String username) throws Exception {
+        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId()).with(user(username)))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("expense"))
+                .andExpect(view().name("expenses/view")).andReturn();
+
+        assertNotNull(res.getModelAndView().getModel().get("expense"));
+    }
+
     @Test
     public void ownerCanViewExpense() throws Exception {
-        testExpenseCanBeViewedBy(USERNAME);
+        testExpenseEditFormCanBeViewedBy(USERNAME);
     }
 
     @Test
     public void adminCanViewExpense() throws Exception {
-        testExpenseCanBeViewedBy(ADMIN_USERNAME);
+        testExpenseEditFormCanBeViewedBy(ADMIN_USERNAME);
     }
 
     @Test
