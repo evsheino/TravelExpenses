@@ -1,7 +1,6 @@
 package wad.selenium;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +11,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -33,7 +31,7 @@ import wad.service.UserService;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-public class ExpenseTests {
+public class ExpenseSeleniumTests {
 
     private final String DATE_FORMAT = "dd/MM/yyyy";
 

@@ -19,28 +19,28 @@
                 <div class="large-12 columns">
                   <div th:include="expenses/editForm :: editExpenseForm" />
 
-                  <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
+                  <form id="add-row-form" th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
                   <div class="row">
                       <div class="large-2 columns date-field" th:classappend="${#fields.hasErrors('date')} ? error">
                           <label>Date
-                              <input type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
+                              <input id="row-add-date" type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
                           </label>
                           <small class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Incorrect date</small>
                       </div>
                       <div class="large-2 columns amount-field" th:classappend="${#fields.hasErrors('amount')} ? error">
                           <label>Amount
-                              <input type="number" step="any" min="0" name="amount" th:field="*{amount}" required="required"/>
+                              <input id="row-add-amount" type="number" step="any" min="0" th:field="*{amount}" required="required"/>
                           </label>
                           <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
                       </div>
                       <div class="large-6 columns description-field" th:classappend="${#fields.hasErrors('description')} ? error">
                           <label>Description
-                              <input type="text" th:field="*{description}" required="required"/>
+                              <input id="row-add-description" type="text" th:field="*{description}" required="required"/>
                           </label>
                           <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
                       </div>
                       <div class="large-2 columns" style="text-align: right;">
-                          <input type="submit" class="button radius small" value="+ Add row" />
+                          <input id="row-add-submit" type="submit" class="button radius small" value="+ Add row" />
                       </div>
                   </div>
                   </form>
