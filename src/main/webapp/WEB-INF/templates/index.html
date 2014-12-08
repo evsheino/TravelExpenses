@@ -11,42 +11,26 @@
             <div class="row page-topic">
                 <div class="large-12 columns">
                     <h1>Travel Expenses</h1>
-
                 </div>
             </div>
 
-            <!-- Just to show user authorities work
-            <div class="row">
+            <div class="row page-toolbar">
                 <div class="large-12 columns">
-                    <p>The columns below will show the authorities you have</p>
-                    <div class="row">
-                        <div class="large-4 medium-4 columns">
-                            <div class="callout panel">
-                                <p sec:authorize="hasRole('USER')">USER</p>
-                            </div>
-                        </div>
-                        <div class="large-4 medium-4 columns">
-                            <div class="callout panel">
-                                <p sec:authorize="hasRole('SUPERVISOR')">SUPERVISOR</p>
-                            </div>
-                        </div>
-                        <div class="large-4 medium-4 columns">
-                            <div class="callout panel">
-                                <p sec:authorize="hasRole('ADMIN')">ADMIN</p>
-                            </div>
-                        </div>
-                    </div>
+                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small dropdown">Status</button>
+                    <br/>
+                    <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                        <li><a href="#">Draft</a></li>
+                        <li><a href="#">Sent</a></li>
+                        <li><a href="#">Rejected</a></li>
+                        <li><a href="#">Accepted</a></li>
+                    </ul>
                 </div>
             </div>
 
-            <hr />
-            -->
-
-            <div class="row">
-                <div class="large-12 columns">
-
-                </div>
-            </div>
+            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
+            <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
+            <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
+            <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
         </div>
     </body>
 </html>

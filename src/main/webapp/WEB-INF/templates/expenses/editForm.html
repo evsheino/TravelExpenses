@@ -29,13 +29,13 @@
                     <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid description</small>
                 </div>
                 <div class="date-field" th:classappend="${#fields.hasErrors('startDate')} ? error">
-                    <label>Start date 
+                    <label>Start date
                         <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{startDate}" />
                     </label>
                     <small class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Incorrect date</small>
                 </div>
                 <div class="date-field" th:classappend="${#fields.hasErrors('endDate')} ? error">
-                    <label>End date 
+                    <label>End date
                         <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
                     </label>
                     <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
@@ -86,12 +86,12 @@
                         </div>
                     </div>
                     <div class="large-1 columns">
-                        <a th:id="'delete-row-confirm-button-' + ${expense.expenseRows[__${stat.index}__].id}" th:onclick="'javascript:var f = $(\'#delete-row-form\'); f.attr(\'action\', \'' + @{/expenses/} + *{id} + @{/rows/} + *{expenseRows[__${stat.index}__].id} + @{/delete} + '\'); f.submit();'" class="button alert" role="button">X</a>
+                        <a th:id="'delete-row-confirm-button-' + ${expense.expenseRows[__${stat.index}__].id}" th:onclick="'javascript:var f = $(\'#delete-row-form\'); f.attr(\'action\', \'' + @{/expenses/} + *{id} + @{/rows/} + *{expenseRows[__${stat.index}__].id} + @{/delete} + '\'); f.submit();'" class="button alert radius small" role="button">X</a>
                     </div>
                 </div>
-                <!-- 
+                <!--
                 The submit button is hidden so that additional buttons can be positioned nicely.
-                This may also be possible with the button visible and better css skills. 
+                This may also be possible with the button visible and better css skills.
                 Add a <label for="edit-form-submit-input">Save</label> element wherever including this in order to have
                 a submit button.
                 -->
@@ -99,12 +99,12 @@
             </form>
             <form method="POST" action="@{/receipts/}" enctype="multipart/form-data">
                 <input type="file" name="file"/>
-                <input type="submit" value="Add receipt"/>
+                <input type="submit" class="button radius small" value="Add receipt"/>
             </form>
 
             <!-- Hidden row delete form -->
             <form hidden="hidden" id="delete-row-form" method="POST" th:action="@{/}" >
-                <input class="button" type="submit" value="Delete" />
+                <input class="button" type="submit radius small" value="Delete" />
             </form>
         </div>
     </body>

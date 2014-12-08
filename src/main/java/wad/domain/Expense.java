@@ -26,7 +26,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class Expense extends AbstractPersistable<Long> {
 
     public static enum Status {
-
         SAVED, // Saved, not sent yet to supervisor
         WAITING, // Sent to supervisor
         RETURNED, // Supervisor asks more info
@@ -72,12 +71,12 @@ public class Expense extends AbstractPersistable<Long> {
     private List<ExpenseRow> expenseRows;
 
     @OneToMany
-    private List<Receipt> receipts;    
+    private List<Receipt> receipts;
     /**
      * Check if the given User is allowed to edit this Expense.
      * A user can edit an Expense if she is an admin or owns the Expense and
      * the status of the Expense is SAVED or RETURNED.
-     
+
      * @param user The user to check.
      * @return True if the user is allowed to edit the Expense, false otherwise.
      */
@@ -199,6 +198,6 @@ public class Expense extends AbstractPersistable<Long> {
     public void setReceipts(List<Receipt> receipts) {
         this.receipts = receipts;
     }
-    
-    
+
+
 }

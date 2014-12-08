@@ -22,7 +22,7 @@
                 <div class="row">
                     <div class="medium-6 columns">
                         <div class="date-field" th:classappend="${#fields.hasErrors('startDate')} ? error">
-                            <label>Start date 
+                            <label>Start date
                                 <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{startDate}" />
                             </label>
                             <small class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Incorrect date</small>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="medium-6 columns">
                         <div class="date-field" th:classappend="${#fields.hasErrors('endDate')} ? error">
-                            <label>End date 
+                            <label>End date
                                 <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
                             </label>
                             <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
@@ -39,10 +39,10 @@
                 </div>
                 <div class="row">
                     <div class="medium-12 columns">
-                        <input id="edit-form-submit-input" type="submit" class="button" value="Submit" />
+                        <input id="edit-form-submit-input" type="submit" class="button radius small" value="Save" />
                     </div>
-                </div> 
-                
+                </div>
+
                 <div th:if="${error}">
                     <p th:text="${error}"></p>
                 </div>

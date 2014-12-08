@@ -4,7 +4,7 @@
       layout:decorator="layout">
     <head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Expense</title>
     </head>
     <body>
@@ -14,7 +14,7 @@
                     <h1>Expense information</h1>
                 </div>
             </div>
-                
+
             <div class="row">
                 <div class="large-12 columns">
                   <div th:include="expenses/editForm :: editExpenseForm" />
@@ -40,21 +40,21 @@
                           <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
                       </div>
                       <div class="large-2 columns" style="text-align: right;">
-                          <input type="submit" class="button" value="+ Add row" />
+                          <input type="submit" class="button radius small" value="+ Add row" />
                       </div>
                   </div>
                   </form>
-                        
-                  <label id="edit-form-submit" class="button" for="edit-form-submit-input">Save</label>
-                  <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert">Delete</a>
-                        
+
+                  <label id="edit-form-submit" class="button radius small" for="edit-form-submit-input">Save</label>
+                  <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius small">Delete</a>
+
                   <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
                       <h2>Are you sure?</h2>
-                      <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert" role="button">Delete</a>
+                      <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert radius small" role="button">Delete</a>
                       <a class="close-reveal-modal">&#215;</a>
                   </div>
                   <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
-                      <input class="button" type="submit" value="Delete" />
+                      <input class="button radius small" type="submit" value="Delete" />
                   </form>
                 </div>
             </div>

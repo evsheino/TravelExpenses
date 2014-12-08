@@ -4,7 +4,7 @@
       layout:decorator="layout">
     <head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Expenses</title>
     </head>
     <body>
@@ -16,45 +16,20 @@
                 </div>
             </div>
 
-            <div class="table">
-                <div class="row table-header">
-                    <div class="large-2 columns">
-                        Start date
-                    </div>
-                    <div class="large-2 columns">
-                        End date
-                    </div>
-                    <div class="large-2 columns">
-                        Description
-                    </div>
-                    <div class="large-2 columns">
-                        Amount
-                    </div>
-                    <div class="large-2 columns">
-                        Status
-                    </div>
-                    <div class="large-2 columns">
-                    </div>
-                </div>
-                <div class="table-rows">
-                    <div class="row table-row" th:each="expense : ${expenses}">
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
-                        </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
-                        </div>
-                        <div class="large-2 columns" th:text="${expense.description}">
-                        </div>
-                        <div class="large-2 columns">
-                            <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span> €
-                        </div>
-                        <div class="large-2 columns" th:text="${expense.status}">
-                        </div>
-                        <div class="large-2 columns" style="text-align: right;">
-                            <a href="#" class="button expand" th:href="@{/expenses/} + ${expense.id}">Edit</a>
-                        </div>
-                    </div>
+            <div class="row page-toolbar">
+                <div class="large-12 columns">
+                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small dropdown">Status</button>
+                    <br/>
+                    <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
+                        <li><a href="#">Draft</a></li>
+                        <li><a href="#">Sent</a></li>
+                        <li><a href="#">Rejected</a></li>
+                        <li><a href="#">Accepted</a></li>
+                    </ul>
                 </div>
             </div>
+
+            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${expenses})"></div>
 
         </div>
     </body>
