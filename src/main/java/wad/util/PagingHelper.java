@@ -25,6 +25,8 @@ public class PagingHelper<T> {
     private Boolean isFirstPage;
     private Boolean isLastPage;
 
+    private Boolean hasContent;
+
     private List<Integer> prevPages = new ArrayList<>();
     private List<Integer> nextPages = new ArrayList<>();
 
@@ -37,6 +39,7 @@ public class PagingHelper<T> {
         this.lastPage = totalPages-1;
         this.isFirstPage = (currentPage == firstPage);
         this.isLastPage = (currentPage == lastPage);
+        this.hasContent = page.hasContent();
 
         // Count values for viewing paging navigation
         int min = currentPage - SPAN;
@@ -90,5 +93,9 @@ public class PagingHelper<T> {
 
     public Boolean isLastPage() {
         return isLastPage;
+    }
+
+    public Boolean hasContent() {
+        return hasContent;
     }
 }
