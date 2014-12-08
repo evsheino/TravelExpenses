@@ -26,12 +26,15 @@
 
                 <div class="row table-header">
                     <div class="large-3 columns">
+                        Employee
+                    </div>
+                    <div class="large-2 columns">
                         Start date
                     </div>
-                    <div class="large-3 columns">
+                    <div class="large-2 columns">
                         End date
                     </div>
-                    <div class="large-4 columns">
+                    <div class="large-3 columns">
                         Modified
                     </div>
                     <div class="large-2 columns">
@@ -41,11 +44,13 @@
 
                 <div class="table-rows">
                     <div class="row table-row">
-                        <div class="large-3 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
+                        <div class="large-3 columns" th:text="${expense.user.name}">
                         </div>
-                        <div class="large-3 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
+                        <div class="large-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
                         </div>
-                        <div class="large-4 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
+                        <div class="large-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
+                        </div>
+                        <div class="large-3 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
                         </div>
                         <div class="large-2 columns" th:text="${expense.status}">
                         </div>
@@ -83,6 +88,7 @@
                     </div>
                 </div>
             </div>
+            <div th:include="expenses/commentListFragment :: commentList" />
         </div>
     </body>
 </html>

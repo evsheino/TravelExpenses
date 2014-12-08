@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Expense</title>
+    </head>
+    <body>
+
+        <div th:fragment="commentList">
+
+            <div class="table">
+                <div class="row table-topic">
+                    <div class="large-12 columns">
+                        Comments
+                    </div>
+                </div>
+                <div class="row table-header">
+                    <div class="large-2 columns">
+                        User
+                    </div>
+                    <div class="large-2 columns">
+                        Date
+                    </div>
+                    <div class="large-8 columns">
+                        Comment
+                    </div>
+                </div>
+                <div class="table-rows">
+                    <div class="row table-row" th:each="comment, stat : ${expense.comments}">
+                        <div class="large-2 columns" th:text="${comment.user.name}">
+                        </div>
+                        <div class="large-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">
+                        </div>
+                        <div class="large-8 columns">
+                            <span th:text="${comment.text}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

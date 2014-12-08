@@ -72,6 +72,10 @@ public class Expense extends AbstractPersistable<Long> {
 
     @OneToMany
     private List<Receipt> receipts;
+
+    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> comments;
+
     /**
      * Check if the given User is allowed to edit this Expense.
      * A user can edit an Expense if she is an admin or owns the Expense and
@@ -174,23 +178,6 @@ public class Expense extends AbstractPersistable<Long> {
         this.supervisor = supervisor;
     }
 
-    public Double updateExpenseAmount() {
-        Double newSum;
-        double helpSum = 0;
-
-        for (ExpenseRow expenseRow : expenseRows) {
-            helpSum += expenseRow.getAmount();
-        }
-        newSum = (Double) helpSum;
-
-        if (newSum.isNaN()) {
-            return 0.0;
-        } else {
-            return newSum;
-        }
-
-    }
-
     public List<Receipt> getReceipts() {
         return receipts;
     }
@@ -199,5 +186,12 @@ public class Expense extends AbstractPersistable<Long> {
         this.receipts = receipts;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
 }
