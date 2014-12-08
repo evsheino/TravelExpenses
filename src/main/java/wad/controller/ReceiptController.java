@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import wad.domain.Expense;
 import wad.domain.Receipt;
+import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import wad.repository.ReceiptRepository;
+import wad.service.UserService;
 
 /**
  *
@@ -30,31 +32,52 @@ public class ReceiptController {
 
     @Autowired
     private ExpenseRepository expenseRepository;
-    
+
     @Autowired
     private ReceiptRepository receiptRepository;
+
+    @Autowired
+    private UserService userService;
 
     @ModelAttribute("receipt")
     private Receipt getReceipt() {
         return new Receipt();
     }
 
+    // Remember to add receipt name checking (no two receipts of same name).
     @RequestMapping(method = RequestMethod.POST)
-    public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long id) throws IOException {
+    public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long expenseId) throws IOException {
         Receipt receipt = new Receipt();
-        Expense expense = expenseRepository.findOne(id);
+        Expense expense = expenseRepository.findOne(expenseId);
 
         receipt.setName(file.getName());
         receipt.setMediaType(file.getContentType());
         receipt.setSize(file.getSize());
         receipt.setContent(file.getBytes());
-        
+
         List<Receipt> receipts = expense.getReceipts();
         receipts.add(receipt);
         expense.setReceipts(receipts);
-        
+
         expenseRepository.save(expense);
         receiptRepository.save(receipt);
+
+        return "redirect:/expenses/" + expense.getId();
+    }
+
+    @RequestMapping(value = "/{receiptId}/delete", method = RequestMethod.POST)
+    public String deleteReceipt(@PathVariable Long receiptId, @PathVariable Long expenseId) {
+        Expense expense = expenseRepository.findOne(expenseId);
+        Receipt receipt = receiptRepository.findOne(receiptId);
+
+        User currentUser = userService.getCurrentUser();
+
+        if (expense == null || !expense.isEditableBy(currentUser)) {
+            throw new ResourceNotFoundException();
+        }
+
+        expense.getReceipts().remove(receipt);
+        receiptRepository.delete(receipt);
 
         return "redirect:/expenses/" + expense.getId();
     }
