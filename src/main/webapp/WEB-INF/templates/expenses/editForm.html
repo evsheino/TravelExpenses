@@ -22,6 +22,11 @@
                     </select>
                     <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" th:field="*{status}" />
                 </label>
+                <div class="amount-field">
+                    <label>Amount
+                        <input type="text" readonly="readonly" th:value="${expense.amount}" />
+                    </label>
+                </div>
                 <div class="description-field" th:classappend="${#fields.hasErrors('description')} ? error">
                     <label>Description
                         <input type="text" required="required" th:field="*{description}" th:errorclass="error" />
@@ -39,11 +44,6 @@
                         <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{endDate}" />
                     </label>
                     <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
-                </div>
-                <div class="amount-field">
-                    <label>Amount
-                        <input type="text" readonly="readonly" th:value="${expense.amount}" />
-                    </label>
                 </div>
 
                 <div class="row page-topic" style="margin: 2em 0 2em 0">
