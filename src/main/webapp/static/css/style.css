@@ -25,25 +25,54 @@
     background:#E06969;
 }
 
-
 /* Admin */
+html, body {
+    background-color: #f8f1eb;
+    background: url(../img/bg-pattern-1.jpg);
+    background-repeat: repeat;
+    background-attachment: fixed;
+}
+
+.row {
+    max-width: 100% !important;
+    margin: 0 !important;
+}
+.status-desc {
+    text-transform: lowercase;
+}
+
+.status-desc:first-letter {
+    text-transform: uppercase;
+}
 
 .page-topic {
-    background-color: #eeeeee;
+    background-color: #00d2df;
     padding: 1em 0em 1em 0em;
+}
+
+.page-topic h1 {
+    color: #ffffff;
 }
 
 .page-toolbar {
-    padding: 1em 0em 1em 0em;
+    padding: 1em 0em 0.5em 0em;
+    background-color: #fcfcfc;
+    border-bottom: solid 4px #f8f8fa;
+}
+
+.page-toolbar .pagination{
+    margin-bottom: 0.2rem;
 }
 
 .table {
-    margin: 1em 0em 2em 0em;
+    margin: 0em 0em 1em 0em;
+    /*background-color:rgba(255,0,0,0.4);*/
 }
 
 .table-topic {
     font-size: 1.2em;
     font-weight: bold;
+    padding: 1em 0em 1em 0em;
 }
 
 .table .table-header {
@@ -54,10 +83,24 @@
     background-color: #303030;
 }
 
+.table .small-table-header {
+    font-weight: bold;
+    margin-top: 0.5em;
+}
+
 .table-row {
     padding: 0.4em 0em 0.4em 0em;
     border-bottom: solid 1px #008cba;
     font-size: 0.9em;
+    background-color: #ffffff;
+}
+
+.table-row .button{
+    margin: 0em;
+}
+
+.table-row:first-child {
+    border-top: solid 1px #008cba;
 }
 
 .table-row:nth-child(2n) {

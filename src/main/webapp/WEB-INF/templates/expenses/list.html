@@ -15,10 +15,10 @@
                     <h1>Expenses</h1>
                 </div>
                 <div class="large-3 columns" style="padding-top: 0.8em;">
-                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small expand dropdown">Status</button>
+                    <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small expand dropdown status-desc" th:text="${status}">Status</button>
                     <br/>
                     <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
-                        <li><a href="#" th:href="@{/expenses}">View all</a></li>
+                        <li><a href="#" th:href="@{/expenses}">All</a></li>
                         <li><a href="#" th:href="@{/expenses(status=DRAFT)}">Draft</a></li>
                         <li><a href="#" th:href="@{/expenses(status=SENT)}">Sent</a></li>
                         <li><a href="#" th:href="@{/expenses(status=REJECTED)}">Rejected</a></li>

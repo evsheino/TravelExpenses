@@ -18,18 +18,37 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class PagingHelperTest {
 
-    private static final int FEW_PAGES_COUNT = 4;
-    private static final int FEW_PAGES_LAST_PAGE = FEW_PAGES_COUNT-1;
-    private static final int MANY_PAGES_COUNT = 100;
-    private static final int MANY_PAGES_LAST_PAGE = MANY_PAGES_COUNT-1;
+    private static final Integer FEW_PAGES_COUNT = 4;
+    private static final Integer FEW_PAGES_LAST_PAGE = FEW_PAGES_COUNT-1;
+    private static final Integer MANY_PAGES_COUNT = 100;
+    private static final Integer MANY_PAGES_LAST_PAGE = MANY_PAGES_COUNT-1;
 
     @Mock
     private Page<?> page;
 
     @Test
+    public void testPagingHelper() {
+        when(page.getTotalPages()).thenReturn(FEW_PAGES_COUNT);
+        when(page.getNumber()).thenReturn(2);
+        when(page.hasContent()).thenReturn(true);
+
+        PagingHelper<?> helper = new PagingHelper<>(page);
+
+        assertEquals(Integer.valueOf(2), helper.getCurrentPage());
+        assertEquals(FEW_PAGES_COUNT, helper.getTotalPages());
+        assertEquals(Integer.valueOf(FEW_PAGES_COUNT-1), helper.getLastPage());
+        assertFalse(helper.isFirstPage());
+        assertFalse(helper.isLastPage());
+        assertTrue(helper.hasContent());
+
+        assertEquals(Integer.valueOf(FEW_PAGES_LAST_PAGE), helper.getNextPages().get(helper.getNextPages().size() - 1));
+    }
+
+    @Test
     public void testPageInTheBeginningFewPages() {
         when(page.getTotalPages()).thenReturn(FEW_PAGES_COUNT);
         when(page.getNumber()).thenReturn(0);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
@@ -39,9 +58,10 @@ public class PagingHelperTest {
 
     @Test
     public void testPageInTheMiddleFewPages() {
-        when(page.getTotalPages()).thenReturn(FEW_PAGES_COUNT);
         final int midpoint = (FEW_PAGES_COUNT/2);
+        when(page.getTotalPages()).thenReturn(FEW_PAGES_COUNT);
         when(page.getNumber()).thenReturn(midpoint);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
@@ -53,6 +73,7 @@ public class PagingHelperTest {
     public void testPageInTheEndFewPages() {
         when(page.getTotalPages()).thenReturn(FEW_PAGES_COUNT);
         when(page.getNumber()).thenReturn(FEW_PAGES_LAST_PAGE);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
@@ -65,6 +86,7 @@ public class PagingHelperTest {
     public void testPageInTheBeginning() {
         when(page.getTotalPages()).thenReturn(MANY_PAGES_COUNT);
         when(page.getNumber()).thenReturn(0);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
@@ -74,9 +96,10 @@ public class PagingHelperTest {
 
     @Test
     public void testPageInTheMiddle() {
-        when(page.getTotalPages()).thenReturn(MANY_PAGES_COUNT);
         final int midpoint = (MANY_PAGES_COUNT/2);
+        when(page.getTotalPages()).thenReturn(MANY_PAGES_COUNT);
         when(page.getNumber()).thenReturn(midpoint);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
@@ -88,6 +111,7 @@ public class PagingHelperTest {
     public void testPageInTheEnd() {
         when(page.getTotalPages()).thenReturn(MANY_PAGES_COUNT);
         when(page.getNumber()).thenReturn(MANY_PAGES_LAST_PAGE);
+        when(page.hasContent()).thenReturn(true);
 
         PagingHelper<?> helper = new PagingHelper<>(page);
 
