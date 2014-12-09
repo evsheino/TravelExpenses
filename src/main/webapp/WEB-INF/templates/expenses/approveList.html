@@ -10,58 +10,18 @@
     <body>
         <div layout:fragment="content">
             <div class="row page-topic">
-                <div class="large-12 columns">
+                <div class="medium-12 columns">
                     <h1>Approve</h1>
                 </div>
             </div>
 
-            <div class="table">
-                <div class="row table-topic">
-                    <div class="large-12 columns">
-                        Expenses
-                    </div>
-                </div>
-                <div class="row table-header">
-                    <div class="large-2 columns">
-                        Start date
-                    </div>
-                    <div class="large-2 columns">
-                        End date
-                    </div>
-                    <div class="large-2 columns">
-                        Modified
-                    </div>
-                    <div class="large-2 columns">
-                        Description
-                    </div>
-                    <div class="large-2 columns">
-                        Amount
-                    </div>
-                    <div class="large-1 columns">
-                        Status
-                    </div>
-                    <div class="large-1 columns">
-                    </div>
-                </div>
-                <div class="table-rows">
-                    <div class="row expenses table-row" th:each="expense : ${expenses}">
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
-                        </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
-                        </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}">
-                        </div>
-                        <div class="large-2 columns" th:text="${expense.description}">
-                        </div>
-                        <div class="large-2 columns">
-                            <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span> €
-                        </div>
-                        <div class="large-1 columns" th:text="${expense.status}">
-                        </div>
-                        <div class="large-1 columns" style="text-align: right;">
-                            <a href="#" class="button radius small" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
-                        </div>
-                    </div>
+            <div class="row page-toolbar">
+                <div class="medium-12 columns" th:include="expenses/paginationFragment :: pagination (${status}, ${paging})"></div>
+            </div>
+
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+                    <div th:include="expenses/listFragment :: expenseList (${status}, ${page.getContent()})"></div>
                 </div>
             </div>
 

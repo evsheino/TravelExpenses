@@ -14,46 +14,49 @@
             <div class="table">
 
                 <div class="row table-topic">
-                    <div class="large-12 columns">
+                    <div class="medium-12 columns">
                         Expense
                     </div>
                 </div>
 
                 <div class="row expense-description">
-                    <div class="large-12 columns" th:text="${expense.description}">
+                    <div class="medium-12 columns" th:text="${expense.description}">
                     </div>
                 </div>
 
                 <div class="row table-header">
-                    <div class="large-3 columns">
+                    <div class="medium-3 columns">
                         Employee
                     </div>
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         Start date
                     </div>
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         End date
                     </div>
-                    <div class="large-3 columns">
+                    <div class="medium-3 columns">
                         Modified
                     </div>
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         Status
                     </div>
                 </div>
 
                 <div class="table-rows">
                     <div class="row table-row">
-                        <div class="large-3 columns" th:text="${expense.user.name}">
+                        <div class="medium-3 columns" th:text="${expense.user.name}">
                         </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
+                        <div class="medium-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
                         </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
+                        <div class="medium-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
                         </div>
-                        <div class="large-3 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
+                        <div class="medium-3 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
                         </div>
-                        <div class="large-2 columns" th:text="${expense.status}">
+                        <div class="medium-2 columns" th:text="${expense.status}">
                         </div>
+                    </div>
+                    <div class="row table-row">
+                        <div class="medium-12 columns"></div>
                     </div>
                 </div>
             </div>
@@ -61,31 +64,35 @@
 
             <div class="table">
                 <div class="row table-topic">
-                    <div class="large-12 columns">
+                    <div class="medium-12 columns">
                         Rows
                     </div>
                 </div>
                 <div class="row table-header">
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         Date
                     </div>
-                    <div class="large-8 columns">
+                    <div class="medium-8 columns">
                         Description
                     </div>
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         Amount
                     </div>
                 </div>
                 <div class="table-rows">
                     <div class="row table-row" th:each="row, stat : ${expense.expenseRows}">
-                        <div class="large-2 columns" th:text="${#calendars.format(row.date,'dd.MM.yyyy')}">
+                        <div class="medium-2 columns" th:text="${#calendars.format(row.date,'dd.MM.yyyy')}">
                         </div>
-                        <div class="large-8 columns" th:text="${row.description}">
+                        <div class="medium-8 columns" th:text="${row.description}">
                         </div>
-                        <div class="large-2 columns">
+                        <div class="medium-2 columns">
                             <span th:text="${#numbers.formatDecimal(row.amount, 0, 'COMMA', 2, 'POINT')}"></span> €
                         </div>
                     </div>
+                    <div class="row table-row">
+                        <div class="medium-12 columns"></div>
+                    </div>
+
                 </div>
             </div>
             <div th:include="expenses/commentListFragment :: commentList" />

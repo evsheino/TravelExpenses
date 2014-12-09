@@ -25,6 +25,8 @@ import wad.validator.ExpenseValidator;
 @SessionAttributes("expense")
 public class ExpensesController {
 
+    private final static int DEFAULT_PAGE_SIZE = 10;
+
     @Autowired
     @Qualifier("expenseValidator")
     ExpenseValidator expenseValidator;
@@ -63,19 +65,17 @@ public class ExpensesController {
     @RequestMapping(method = RequestMethod.GET)
     public String listExpenses(Model model, @RequestParam(required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
 
-        String statusDescription = null;
         Page<Expense> page = null;
         if(status == null) {
-            statusDescription = "All";
-            page = expenseService.getPagedExpenses(pageNumber, 10);
+            page = expenseService.getPagedExpenses(pageNumber, DEFAULT_PAGE_SIZE);
         } else {
-            statusDescription = status.toString();
-            page = expenseService.getPagedExpenses(status, pageNumber, 10);
+            model.addAttribute("status", status.toString());
+            page = expenseService.getPagedExpenses(status, pageNumber, DEFAULT_PAGE_SIZE);
         }
 
         model.addAttribute("paging", new PagingHelper(page));
         model.addAttribute("page", page);
-        model.addAttribute("status", statusDescription);
+
 
         return "expenses/list";
     }

@@ -101,7 +101,7 @@ html, body {
 
 .table-row {
     padding: 0.4em 0em 0.4em 0em;
-    border-bottom: solid 1px #008cba;
+    border-bottom: solid 1px #00d2df;
     font-size: 0.9em;
     background-color: #ffffff;
 }
@@ -119,12 +119,20 @@ html, body {
 }
 
 .table-row:first-child {
-    border-top: solid 1px #008cba;
+
 }
 
 .table-row:last-child {
+    border-bottom: none;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    min-height: 15px;
+    background-color: #ffffff;
+
+}
+
+.table-row:last-child:hover {
+    background-color: #ffffff;
 }
 
 .users {

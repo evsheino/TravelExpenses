@@ -17,7 +17,7 @@
             <div class="row index-wrapper">
                 <div class="medium-12 columns">
                     <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
-                    <div class="row">
+                    <div class="row" th:if="${not drafts.isEmpty()}">
                         <div class="medium-12 columns">
                             <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts &raquo;</a>
                         </div>
@@ -28,7 +28,7 @@
             <div class="row index-wrapper">
                 <div class="medium-12 columns">
                     <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
-                    <div class="row">
+                    <div class="row" th:if="${not sent.isEmpty()}">
                         <div class="medium-12 columns">
                             <a href="#" th:href="@{/expenses(status=SENT)}">View all sent &raquo;</a>
                         </div>
@@ -39,7 +39,7 @@
             <div class="row index-wrapper">
                 <div class="medium-12 columns">
                     <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
-                    <div class="row">
+                    <div class="row" th:if="${not rejected.isEmpty()}">
                         <div class="medium-12 columns">
                             <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected &raquo;</a>
                         </div>
@@ -50,7 +50,7 @@
             <div class="row index-wrapper">
                 <div class="medium-12 columns">
                     <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
-                    <div class="row">
+                    <div class="row" th:if="${not approved.isEmpty()}">
                         <div class="medium-12 columns">
                             <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved &raquo;</a>
                         </div>

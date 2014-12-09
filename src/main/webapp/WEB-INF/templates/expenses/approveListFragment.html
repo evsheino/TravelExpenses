@@ -63,8 +63,7 @@
                             <span class="show-for-small-only small-table-header">Status: </span><span th:text="${expense.status}">status</span>
                         </div>
                         <div class="medium-2 columns" style="text-align: right;">
-                            <a th:if="${approve == null}" href="#" class="button radius small" th:href="@{/expenses/} + ${expense.id}">Edit</a>
-                            <a th:if="${approve != null}" href="#" class="button radius small" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
+                            <a href="#" class="button radius small" th:href="@{/expenses/} + ${expense.id}">Edit</a>
                         </div>
                     </div>
                     <div class="row table-row">

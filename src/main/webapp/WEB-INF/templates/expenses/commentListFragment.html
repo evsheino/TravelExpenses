@@ -13,31 +13,35 @@
 
             <div class="table">
                 <div class="row table-topic">
-                    <div class="large-12 columns">
+                    <div class="medium-12 columns">
                         Comments
                     </div>
                 </div>
                 <div class="row table-header">
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         User
                     </div>
-                    <div class="large-2 columns">
+                    <div class="medium-2 columns">
                         Date
                     </div>
-                    <div class="large-8 columns">
+                    <div class="medium-8 columns">
                         Comment
                     </div>
                 </div>
                 <div class="table-rows">
                     <div class="row table-row" th:each="comment, stat : ${expense.comments}">
-                        <div class="large-2 columns" th:text="${comment.user.name}">
+                        <div class="medium-2 columns" th:text="${comment.user.name}">
                         </div>
-                        <div class="large-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">
+                        <div class="medium-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">
                         </div>
-                        <div class="large-8 columns">
+                        <div class="medium-8 columns">
                             <span th:text="${comment.text}"></span>
                         </div>
                     </div>
+                    <div class="row table-row">
+                        <div class="medium-12 columns"></div>
+                    </div>
+
                 </div>
             </div>
         </div>

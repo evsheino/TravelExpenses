@@ -34,9 +34,9 @@ public class PagingHelper<T> {
 
         // Extract needed inforation
         this.totalPages = page.getTotalPages();
-        this.firstPage = 0;
-        this.currentPage = page.getNumber();
-        this.lastPage = totalPages-1;
+        this.firstPage = 1;
+        this.currentPage = page.getNumber() + 1;
+        this.lastPage = totalPages;
         this.isFirstPage = (currentPage == firstPage);
         this.isLastPage = (currentPage == lastPage);
         this.hasContent = page.hasContent();
@@ -46,13 +46,16 @@ public class PagingHelper<T> {
         int max = currentPage + SPAN;
 
         if(min < firstPage) {
-            max = max + (SPAN % min);
+            max = max + Math.abs(min-firstPage);
             min = firstPage;
         }
 
         if(max > lastPage) {
+            min = min - Math.abs(max-lastPage);
             max = lastPage;
         }
+
+        min = Math.max(min, firstPage);
 
         for(int i = min; i < currentPage; i++) {
             prevPages.add(i);

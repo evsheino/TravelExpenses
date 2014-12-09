@@ -11,27 +11,39 @@
 
         <div layout:fragment="content">
 
-            <div th:include="expenses/viewFragment :: viewExpense" />
+            <div class="row page-topic">
+                <div class="medium-12 columns">
+                    <h1>Approve expense</h1>
+                </div>
+            </div>
 
-            <div class="row buttons">
-                <div class="large-12 columns">
-                    <label id="approve-form-submit-label" class="button radius small" for="approve-form-submit">Approve</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="large-12 columns">
-                    <form id="reject-form" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/reject}">
-                        <input id="reject-form-submit" class="button alert radius small" type="submit" value="Reject" />
-                        <label> Reason for rejection
-                            <textarea name="commentText" id="commentText" required="required" />
-                        </label>
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+
+                    <div th:include="expenses/viewFragment :: viewExpense" />
+
+                    <div class="row buttons">
+                        <div class="medium-12 columns">
+                            <label id="approve-form-submit-label" class="button radius small" for="approve-form-submit">Approve</label>
+                        </div>
+                    </div>                        R
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <form id="reject-form" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/reject}">
+                                <input id="reject-form-submit" class="button alert radius small" type="submit" value="Reject" />
+                                <label> Reason for rejection
+                                    <textarea name="commentText" id="commentText" required="required" />
+                                </label>
+                            </form>
+                        </div>
+                    </div>
+
+                    <form id="approve-form" hidden="hidden" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/approve}">
+                        <input id="approve-form-submit" class="button" type="submit" value="Approve" />
                     </form>
+
                 </div>
             </div>
-                
-            <form id="approve-form" hidden="hidden" method="POST" th:action="@{/expenses/approve/} + ${expense.id} + @{/approve}">
-                <input id="approve-form-submit" class="button" type="submit" value="Approve" />
-            </form>
         </div>
     </body>
 </html>

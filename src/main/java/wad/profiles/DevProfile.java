@@ -41,20 +41,22 @@ public class DevProfile extends BaseProfile {
     public void init() {
         userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
         User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
-        generateExpenses(foob, 4);
+        generateExpenses(foob, 9, Expense.Status.DRAFT);
+        generateExpenses(foob, 13, Expense.Status.SENT);
 
         User johnd = userService.createUser("John Doe", "johnd", "johnd", true, Authority.Role.USER);
-        generateExpenses(johnd, 10);
+        generateExpenses(johnd, 28, Expense.Status.DRAFT);
+        generateExpenses(johnd, 9, Expense.Status.SENT);
 
         userService.createUser("Teemu", "Teemu", "sisaan", Authority.Role.USER);
         userService.createUser("Aku", "Aku", "password", Authority.Role.ADMIN);
         userService.createUser("Tommi", "Tommi", "esimies", Authority.Role.SUPERVISOR);
     }
 
-    private void generateExpenses(User user, int numOfExpenses) {
+    private void generateExpenses(User user, int numOfExpenses, Expense.Status status) {
         user.setExpenses(new ArrayList<Expense>());
         for(int i = 0; i < numOfExpenses; i++) {
-            Expense e = expenseService.createExpense(user, new Date(), new Date(), (i^2), user.getName() + " blaab");
+            Expense e = expenseService.createExpense(user, new Date(), new Date(), (i^2), user.getName() + " blaab", status);
             generateExpenseRows(e, i);
         }
     }
