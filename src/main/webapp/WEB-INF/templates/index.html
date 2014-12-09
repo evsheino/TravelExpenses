@@ -9,42 +9,52 @@
         <div layout:fragment="content">
 
             <div class="row page-topic">
-                <div class="large-12 columns">
-                    <h1>Travel Expenses</h1>
+                <div class="medium-12 columns">
+                    <h1>Dashboard</h1>
                 </div>
             </div>
 
-            <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
-            <div class="row">
-                <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts &raquo;</a>
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+                    <div th:include="expenses/listFragment :: expenseList ('Drafts', ${drafts})"></div>
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <a href="#" th:href="@{/expenses(status=DRAFT)}">View all drafts &raquo;</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <hr />
-
-            <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
-            <div class="row">
-                <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=SENT)}">View all sent &raquo;</a>
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+                    <div th:include="expenses/listFragment :: expenseList ('Sent', ${sent})"></div>
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <a href="#" th:href="@{/expenses(status=SENT)}">View all sent &raquo;</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <hr />
-
-            <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
-            <div class="row">
-                <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected &raquo;</a>
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+                    <div th:include="expenses/listFragment :: expenseList ('Rejected', ${rejected})"></div>
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <a href="#" th:href="@{/expenses(status=REJECTED)}">View all rejected &raquo;</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <hr />
-
-            <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
-            <div class="row">
-                <div class="large-12 columns">
-                    <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved &raquo;</a>
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+                    <div th:include="expenses/listFragment :: expenseList ('Approved', ${approved})"></div>
+                    <div class="row">
+                        <div class="medium-12 columns">
+                            <a href="#" th:href="@{/expenses(status=APPROVED)}">View all approved &raquo;</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
