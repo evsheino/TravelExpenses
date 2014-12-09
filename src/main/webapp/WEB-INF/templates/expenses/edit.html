@@ -14,7 +14,10 @@
                     <h1>Expense information</h1>
                 </div>
             </div>
-                
+
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+
             <div class="row">
                 <div class="large-12 columns">
                     <div th:include="expenses/editForm :: editExpenseForm" />
@@ -59,6 +62,9 @@
                 </div>
             </div>
             <div th:include="expenses/commentListFragment :: commentList" />
+
+                </div>
+            </div>
         </div>
     </body>
 </html>
