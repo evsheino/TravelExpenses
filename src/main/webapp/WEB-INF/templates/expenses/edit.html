@@ -22,34 +22,54 @@
                 <div class="large-12 columns">
                     <div th:include="expenses/editForm :: editExpenseForm" />
                         
-                    <form id="add-row-form" th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
-                        <div class="row">
-                            <div class="large-2 columns date-field" th:classappend="${#fields.hasErrors('date')} ? error">
-                                <label>Date
-                                    <input id="row-add-date" type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
-                                </label>
-                                <small class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Incorrect date</small>
+                        <div class="table">
+                            <div class="row table-topic">
+                                <div class="medium-12 columns status-desc">
+                                    Add new row
+                                </div>
                             </div>
-                            <div class="large-2 columns amount-field" th:classappend="${#fields.hasErrors('amount')} ? error">
-                                <label>Amount
-                                    <input id="row-add-amount" type="number" step="any" min="0" th:field="*{amount}" required="required"/>
-                                </label>
-                                <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
+                            <div class="row table-header hide-for-small-only">
+                                <div class="medium-2 columns">
+                                    Date
+                                </div>
+                                <div class="medium-2 columns">
+                                    Amount
+                                </div>
+                                <div class="medium-6 columns">
+                                    Description
+                                </div>
+                                <div class="medium-2 columns">
+                                </div>
                             </div>
-                            <div class="large-6 columns description-field" th:classappend="${#fields.hasErrors('description')} ? error">
-                                <label>Description
-                                    <input id="row-add-description" type="text" th:field="*{description}" required="required"/>
-                                </label>
-                                <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
-                            </div>
-                            <div class="large-2 columns" style="text-align: right;">
-                                <input id="row-add-submit" type="submit" class="button radius small" value="+ Add row" />
+
+                            <div class="table-rows">
+                                <div class="row table-row">
+                                    <form id="add-row-form" th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
+                                    <div class="medium-2 columns">
+                                        <input id="row-add-date" type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
+                                        <small class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Incorrect date</small>
+                                    </div>
+                                    <div class="medium-2 columns">
+                                        <input id="row-add-amount" type="number" step="any" min="0" th:field="*{amount}" required="required"/>
+                                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
+                                    </div>
+                                    <div class="medium-6 columns">
+                                        <input id="row-add-description" type="text" th:field="*{description}" required="required"/>
+                                        <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                                    </div>
+                                    <div class="medium-2 columns">
+                                        <input id="row-add-submit" type="submit" class="button radius tiny expand" value="+ Add row" />
+                                    </div>
+                                    </form>
+                                </div>
+                                <div class="row table-row">
+                                    <div class="medium-12 columns"></div>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                        
-                    <label id="edit-form-submit" class="button radius small" for="edit-form-submit-input">Save</label>
-                    <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius small">Delete</a>
+
+                    <label id="edit-form-submit" class="button radius" for="edit-form-submit-input"><i class="fi-save"></i> Save</label>
+                    <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius"><i class="fi-trash"></i> Delete</a>
                         
                     <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
                         <h2>Are you sure?</h2>

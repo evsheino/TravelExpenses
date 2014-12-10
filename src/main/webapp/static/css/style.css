@@ -50,8 +50,14 @@ html, body {
     text-transform: lowercase;
 }
 
-.status-desc:first-letter {
+.status-desc:first-letter, i.status-desc:first-letter {
     text-transform: uppercase;
+}
+
+i.status-desc {
+    padding: 0;
+    margin: 0;
+    display:inline;
 }
 
 .page-topic {
@@ -149,3 +155,24 @@ html, body {
 .admin-user-data {
     margin-top: 1em;
 }
+
+
+.fi-DRAFT:before,
+.fi-SENT:before,
+.fi-REJECTED:before,
+.fi-APPROVED:before {
+    font-family: "foundation-icons";
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    text-decoration: inherit;
+}
+
+.fi-DRAFT:before { content: "\f194"; }
+.fi-SENT:before { content: "\f16a"; }
+.fi-REJECTED:before { content: "\f14d"; }
+.fi-APPROVED:before { content: "\f126"; }

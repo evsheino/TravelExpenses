@@ -16,8 +16,8 @@
             <div class="table">
                 <div class="row table-topic">
                     <div class="medium-12 columns status-desc">
-                        <span th:if="${topic} != null" th:text="${topic}">Topic</span>
-                        <span th:if="${topic} == null">All</span>
+                        <i th:if="${topic} != null" th:class="'fi-' + ${topic}"> </i><span th:if="${topic} != null" th:text="${topic}">Topic</span>
+                        <i th:if="${topic} == null" class="fi-list"> </i><span th:if="${topic} == null">All</span>
                     </div>
                 </div>
                 <div class="row table-header hide-for-small-only">
@@ -30,7 +30,7 @@
                     <div class="medium-2 columns">
                         Modified
                     </div>
-                    <div class="medium-4 columns">
+                    <div class="medium-5 columns">
                         Description
                     </div>
                     <div class="medium-1 columns">
@@ -39,32 +39,38 @@
                     <div class="medium-1 columns">
                         Status
                     </div>
-                    <div class="medium-2 columns">
+                    <div class="medium-1 columns">
                     </div>
                 </div>
                 <div class="table-rows">
                     <div class="row table-row" th:each="expense : ${expenses}">
                         <div class="medium-1 columns">
-                            <span class="show-for-small-only small-table-header">Start date: </span><span th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">start date</span>
+                            <span class="show-for-small-only small-table-header">Start date: </span>
+                            <span th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">start date</span>
                         </div>
                         <div class="medium-1 columns">
-                            <span class="show-for-small-only small-table-header">End date: </span><span th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">end date</span>
+                            <span class="show-for-small-only small-table-header">End date: </span>
+                            <span th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">end date</span>
                         </div>
                         <div class="medium-2 columns">
-                            <span class="show-for-small-only small-table-header">Modified: </span><span th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy HH:mm')}">modified</span>
+                            <span class="show-for-small-only small-table-header">Modified: </span>
+                            <span th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy HH:mm')}">modified</span>
                         </div>
-                        <div class="medium-4 columns">
-                            <span class="show-for-small-only small-table-header">Description: </span><span th:text="${expense.description}">description</span>
+                        <div class="medium-5 columns">
+                            <span class="show-for-small-only small-table-header">Description: </span>
+                            <span th:text="${expense.description}">description</span>
                         </div>
                         <div class="medium-1 columns">
-                            <span class="show-for-small-only small-table-header">Amount: </span><span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span>
+                            <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span>
+                            <i class="fi-euro"></i>
                         </div>
                         <div class="medium-1 columns" >
-                            <span class="show-for-small-only small-table-header">Status: </span><span th:text="${expense.status}">status</span>
+                            <span class="show-for-small-only small-table-header">Status: </span>
+                            <span th:text="${expense.status}">status</span>
                         </div>
-                        <div class="medium-2 columns" style="text-align: right;">
-                            <a th:if="${approve == null}" href="#" class="button radius small" th:href="@{/expenses/} + ${expense.id}">Edit</a>
-                            <a th:if="${approve != null}" href="#" class="button radius small" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
+                        <div class="medium-1 columns" style="text-align: right;">
+                            <a th:if="${approve == null}" href="#" class="button radius tiny" th:href="@{/expenses/} + ${expense.id}"><i class="fi-pencil"></i></a>
+                            <a th:if="${approve != null}" href="#" class="button radius tiny" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
                         </div>
                     </div>
                     <div class="row table-row">

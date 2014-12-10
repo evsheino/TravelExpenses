@@ -46,49 +46,53 @@
                     <small class="error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}">Incorrect date</small>
                 </div>
 
-                <div class="row page-topic" style="margin: 2em 0 2em 0">
-                    <div class="large-10 columns">
-                        <h1>Rows</h1>
-                    </div>
-                </div>
-
-                <div class="row" style="margin: 2em 0 2em 0">
-                    <div class="large-2 columns">
-                        <h3>Date</h3>
-                    </div>
-                    <div class="large-8 columns">
-                        <h3>Description</h3>
-                    </div>
-                    <div class="large-2 columns">
-                        <h3>Amount</h3>
-                    </div>
-                </div>
-
-                <div style="margin: 2em 0 2em 0"> </div>
-
-                <div class="row" th:each="row, stat : *{expenseRows}">
-                    <div class="large-2 columns">
-                        <div class="date-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].date')} ? error">
-                            <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{expenseRows[__${stat.index}__].date}" />
-                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].date')}" th:errors="*{expenseRows[__${stat.index}__].date}">Incorrect amount</small>
+                <div class="table">
+                    <div class="row table-topic">
+                        <div class="medium-12 columns status-desc">
+                            Rows
                         </div>
                     </div>
-                    <div class="large-7 columns">
-                        <div class="description-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].description')} ? error">
-                            <input type="text" required="required" th:field="*{expenseRows[__${stat.index}__].description}" th:errorclass="error" />
-                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].description')}" th:errors="*{expenseRows[__${stat.index}__].description}">Invalid description</small>
+                    <div class="row table-header hide-for-small-only">
+                        <div class="medium-2 columns">
+                            Date
+                        </div>
+                        <div class="medium-7 columns">
+                            Description
+                        </div>
+                        <div class="medium-2 columns">
+                            Amount
+                        </div>
+                        <div class="medium-1 columns">
                         </div>
                     </div>
-                    <div class="large-2 columns">
-                        <div class="amount-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')} ? error">
-                            <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{expenseRows[__${stat.index}__].amount}" />
-                            <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')}" th:errors="*{expenseRows[__${stat.index}__].amount}">Incorrect amount</small>
+
+                    <div class="row table-row" th:each="row, stat : *{expenseRows}">
+                        <div class="medium-2 columns">
+                            <div class="date-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].date')} ? error">
+                                <input type="text" required="required" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{expenseRows[__${stat.index}__].date}" />
+                                <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].date')}" th:errors="*{expenseRows[__${stat.index}__].date}">Incorrect amount</small>
+                            </div>
+                        </div>
+                        <div class="medium-7 columns">
+                            <div class="description-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].description')} ? error">
+                                <input type="text" required="required" th:field="*{expenseRows[__${stat.index}__].description}" th:errorclass="error" />
+                                <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].description')}" th:errors="*{expenseRows[__${stat.index}__].description}">Invalid description</small>
+                            </div>
+                        </div>
+                        <div class="medium-2 columns">
+                            <div class="amount-field" th:classappend="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')} ? error">
+                                <input type="number" required="required" step="any" min="0" placeholder="amount" th:field="*{expenseRows[__${stat.index}__].amount}" />
+                                <small class="error" th:if="${#fields.hasErrors('expenseRows[__${stat.index}__].amount')}" th:errors="*{expenseRows[__${stat.index}__].amount}">Incorrect amount</small>
+                            </div>
+                        </div>
+                        <div class="medium-1 columns">
+                            <a th:id="'delete-row-confirm-button-' + ${expense.expenseRows[__${stat.index}__].id}" th:onclick="'javascript:var f = $(\'#delete-row-form\'); f.attr(\'action\', \'' + @{/expenses/} + *{id} + @{/rows/} + *{expenseRows[__${stat.index}__].id} + @{/delete} + '\'); f.submit();'" class="button alert radius tiny" role="button"><i class="fi-minus"></i></a>
                         </div>
                     </div>
-                    <div class="large-1 columns">
-                        <a th:id="'delete-row-confirm-button-' + ${expense.expenseRows[__${stat.index}__].id}" th:onclick="'javascript:var f = $(\'#delete-row-form\'); f.attr(\'action\', \'' + @{/expenses/} + *{id} + @{/rows/} + *{expenseRows[__${stat.index}__].id} + @{/delete} + '\'); f.submit();'" class="button alert radius small" role="button">X</a>
-                    </div>
+                    <div class="row table-row"></div>
+
                 </div>
+
                 <!--
                 The submit button is hidden so that additional buttons can be positioned nicely.
                 This may also be possible with the button visible and better css skills.
@@ -97,10 +101,20 @@
                 -->
                 <input id="edit-form-submit-input" type="submit" hidden="hidden" />
             </form>
+
+            <fieldset>
+                <legend style="background: none;">Photo/Scan of receipt</legend>
             <form method="POST" action="@{/receipts/}" enctype="multipart/form-data">
-                <input type="file" name="file"/>
-                <input type="submit" class="button radius small" value="Add receipt"/>
+                <div class="row">
+                    <div class="medium-4 columns">
+                        <input type="file" name="file"/>
+                    </div>
+                    <div class="medium-2 columns">
+                        <input type="submit" class="button radius tiny" value="Add receipt"/>
+                    </div>
+                </div>
             </form>
+            </fieldset>
 
             <!-- Hidden row delete form -->
             <form hidden="hidden" id="delete-row-form" method="POST" th:action="@{/}" >

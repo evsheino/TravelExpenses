@@ -16,16 +16,16 @@
                 </div>
                 <div class="medium-3 columns" style="padding-top: 0.8em;">
                     <button href="#" data-dropdown="expense-type" aria-controls="expense-type" aria-expanded="false" class="button radius small expand dropdown status-desc">
-                        <span th:if="${status} != null" th:text="${status}">Status</span>
-                        <span th:if="${status} == null">All</span>
+                        <i th:if="${status} != null" th:class="'fi-' + ${status}"> </i> <span th:if="${status} != null" th:text="${status}">Status</span>
+                        <i th:if="${status} == null" class="fi-list"> </i><span th:if="${status} == null">All</span>
                     </button>
                     <br/>
                     <ul id="expense-type" data-dropdown-content="" class="f-dropdown" aria-hidden="true" tabindex="-1">
-                        <li><a href="#" th:href="@{/expenses}">All</a></li>
-                        <li><a href="#" th:href="@{/expenses(status=DRAFT)}">Draft</a></li>
-                        <li><a href="#" th:href="@{/expenses(status=SENT)}">Sent</a></li>
-                        <li><a href="#" th:href="@{/expenses(status=REJECTED)}">Rejected</a></li>
-                        <li><a href="#" th:href="@{/expenses(status=APPROVED)}">Approved</a></li>
+                        <li><a href="#" th:href="@{/expenses}"><i class="fi-list"></i> All</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=DRAFT)}"><i class="fi-DRAFT"></i> Draft</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=SENT)}"><i class="fi-SENT"></i> Sent</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=REJECTED)}"><i class="fi-REJECTED"></i> Rejected</a></li>
+                        <li><a href="#" th:href="@{/expenses(status=APPROVED)}"><i class="fi-APPROVED"></i> Approved</a></li>
                     </ul>
                 </div>
             </div>
