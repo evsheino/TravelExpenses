@@ -104,8 +104,9 @@ public class ExpenseSeleniumTests {
 
     @After
     public void cleanup() {
-        userRepository.deleteAll();
+        commentRepository.deleteAll();
         expenseRepository.deleteAll();
+        userRepository.deleteAll();
         driver.quit();
     }
     
