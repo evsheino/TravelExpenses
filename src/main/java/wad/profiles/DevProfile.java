@@ -39,18 +39,18 @@ public class DevProfile extends BaseProfile {
 
     @PostConstruct
     public void init() {
-        userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.USER, Authority.Role.SUPERVISOR, Authority.Role.ADMIN);
-        User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.USER, Authority.Role.SUPERVISOR);
+        userService.createUser("Clint Eastwood", "clinte", "clinte", Authority.Role.ROLE_USER, Authority.Role.ROLE_SUPERVISOR, Authority.Role.ROLE_ADMIN);
+        User foob = userService.createUser("Foo Bar", "foob", "foob", Authority.Role.ROLE_USER, Authority.Role.ROLE_SUPERVISOR);
         generateExpenses(foob, 9, Expense.Status.DRAFT);
         generateExpenses(foob, 13, Expense.Status.SENT);
 
-        User johnd = userService.createUser("John Doe", "johnd", "johnd", true, Authority.Role.USER);
+        User johnd = userService.createUser("John Doe", "johnd", "johnd", true, Authority.Role.ROLE_USER);
         generateExpenses(johnd, 28, Expense.Status.DRAFT);
         generateExpenses(johnd, 9, Expense.Status.SENT);
 
-        userService.createUser("Teemu", "Teemu", "sisaan", Authority.Role.USER);
-        userService.createUser("Aku", "Aku", "password", Authority.Role.ADMIN);
-        userService.createUser("Tommi", "Tommi", "esimies", Authority.Role.SUPERVISOR);
+        userService.createUser("Teemu", "Teemu", "sisaan", Authority.Role.ROLE_USER);
+        userService.createUser("Aku", "Aku", "password", Authority.Role.ROLE_ADMIN);
+        userService.createUser("Tommi", "Tommi", "esimies", Authority.Role.ROLE_SUPERVISOR);
     }
 
     private void generateExpenses(User user, int numOfExpenses, Expense.Status status) {

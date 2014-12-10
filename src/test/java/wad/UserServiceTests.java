@@ -56,7 +56,7 @@ public class UserServiceTests {
 
     @Test
     public void saveUserCreatesANewUserWhenUserDoesNotExist() throws Exception {
-        user = userService.saveUser(user, Authority.Role.USER);
+        user = userService.saveUser(user, Authority.Role.ROLE_USER);
 
         User fetchedUser = userRepository.findOne(user.getId());
 
@@ -68,7 +68,7 @@ public class UserServiceTests {
     public void saveUserUpdatesUserWhenUserExists() throws Exception {
         User repoUser = userRepository.save(user);
 
-        User serviceUser = userService.saveUser(user, Authority.Role.USER);
+        User serviceUser = userService.saveUser(user, Authority.Role.ROLE_USER);
 
         assertEquals(1, userRepository.count());
         assertEquals(repoUser, serviceUser);
@@ -76,7 +76,7 @@ public class UserServiceTests {
 
     @Test
     public void createUserCreatesANewUser() throws Exception {
-        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.USER);
+        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.ROLE_USER);
 
         assertEquals(1, userRepository.count());
 
@@ -87,14 +87,14 @@ public class UserServiceTests {
 
     @Test
     public void createUserAndUpdate() throws Exception {
-        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.USER);
+        user = userService.createUser(user.getName(), user.getUsername(), "password", Authority.Role.ROLE_USER);
         User fetchedUser = userRepository.findOne(user.getId());
 
         assertTrue(user.isUser() && fetchedUser.isUser());
         assertFalse(user.isSupervisor() && fetchedUser.isSupervisor());
         assertFalse(user.isAdmin() && fetchedUser.isAdmin());
 
-        user = userService.saveUser(user, Authority.Role.USER, Authority.Role.SUPERVISOR);
+        user = userService.saveUser(user, Authority.Role.ROLE_USER, Authority.Role.ROLE_SUPERVISOR);
         fetchedUser = userRepository.findOne(user.getId());
 
         assertTrue(user.isUser() && fetchedUser.isUser());

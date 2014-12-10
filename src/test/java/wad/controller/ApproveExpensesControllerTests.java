@@ -104,10 +104,10 @@ public class ApproveExpensesControllerTests {
         this.webAppContext.getServletContext()
                 .setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, webAppContext);
 
-        user = userService.createUser(NAME, USERNAME, PASSWORD, Authority.Role.USER);
-        user2 = userService.createUser(NAME2, USERNAME2, PASSWORD2, Authority.Role.USER);
-        admin = userService.createUser(ADMIN_NAME, ADMIN_USERNAME, ADMIN_PASSWORD, Authority.Role.ADMIN);
-        supervisor = userService.createUser(SUPERVISOR_NAME, SUPERVISOR_USERNAME, SUPERVISOR_PASSWORD, Authority.Role.SUPERVISOR);
+        user = userService.createUser(NAME, USERNAME, PASSWORD, Authority.Role.ROLE_USER);
+        user2 = userService.createUser(NAME2, USERNAME2, PASSWORD2, Authority.Role.ROLE_USER);
+        admin = userService.createUser(ADMIN_NAME, ADMIN_USERNAME, ADMIN_PASSWORD, Authority.Role.ROLE_ADMIN);
+        supervisor = userService.createUser(SUPERVISOR_NAME, SUPERVISOR_USERNAME, SUPERVISOR_PASSWORD, Authority.Role.ROLE_SUPERVISOR);
 
         userRepository.save(user);
 
@@ -186,4 +186,21 @@ public class ApproveExpensesControllerTests {
         assertEquals(text, expense.getComments().get(0).getText());
     }
 
+    @Test
+    public void userCannotApproveExpense() throws Exception {
+        session = createSession(USERNAME, PASSWORD, expense);
+
+        String url = "/expenses/approve/" + expense.getId() + "/approve";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void userCannotRejectExpense() throws Exception {
+        session = createSession(USERNAME, PASSWORD, expense);
+
+        String url = "/expenses/approve/" + expense.getId() + "/reject";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is4xxClientError());
+    }
 }

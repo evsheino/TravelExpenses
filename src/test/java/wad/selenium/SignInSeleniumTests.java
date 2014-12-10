@@ -65,7 +65,7 @@ public class SignInSeleniumTests {
 
         this.driver = new HtmlUnitDriver();
 
-        userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
+        userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
 
     }
 

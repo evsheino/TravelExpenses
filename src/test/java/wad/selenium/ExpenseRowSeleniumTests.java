@@ -89,7 +89,7 @@ public class ExpenseRowSeleniumTests {
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
-        user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.USER);
+        user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
         expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), 20.0, DESCRIPTION, Expense.Status.DRAFT);
 
         row = new ExpenseRow();

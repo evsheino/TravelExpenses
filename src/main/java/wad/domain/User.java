@@ -56,15 +56,15 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public boolean isAdmin() {
-        return hasRole(Authority.Role.ADMIN);
+        return hasRole(Authority.Role.ROLE_ADMIN);
     }
 
     public boolean isSupervisor() {
-        return hasRole(Authority.Role.SUPERVISOR);
+        return hasRole(Authority.Role.ROLE_SUPERVISOR);
     }
 
     public boolean isUser() {
-        return hasRole(Authority.Role.USER);
+        return hasRole(Authority.Role.ROLE_USER);
     }
 
     public String getName() {

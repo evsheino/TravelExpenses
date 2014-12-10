@@ -11,9 +11,9 @@ import javax.persistence.*;
 public class Authority extends AbstractPersistable<Long> implements GrantedAuthority {
 
     public static enum Role {
-        USER,
-        SUPERVISOR,
-        ADMIN
+        ROLE_USER,
+        ROLE_SUPERVISOR,
+        ROLE_ADMIN
     }
 
     @JsonIgnore

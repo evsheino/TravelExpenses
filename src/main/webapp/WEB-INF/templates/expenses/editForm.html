@@ -17,10 +17,10 @@
                     <input type="text" required="required" readonly="readonly" th:field="*{modified}" />
                 </label>
                 <label>Status
-                    <select sec:authorize="hasAnyRole('ADMIN')" th:field="*{status}">
+                    <select sec:authorize="hasAnyRole('ROLE_ADMIN')" th:field="*{status}">
                         <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
                     </select>
-                    <input type="text" sec:authorize="hasRole('USER')" readonly="readonly" th:field="*{status}" />
+                    <input type="text" sec:authorize="hasRole('ROLE_USER')" readonly="readonly" th:field="*{status}" />
                 </label>
                 <div class="amount-field">
                     <label>Amount

@@ -38,11 +38,11 @@ public class ExpenseTests {
     @Before
     public void setUp() {
         Authority adminAuth = new Authority();
-        adminAuth.setRole(Authority.Role.ADMIN);
+        adminAuth.setRole(Authority.Role.ROLE_ADMIN);
         Authority supervisorAuth = new Authority();
-        supervisorAuth.setRole(Authority.Role.SUPERVISOR);
+        supervisorAuth.setRole(Authority.Role.ROLE_SUPERVISOR);
         Authority userAuth = new Authority();
-        userAuth.setRole(Authority.Role.USER);
+        userAuth.setRole(Authority.Role.ROLE_USER);
 
         user = new User();
         user.setName("User");
@@ -58,7 +58,7 @@ public class ExpenseTests {
         user2.setUsername("johnd2");
         user2.setAuthorities(new ArrayList());
         userAuth = new Authority();
-        userAuth.setRole(Authority.Role.USER);
+        userAuth.setRole(Authority.Role.ROLE_USER);
         user2.getAuthorities().add(userAuth);
         user2 = userRepository.save(user2);
 
