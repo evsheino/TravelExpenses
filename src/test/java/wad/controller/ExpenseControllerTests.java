@@ -151,8 +151,8 @@ public class ExpenseControllerTests {
     @After
     public void cleanup() {
         userRepository.deleteAll();
-        expenseRepository.deleteAll();
         commentRepository.deleteAll();
+        expenseRepository.deleteAll();
     }
 
     @Test
@@ -485,7 +485,6 @@ public class ExpenseControllerTests {
     }
 
     @Test
-    @Transactional
     public void addCommentAddsCommentToExpense() throws Exception {
         assertEquals(0, commentRepository.count());
 
