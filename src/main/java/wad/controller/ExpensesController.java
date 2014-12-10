@@ -174,10 +174,8 @@ public class ExpensesController {
             throw new ResourceNotFoundException();
 
         Comment comment = new Comment(expense, currentUser, commentText, new Date());
-        commentRepository.save(comment);
-        expense.getComments().add(comment);
+        comment = commentRepository.save(comment);
 
-        expense = expenseService.saveExpense(expense);
         status.setComplete();
 
         return "redirect:/expenses/" + expense.getId();

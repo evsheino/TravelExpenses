@@ -20,8 +20,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import wad.Application;
 import wad.domain.Authority;
+import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.User;
+import wad.repository.CommentRepository;
 import wad.repository.ExpenseRepository;
 import wad.repository.UserRepository;
 import wad.service.ExpenseService;
@@ -58,6 +60,9 @@ public class ExpenseSeleniumTests {
 
     @Autowired
     ExpenseService expenseService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     private Expense expense;
     private User user;
@@ -232,5 +237,34 @@ public class ExpenseSeleniumTests {
         assertTrue(content.contains(f.format(expense.getStartDate())));
         assertTrue(content.contains(f.format(expense.getEndDate())));
         assertTrue(content.contains(expense.getUser().getName()));
+    }
+
+    @Test
+    public void userCanAddANewComment() throws Exception {
+        String text = "new comment";
+
+        driver.get(EXPENSES_URI + expense.getId());
+
+        WebElement element = driver.findElement(By.id("commentText"));
+        element.clear();
+        element.sendKeys(text);
+
+        element = driver.findElement(By.id("add-comment-form"));
+        element.submit();
+
+        assertEquals("There should be one more Comment in the database after creating a new one.",
+                1, commentRepository.count());
+
+        Comment comment = commentRepository.findAll().get(0);
+
+        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+
+        assertEquals(text, comment.getText());
+
+        // Check that the page has the correct information.
+        String content = driver.getPageSource();
+
+        assertTrue(content.contains(comment.getText()));
     }
 }

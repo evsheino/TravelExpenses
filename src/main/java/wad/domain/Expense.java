@@ -73,7 +73,7 @@ public class Expense extends AbstractPersistable<Long> {
     @OneToMany
     private List<Receipt> receipts;
 
-    @OneToMany(mappedBy = "expense", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "expense", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     /**

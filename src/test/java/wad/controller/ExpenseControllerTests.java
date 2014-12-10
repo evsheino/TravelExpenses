@@ -29,10 +29,13 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 import wad.Application;
 import wad.domain.Authority;
+import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.User;
+import wad.repository.CommentRepository;
 import wad.repository.ExpenseRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -69,6 +72,9 @@ public class ExpenseControllerTests {
 
     @Autowired
     private ExpenseRepository expenseRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private UserService userService;
@@ -146,6 +152,7 @@ public class ExpenseControllerTests {
     public void cleanup() {
         userRepository.deleteAll();
         expenseRepository.deleteAll();
+        commentRepository.deleteAll();
     }
 
     @Test
@@ -476,4 +483,24 @@ public class ExpenseControllerTests {
         expense = expenseRepository.save(expense);
         testDeleteFails(expense);
     }
+
+    @Test
+    @Transactional
+    public void addCommentAddsCommentToExpense() throws Exception {
+        assertEquals(0, commentRepository.count());
+
+        String text = "New comment";
+
+        String url = "/expenses/" + expense.getId() + "/comments";
+        mockMvc.perform(post(url).session(session).with(csrf())
+                .param("commentText", text))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses/" + expense.getId()));
+
+        assertEquals(1, commentRepository.count());
+        Comment comment = commentRepository.findAll().get(0);
+        assertEquals(expense.getId(), comment.getExpense().getId());
+        assertEquals(text, comment.getText());
+    }
+
 }
