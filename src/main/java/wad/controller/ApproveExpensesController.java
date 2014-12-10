@@ -27,9 +27,6 @@ public class ApproveExpensesController {
     private ExpenseService expenseService;
 
     @Autowired
-    private ExpenseRepository expenseRepository;
-
-    @Autowired
     private CommentRepository commentRepository;
 
     @Autowired
@@ -53,7 +50,7 @@ public class ApproveExpensesController {
 
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     public String viewExpense(Model model, @PathVariable Long id) {
-        model.addAttribute("expense", expenseRepository.findOne(id));
+        model.addAttribute("expense", expenseService.getExpense(id));
         return "expenses/approve";
     }
 
@@ -65,7 +62,7 @@ public class ApproveExpensesController {
 
     @RequestMapping(value="/{id}/reject", method = RequestMethod.POST)
     public String rejectExpense(Model model, @PathVariable Long id, String commentText) {
-        Expense expense = expenseRepository.findOne(id);
+        Expense expense = expenseService.getExpense(id);
 
         Comment comment = new Comment(expense, userService.getCurrentUser(), commentText, new Date());
         commentRepository.save(comment);
@@ -76,13 +73,13 @@ public class ApproveExpensesController {
     }
 
     private void updateStatus(Long id, Expense.Status status) {
-        Expense expense = expenseRepository.findOne(id);
+        Expense expense = expenseService.getExpense(id);
         updateStatus(expense, status);
     }
 
     private void updateStatus(Expense expense, Expense.Status status) {
         expense.setStatus(status);
-        expenseRepository.save(expense);
+        expenseService.saveExpense(expense);
     }
 
 }

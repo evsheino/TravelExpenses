@@ -8,42 +8,58 @@
         <title>Expense</title>
     </head>
     <body>
-
         <div th:fragment="commentList">
-
             <div class="table">
-                <div class="row table-topic">
-                    <div class="medium-12 columns">
-                        Comments
-                    </div>
-                </div>
-                <div class="row table-header">
-                    <div class="medium-2 columns">
-                        User
-                    </div>
-                    <div class="medium-2 columns">
-                        Date
-                    </div>
-                    <div class="medium-8 columns">
-                        Comment
-                    </div>
-                </div>
-                <div class="table-rows">
-                    <div class="row table-row" th:each="comment, stat : ${expense.comments}">
-                        <div class="medium-2 columns" th:text="${comment.user.name}">
+                <div th:include="expenses/commentListFragment :: commentRows" />
+                <div th:if="${expense.comments.isEmpty()}" class="row table-row" />
+            </div>
+        </div>
+        
+        <div th:fragment="commentListWithAddForm">
+            <div class="table">
+                <div th:include="expenses/commentListFragment :: commentRows" />
+                <div class="row table-row">
+                    <form id="add-comment-form" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/comments}">
+                        <div class="medium-10 columns">
+                            <textarea name="commentText" id="commentText" required="required" />
                         </div>
-                        <div class="medium-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">
+                        <div class="medium-2 columns">
+                            <input id="comment-add-form-submit" class="button radius tiny expand" type="submit" value="+ Add Comment" />
                         </div>
-                        <div class="medium-8 columns">
-                            <span th:text="${comment.text}"></span>
-                        </div>
-                    </div>
-                    <div class="row table-row">
-                        <div class="medium-12 columns"></div>
-                    </div>
-
+                    </form>
                 </div>
             </div>
         </div>
+
+        <div th:fragment="commentRows">
+            <div class="row table-topic">
+                <div class="medium-12 columns">
+                    Comments
+                </div>
+            </div>
+            <div class="row table-header">
+                <div class="medium-2 columns">
+                    User
+                </div>
+                <div class="medium-2 columns">
+                    Date
+                </div>
+                <div class="medium-8 columns">
+                    Comment
+                </div>
+            </div>
+            <div class="table-rows">
+                <div class="row table-row" th:each="comment, stat : ${expense.comments}">
+                    <div class="medium-2 columns" th:text="${comment.user.name}">
+                    </div>
+                    <div class="medium-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">
+                    </div>
+                    <div class="medium-8 columns">
+                        <span th:text="${comment.text}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

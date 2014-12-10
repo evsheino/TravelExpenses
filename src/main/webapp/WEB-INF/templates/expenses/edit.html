@@ -14,75 +14,74 @@
                     <h1>Expense information</h1>
                 </div>
             </div>
-
+            
             <div class="row index-wrapper">
                 <div class="medium-12 columns">
-
-            <div class="row">
-                <div class="large-12 columns">
-                    <div th:include="expenses/editForm :: editExpenseForm" />
-                        
-                        <div class="table">
-                            <div class="row table-topic">
-                                <div class="medium-12 columns status-desc">
-                                    Add new row
+                    
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <div th:include="expenses/editForm :: editExpenseForm" />
+                            
+                            <div class="table">
+                                <div class="row table-topic">
+                                    <div class="medium-12 columns status-desc">
+                                        Add new row
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row table-header hide-for-small-only">
-                                <div class="medium-2 columns">
-                                    Date
-                                </div>
-                                <div class="medium-2 columns">
-                                    Amount
-                                </div>
-                                <div class="medium-6 columns">
-                                    Description
-                                </div>
-                                <div class="medium-2 columns">
-                                </div>
-                            </div>
-
-                            <div class="table-rows">
-                                <div class="row table-row">
-                                    <form id="add-row-form" th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
+                                <div class="row table-header hide-for-small-only">
                                     <div class="medium-2 columns">
-                                        <input id="row-add-date" type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
-                                        <small class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Incorrect date</small>
+                                        Date
                                     </div>
                                     <div class="medium-2 columns">
-                                        <input id="row-add-amount" type="number" step="any" min="0" th:field="*{amount}" required="required"/>
-                                        <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
+                                        Amount
                                     </div>
                                     <div class="medium-6 columns">
-                                        <input id="row-add-description" type="text" th:field="*{description}" required="required"/>
-                                        <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                                        Description
                                     </div>
                                     <div class="medium-2 columns">
-                                        <input id="row-add-submit" type="submit" class="button radius tiny expand" value="+ Add row" />
                                     </div>
-                                    </form>
                                 </div>
-                                <div class="row table-row">
-                                    <div class="medium-12 columns"></div>
+                                
+                                <div class="table-rows">
+                                    <div class="row table-row">
+                                        <form id="add-row-form" th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/rows}" th:object="${expenseRow}">
+                                            <div class="medium-2 columns">
+                                                <input id="row-add-date" type="text" class="fdatepicker" data-date-format="dd/mm/yyyy" th:field="*{date}" required="required" />
+                                                <small class="error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Incorrect date</small>
+                                            </div>
+                                            <div class="medium-2 columns">
+                                                <input id="row-add-amount" type="number" step="any" min="0" th:field="*{amount}" required="required"/>
+                                                <small class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Invalid amount</small>
+                                            </div>
+                                            <div class="medium-6 columns">
+                                                <input id="row-add-description" type="text" th:field="*{description}" required="required"/>
+                                                <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                                            </div>
+                                            <div class="medium-2 columns">
+                                                <input id="row-add-submit" type="submit" class="button radius tiny expand" value="+ Add row" />
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+                            
+                            <label id="edit-form-submit" class="button radius" for="edit-form-submit-input"><i class="fi-save"></i> Save</label>
+                            <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius"><i class="fi-trash"></i> Delete</a>
+                            
+                            <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
+                                <h2>Are you sure?</h2>
+                                <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert radius small" role="button">Delete</a>
+                                <a class="close-reveal-modal">&#215;</a>
+                            </div>
+                            <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
+                                <input class="button radius small" type="submit" value="Delete" />
+                            </form>
+
+                            <div th:include="expenses/commentListFragment :: commentListWithAddForm" />
+
                         </div>
-
-                    <label id="edit-form-submit" class="button radius" for="edit-form-submit-input"><i class="fi-save"></i> Save</label>
-                    <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius"><i class="fi-trash"></i> Delete</a>
-                        
-                    <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
-                        <h2>Are you sure?</h2>
-                        <a href="#" id="delete-confirm-button" onclick="document.getElementById('delete-form').submit();" class="button alert radius small" role="button">Delete</a>
-                        <a class="close-reveal-modal">&#215;</a>
                     </div>
-                    <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
-                        <input class="button radius small" type="submit" value="Delete" />
-                    </form>
-                </div>
-            </div>
-            <div th:include="expenses/commentListFragment :: commentList" />
-
+                    
                 </div>
             </div>
         </div>

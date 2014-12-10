@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.SessionStatus;
+import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.ExpenseRow;
 import wad.domain.User;
+import wad.repository.CommentRepository;
 import wad.repository.ExpenseRowRepository;
 import wad.service.ExpenseService;
 import wad.util.PagingHelper;
@@ -39,6 +41,9 @@ public class ExpensesController {
 
     @Autowired
     private ExpenseRowRepository expenseRowRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
@@ -126,7 +131,7 @@ public class ExpensesController {
     }
 
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteExpense (@PathVariable Long id, SessionStatus status) {
+    public String deleteExpense(@PathVariable Long id, SessionStatus status) {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
 
@@ -140,7 +145,7 @@ public class ExpensesController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    public String updateExpense (@PathVariable Long id, @Valid @ModelAttribute("expense") Expense expense,
+    public String updateExpense(@PathVariable Long id, @Valid @ModelAttribute("expense") Expense expense,
             BindingResult bindingResult, SessionStatus status) {
 
         if (bindingResult.hasErrors())
@@ -153,6 +158,24 @@ public class ExpensesController {
 
         if (bindingResult.hasErrors())
             return "expenses/edit";
+
+        expense = expenseService.saveExpense(expense);
+        status.setComplete();
+
+        return "redirect:/expenses/" + expense.getId();
+    }
+
+    @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
+    public String addComment(@PathVariable Long id, SessionStatus status, String commentText) {
+        Expense expense = expenseService.getExpense(id);
+        User currentUser = userService.getCurrentUser();
+
+        if (expense == null || !expense.isViewableBy(currentUser))
+            throw new ResourceNotFoundException();
+
+        Comment comment = new Comment(expense, currentUser, commentText, new Date());
+        commentRepository.save(comment);
+        expense.getComments().add(comment);
 
         expense = expenseService.saveExpense(expense);
         status.setComplete();
