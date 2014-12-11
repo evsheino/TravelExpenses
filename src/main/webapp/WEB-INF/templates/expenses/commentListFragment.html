@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="table-rows">
-                <div class="row table-row" th:each="comment, stat : ${expense.comments}">
+                <div class="row table-row" th:each="comment : ${expense.comments}">
                     <div class="medium-2 columns" th:text="${comment.user.name}">
                     </div>
                     <div class="medium-2 columns" th:text="${#calendars.format(comment.created,'dd.MM.yyyy hh:mm')}">

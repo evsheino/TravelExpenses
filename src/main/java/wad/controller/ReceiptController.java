@@ -6,7 +6,7 @@
 package wad.controller;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -54,13 +54,13 @@ public class ReceiptController {
         receipt.setMediaType(file.getContentType());
         receipt.setSize(file.getSize());
         receipt.setContent(file.getBytes());
+        receipt.setSubmitted(new Date());
+        receipt.setExpense(expense);
 
-        List<Receipt> receipts = expense.getReceipts();
-        receipts.add(receipt);
-        expense.setReceipts(receipts);
+        //expense.getReceipts().add(receipt);
 
-        expenseRepository.save(expense);
         receiptRepository.save(receipt);
+        //expenseRepository.save(expense);
 
         return "redirect:/expenses/" + expense.getId();
     }

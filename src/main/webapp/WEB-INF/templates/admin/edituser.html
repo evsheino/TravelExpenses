@@ -71,7 +71,7 @@
                 <div class="medium-12 columns">
                     <label>User</label>
                     <div class="switch radius">
-                        <input id="role-user" type="checkbox" name="roles" value="USER" th:checked="${user.isUser()}"/>
+                        <input id="role-user" type="checkbox" name="roles" value="ROLE_USER" th:checked="${user.isUser()}"/>
                         <label for="role-user"></label>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="medium-12 columns">
                     <label>Supervisor</label>
                     <div class="switch radius">
-                        <input id="role-admin" type="checkbox" name="roles" value="SUPERVISOR" th:checked="${user.isSupervisor()}"/>
+                        <input id="role-admin" type="checkbox" name="roles" value="ROLE_SUPERVISOR" th:checked="${user.isSupervisor()}"/>
                         <label for="role-admin"></label>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="medium-12 columns">
                     <label>Admin</label>
                     <div class="switch radius">
-                        <input id="role-supervisor" type="checkbox" name="roles" value="ADMIN" th:checked="${user.isAdmin()}"/>
+                        <input id="role-supervisor" type="checkbox" name="roles" value="ROLE_ADMIN" th:checked="${user.isAdmin()}"/>
                         <label for="role-supervisor"></label>
                     </div>
                 </div>

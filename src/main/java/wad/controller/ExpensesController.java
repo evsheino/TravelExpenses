@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.SessionStatus;
@@ -148,9 +149,6 @@ public class ExpensesController {
     public String updateExpense(@PathVariable Long id, @Valid @ModelAttribute("expense") Expense expense,
             BindingResult bindingResult, SessionStatus status) {
 
-        if (bindingResult.hasErrors())
-            return "expenses/edit";
-
         User currentUser = userService.getCurrentUser();
 
         if (expense == null || !expense.isEditableBy(currentUser))
@@ -174,7 +172,7 @@ public class ExpensesController {
             throw new ResourceNotFoundException();
 
         Comment comment = new Comment(expense, currentUser, commentText, new Date());
-        comment = commentRepository.save(comment);
+        commentRepository.save(comment);
 
         status.setComplete();
 

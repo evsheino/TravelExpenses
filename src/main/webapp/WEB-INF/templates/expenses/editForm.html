@@ -104,7 +104,7 @@
 
             <fieldset>
                 <legend style="background: none;">Photo/Scan of receipt</legend>
-            <form method="POST" action="@{/receipts/}" enctype="multipart/form-data">
+            <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/receipts/}" enctype="multipart/form-data">
                 <div class="row">
                     <div class="medium-4 columns">
                         <input type="file" name="file"/>

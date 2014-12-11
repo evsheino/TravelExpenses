@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wad.domain.Comment;
@@ -63,12 +64,13 @@ public class ApproveExpensesController {
     }
 
     @RequestMapping(value="/{id}/reject", method = RequestMethod.POST)
+    @Transactional
     public String rejectExpense(Model model, @PathVariable Long id, String commentText) {
         Expense expense = expenseService.getExpense(id);
 
         Comment comment = new Comment(expense, userService.getCurrentUser(), commentText, new Date());
         commentRepository.save(comment);
-        expense.getComments().add(comment);
+        //expense.getComments().add(comment);
 
         updateStatus(expense, Expense.Status.REJECTED);
         return "redirect:/expenses/approve/list";

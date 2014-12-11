@@ -181,9 +181,10 @@ public class ApproveExpensesControllerTests {
         assertEquals(1, commentRepository.count());
 
         expense = expenseRepository.findOne(expense.getId());
+        Comment comment = commentRepository.findAll().get(0);
 
         assertEquals(Expense.Status.REJECTED, expense.getStatus());
-        assertEquals(text, expense.getComments().get(0).getText());
+        assertEquals(text, comment.getText());
     }
 
     @Test
