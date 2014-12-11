@@ -69,8 +69,14 @@
                             <span th:text="${expense.status}">status</span>
                         </div>
                         <div class="medium-1 columns" style="text-align: right;">
-                            <a th:if="${approve == null}" href="#" class="button radius tiny" th:href="@{/expenses/} + ${expense.id}"><i class="fi-pencil"></i></a>
-                            <a th:if="${approve != null}" href="#" class="button radius tiny" th:href="@{/expenses/approve/} + ${expense.id}">View</a>
+                            <a th:if="${approve == null}" href="#" class="button radius tiny" th:href="@{/expenses/} + ${expense.id}">
+                                <i class="fi-pencil" th:if="${expense.status.toString() == 'DRAFT'} or ${expense.status.toString() == 'REJECTED'}"></i>
+                                <i class="fi-magnifying-glass" th:if="${expense.status.toString() == 'SENT'} or ${expense.status.toString() == 'APPROVED'}"></i>
+                            </a>
+                            <a th:if="${approve != null}" href="#" class="button radius tiny" th:href="@{/expenses/approve/} + ${expense.id}">
+                                <i class="fi-pencil" th:if="${expense.status.toString() == 'DRAFT'} or ${expense.status.toString() == 'REJECTED'}"></i>
+                                <i class="fi-magnifying-glass" th:if="${expense.status.toString() == 'SENT'} or ${expense.status.toString() == 'APPROVED'}"></i>
+                            </a>
                         </div>
                     </div>
                     <div class="row table-row">
