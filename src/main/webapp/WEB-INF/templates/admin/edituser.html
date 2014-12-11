@@ -16,6 +16,7 @@
 <body>
 <div layout:fragment="content">
 
+
     <div class="row page-topic">
         <div class="medium-12 columns">
             <h1 th:if="${user.id == null}">Create user</h1>
@@ -23,8 +24,10 @@
         </div>
     </div>
 
+    <div class="row index-wrapper">
+        <div class="medium-12 columns">
 
-    <div class="admin-user-data">
+        <div class="admin-user-data">
         <form data-abide="" id="admin-user-data-form" method="POST" th:action="@{/admin/user/} + ${user.id} + @{/save}">
             <input type="hidden" id="id" name="id" th:value="${user.id}"/>
             <div class="row">
@@ -97,10 +100,17 @@
                 </div>
             </div>
 
-            <input type="submit" value="Sign in" style="display: none; visibility: hidden;"/>
-            <a href="#" class="button radius" id="admin-user-data-form-submit">Save</a>
-            <a href="#" class="button radius" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
+            <div class="row">
+                <div class="medium-12 columns">
+                    <input type="submit" style="display: none; visibility: hidden;"/>
+                    <a href="#" class="button radius" id="admin-user-data-form-submit">Save</a>
+                    <a href="#" class="button radius" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
+                </div>
+            </div>
         </form>
+
+    </div>
+        </div>
 
     </div>
 
