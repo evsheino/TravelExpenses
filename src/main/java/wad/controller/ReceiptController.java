@@ -7,17 +7,21 @@ package wad.controller;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wad.domain.Expense;
+import wad.domain.ExpenseRow;
 import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
@@ -25,6 +29,7 @@ import wad.repository.ReceiptRepository;
 import wad.service.ExpenseService;
 import wad.service.ReceiptService;
 import wad.service.UserService;
+import wad.validator.ReceiptValidator;
 
 /**
  *
@@ -32,7 +37,12 @@ import wad.service.UserService;
  */
 @Controller
 @RequestMapping("/expenses/{expenseId}/receipts")
+@SessionAttributes("expense")
 public class ReceiptController {
+
+    @Autowired
+    @Qualifier("receiptValidator")
+    ReceiptValidator receiptValidator;
 
     @Autowired
     private ExpenseRepository expenseRepository;
@@ -54,25 +64,15 @@ public class ReceiptController {
         return new Receipt();
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String listReceipts(@PathVariable Long expenseId, Model model) {
-        Expense expense = expenseService.getExpense(expenseId);
-        User currentUser = userService.getCurrentUser();
+    @RequestMapping(method = RequestMethod.POST)
+    public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long expenseId,
+            @ModelAttribute Receipt receipt, BindingResult bindingResult, 
+            @ModelAttribute Expense expense, SessionStatus status,
+            RedirectAttributes redirectAttrs) throws IOException {
 
-        if (expense == null || !expense.isViewableBy(currentUser)) {
+        if (expense == null || !expense.isEditableBy(userService.getCurrentUser())) {
             throw new ResourceNotFoundException();
         }
-
-        List<Receipt> list = receiptRepository.findByExpense(expense);
-        model.addAttribute("receipts", list);
-
-        return "/expenses/" + expense.getId();
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long expenseId) throws IOException {
-        Receipt receipt = new Receipt();
-        Expense expense = expenseRepository.findOne(expenseId);
 
         receipt.setName(file.getName());
         receipt.setMediaType(file.getContentType());
@@ -81,7 +81,16 @@ public class ReceiptController {
         receipt.setSubmitted(new Date());
         receipt.setExpense(expense);
 
+        receiptValidator.validate(receipt, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            redirectAttrs.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/expenses/" + expense.getId();
+        }
+
         receiptRepository.save(receipt);
+
+        status.setComplete();
 
         return "redirect:/expenses/" + expense.getId();
     }

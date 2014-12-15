@@ -5,7 +5,9 @@
  */
 package wad.domain;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
@@ -23,6 +25,13 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 public class Receipt extends AbstractPersistable<Long> {
+
+    public static final List<String> allowedContentTypes = Arrays.asList(
+            "application/pdf",
+            "image/jpeg",
+            "image/png",
+            "image/gif"
+        );
 
     @NotNull
     private String name;

@@ -13,7 +13,6 @@ import wad.domain.ExpenseRow;
 @Component
 public class ExpenseValidator implements Validator {
     
-    //private final Validator rowValidator = new ExpenseRowValidator();
     @Autowired
     @Qualifier("expenseRowValidator")
     ExpenseRowValidator rowValidator;
