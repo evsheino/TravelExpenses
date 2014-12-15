@@ -1,7 +1,6 @@
 package wad.controller;
 
 import java.util.Date;
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.support.SessionStatus;
 import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.ExpenseRow;
-import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.CommentRepository;
+import wad.repository.ReceiptRepository;
 import wad.service.ExpenseService;
 import wad.util.PagingHelper;
 import wad.validator.ExpenseValidator;
@@ -42,6 +41,9 @@ public class ExpensesController {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private ReceiptRepository receiptRepository;
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
@@ -94,6 +96,7 @@ public class ExpensesController {
         model.addAttribute("statuses", Expense.Status.values());
         model.addAttribute("expense", expense);
         model.addAttribute("expenseRow", new ExpenseRow());
+        model.addAttribute("receipts", receiptRepository.findByExpense(expense));
 
         if (expense.isEditableBy(currentUser)) {
             return "expenses/edit";

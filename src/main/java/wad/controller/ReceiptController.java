@@ -63,8 +63,7 @@ public class ReceiptController {
             throw new ResourceNotFoundException();
         }
 
-//        List<Receipt> list = expense.getReceipts();
-        List<Receipt> list = receiptRepository.findAll();       // Olemassa vain testi mielessä. Poista kun toiminto toimii.
+        List<Receipt> list = receiptRepository.findByExpense(expense);
         model.addAttribute("receipts", list);
 
         return "/expenses/" + expense.getId();
@@ -75,7 +74,6 @@ public class ReceiptController {
         Receipt receipt = new Receipt();
         Expense expense = expenseRepository.findOne(expenseId);
 
-        //expense.getReceipts().add(receipt);
         receipt.setName(file.getName());
         receipt.setMediaType(file.getContentType());
         receipt.setSize(file.getSize());
@@ -85,7 +83,6 @@ public class ReceiptController {
 
         receiptRepository.save(receipt);
 
-        //expenseRepository.save(expense);
         return "redirect:/expenses/" + expense.getId();
     }
     

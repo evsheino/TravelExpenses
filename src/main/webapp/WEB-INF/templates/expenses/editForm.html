@@ -101,48 +101,7 @@
                 -->
                 <input id="edit-form-submit-input" type="submit" hidden="hidden" />
             </form>
-
-	<!--
-            <fieldset>
-                <legend style="background: none;">Photo/Scan of receipt</legend>
-            <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/receipts/}" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="medium-4 columns">
-                        <input type="file" name="file"/>
-                    </div>
-                    <div class="medium-2 columns">
-                        <input type="submit" class="button radius tiny" value="Add receipt"/>
-                    </div>
-                </div>
-            </form>
-            </fieldset>
-           -->
             
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Receipt name</th><th>Size</th><th>Content-Type</th><th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <!--
-                    <tr th:if="${receipts.empty}">
-                        <td colspan="4">No receipts</td>
-                    </tr>
-                    -->
-                    
-                    <tr th:each="receipt : ${receipts}">
-                        <td><a th:href="@{/receipts/{id}(id=${receipt.id})}"><span th:text="${receipt.name}">receipt name</span></a></td>
-                        <td th:text="${receipt.size}">Content length</td>
-                        <td th:text="${receipt.mediaType}">Content type</td>
-                        <td><form th:action="@{/receipts/{id}(id=${receipt.id})}" th:method="delete"><input type="submit" value="Delete"/></form></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>            
-
             <!-- Hidden row delete form -->
             <form hidden="hidden" id="delete-row-form" method="POST" th:action="@{/}" >
                 <input class="button" type="submit radius small" value="Delete" />

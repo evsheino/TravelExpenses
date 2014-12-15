@@ -78,6 +78,10 @@
                                 <input class="button radius small" type="submit" value="Delete" />
                             </form>
 
+                            <div th:include="receipts/listFragment :: receiptList" />
+
+
+
                             <fieldset>
                                 <legend style="background: none;">Photo/Scan of receipt</legend>
                                 <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/receipts/}" enctype="multipart/form-data">

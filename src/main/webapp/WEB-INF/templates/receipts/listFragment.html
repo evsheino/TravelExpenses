@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Expenses</title>
+    </head>
+    <body>
+        <div th:fragment="receiptList">
+            <div class="row">
+                <div class="medium-12">
+                    <div class="table">
+                        <div class="row table-topic">
+                            <div class="medium-12 columns status-desc">
+                                Scanned receipts
+                            </div>
+                        </div>
+                        <div class="row table-header hide-for-small-only">
+                            <div class="medium-3 columns">
+                                Name
+                            </div>
+                            <div class="medium-3 columns">
+                                Size
+                            </div>
+                            <div class="medium-3 columns">
+                                Content-type
+                            </div>
+                            <div class="medium-3 columns">
+                                Delete
+                            </div>
+                        </div>
+                        <div class="table-rows">
+                            <div class="row table-row" th:each="receipt : ${receipts}">
+                                <div class="medium-3 columns">
+                                    <span class="show-for-small-only small-table-header">Name: </span>
+                                    <a th:href="@{/receipts/{id}(id=${receipt.id})}"><span th:text="${receipt.name}">receipt name</span></a>
+                                </div>
+                                <div class="medium-1 columns">
+                                    <span class="show-for-small-only small-table-header">Size: </span>
+                                    <span th:text="${receipt.size}">Content length</span>
+                                </div>
+                                <div class="medium-2 columns">
+                                    <span class="show-for-small-only small-table-header">Content-type: </span>
+                                    <span th:text="${receipt.mediaType}">Content type</span>
+                                </div>
+                                <div class="medium-5 columns">
+                                    <form th:action="@{/expenses/{expenseId}/receipts/{id}/delete(expenseId=${expense.id}, id=${receipt.id})}" th:method="POST"><button class="button alert radius tiny" type="submit"><i class="fi-minus" /></button></form>
+                                </div>
+                            </div>
+                            <div class="row table-row">
+                                <div class="medium-12 columns"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
