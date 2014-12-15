@@ -42,10 +42,10 @@ public class ReceiptController {
 
     @Autowired
     private UserService userService;
-
+    
     @Autowired
     private ExpenseService expenseService;
-
+    
     @Autowired
     private ReceiptService receiptService;
 
@@ -70,7 +70,6 @@ public class ReceiptController {
         return "/expenses/" + expense.getId();
     }
 
-    // Remember to add receipt name checking (no two receipts of same name).
     @RequestMapping(method = RequestMethod.POST)
     public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long expenseId) throws IOException {
         Receipt receipt = new Receipt();
@@ -89,21 +88,21 @@ public class ReceiptController {
         //expenseRepository.save(expense);
         return "redirect:/expenses/" + expense.getId();
     }
-
+    
     @RequestMapping(value = "/{receiptId}/delete", method = RequestMethod.POST)
     public String deleteReceipt(@PathVariable Long receiptId, @PathVariable Long expenseId) {
         Expense expense = expenseRepository.findOne(expenseId);
         Receipt receipt = receiptRepository.findOne(receiptId);
-
+        
         User currentUser = userService.getCurrentUser();
-
+        
         if (expense == null || !expense.isEditableBy(currentUser)) {
             throw new ResourceNotFoundException();
         }
-
+        
         expense.getReceipts().remove(receipt);
         receiptRepository.delete(receipt);
-
+        
         return "redirect:/expenses/" + expense.getId();
     }
 }

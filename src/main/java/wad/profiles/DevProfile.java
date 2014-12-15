@@ -1,5 +1,6 @@
 package wad.profiles;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -64,7 +65,7 @@ public class DevProfile extends BaseProfile {
     private void generateExpenseRows(Expense expense, int numOfRows) {
         expense.setExpenseRows(new ArrayList<ExpenseRow>());
         for(int i = 0; i < numOfRows; i++) {
-            ExpenseRow row = new ExpenseRow(expense, (i+0.99), "Unavoidable expense like lunch with frieds "+ 1, new Date() );
+            ExpenseRow row = new ExpenseRow(expense, new BigDecimal(i).add(new BigDecimal("0.99")), "Unavoidable expense like lunch with frieds "+ 1, new Date() );
             expenseRowRepository.save(row);
         }
     }

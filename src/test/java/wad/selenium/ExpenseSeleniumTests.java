@@ -1,5 +1,6 @@
 package wad.selenium;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
@@ -228,7 +229,7 @@ public class ExpenseSeleniumTests {
         assertEquals(startDate, f.format(expense.getStartDate()));
         assertEquals(endDate, f.format(expense.getEndDate()));
         assertEquals(desc, expense.getDescription());
-        assertEquals(0, expense.getAmount(), 0.001);
+        assertEquals(new BigDecimal(0), expense.getAmount());
 
         // Check that the page has the correct information.
         String content = driver.getPageSource();
@@ -267,5 +268,54 @@ public class ExpenseSeleniumTests {
         String content = driver.getPageSource();
 
         assertTrue(content.contains(comment.getText()));
+    }
+
+    @Test
+    public void expenseEditPageHasSendButtonThatTakesToConfirmSendPage() throws Exception {
+        driver.get(EXPENSES_URI + expense.getId());
+
+        WebElement element = driver.findElement(By.id("send-button"));
+        element.click();
+
+        assertEquals("The user should be taken to the expense send confirmation page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + expense.getId() + "/send", driver.getCurrentUrl());
+
+        String content = driver.getPageSource();
+
+        SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy");
+
+        assertTrue(content.contains(expense.getDescription()));
+        assertTrue(content.contains(f.format(expense.getStartDate())));
+        assertTrue(content.contains(f.format(expense.getEndDate())));
+        assertTrue(content.contains(expense.getAmount().toString()));
+        assertTrue(content.contains(expense.getUser().getName()));
+    }
+
+    @Test
+    public void confirmSendPageAllowsUserToSendExpenseForApproval() throws Exception {
+        driver.get(EXPENSES_URI + expense.getId() + "/send");
+
+        WebElement element = driver.findElement(By.id("send-form-submit-label"));
+        element.click();
+
+        assertEquals("The user should be taken to the expense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI, driver.getCurrentUrl());
+
+        expense = expenseRepository.findOne(expense.getId());
+        assertEquals(expense.getStatus(), Expense.Status.SENT);
+    }
+
+    @Test
+    public void confirmSendPageHasABackButton() throws Exception {
+        driver.get(EXPENSES_URI + expense.getId() + "/send");
+
+        WebElement element = driver.findElement(By.id("cancel-button"));
+        element.click();
+
+        assertEquals("The user should be taken to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+
+        expense = expenseRepository.findOne(expense.getId());
+        assertEquals(expense.getStatus(), Expense.Status.DRAFT);
     }
 }

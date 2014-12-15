@@ -1,5 +1,6 @@
 package wad.controller;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.junit.After;
@@ -130,12 +131,12 @@ public class ExpenseRowControllerTests {
         unsavedExpense.setModified(new Date());
 
         row = new ExpenseRow();
-        row.setAmount(20.0);
+        row.setAmount(new BigDecimal("20.0"));
         row.setDate(f.parse("21/09/2014"));
         row.setDescription("row description");
 
         unsavedRow = new ExpenseRow();
-        unsavedRow.setAmount(34.5);
+        unsavedRow.setAmount(new BigDecimal("34.5"));
         unsavedRow.setDate(f.parse("22/09/2014"));
         unsavedRow.setDescription("unsaved row description");
 
@@ -187,7 +188,7 @@ public class ExpenseRowControllerTests {
 
         assertEquals("redirect:/expenses/" + expense.getId(), res.getModelAndView().getViewName());
 
-        assertEquals(unsavedRow.getAmount(), posted.getAmount());
+        assertEquals(unsavedRow.getAmount().stripTrailingZeros(), posted.getAmount().stripTrailingZeros());
         assertEquals(unsavedRow.getDescription(), posted.getDescription());
         assertEquals(f.format(unsavedRow.getDate()), f.format(posted.getDate()));
         assertEquals(expense.getId(), posted.getExpense().getId());
