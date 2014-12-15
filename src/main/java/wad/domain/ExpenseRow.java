@@ -1,5 +1,6 @@
 package wad.domain;
 
+import java.math.BigDecimal;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ public class ExpenseRow extends AbstractPersistable<Long> {
 
     @NotNull
     @Min(0)
-    private double amount;
+    private BigDecimal amount;
 
     @NotEmpty
     private String description;
@@ -33,18 +34,18 @@ public class ExpenseRow extends AbstractPersistable<Long> {
 
     }
 
-    public ExpenseRow(Expense expense, Double amount, String description, Date date) {
+    public ExpenseRow(Expense expense, BigDecimal amount, String description, Date date) {
         this.expense = expense;
         this.amount = amount;
         this.description = description;
         this.date = date;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

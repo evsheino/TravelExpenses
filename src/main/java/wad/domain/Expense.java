@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.jpa.domain.AbstractPersistable;
@@ -102,13 +103,13 @@ public class Expense extends AbstractPersistable<Long> {
                 || (user.getId().equals(getUser().getId()) || user.isSupervisor());
     }
 
-    public Double getAmount() {
-        if (expenseRows == null) return 0.0;
+    public BigDecimal getAmount() {
+        if (expenseRows == null) return new BigDecimal(0.0);
 
-        double sum = 0;
+        BigDecimal sum = new BigDecimal(0);
 
         for (ExpenseRow expenseRow : expenseRows) {
-            sum += expenseRow.getAmount();
+            sum = sum.add(expenseRow.getAmount());
         }
         return sum;
     }

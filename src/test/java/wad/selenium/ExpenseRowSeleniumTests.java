@@ -1,5 +1,6 @@
 package wad.selenium;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
@@ -93,7 +94,7 @@ public class ExpenseRowSeleniumTests {
         expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), 20.0, DESCRIPTION, Expense.Status.DRAFT);
 
         row = new ExpenseRow();
-        row.setAmount(20.5);
+        row.setAmount(new BigDecimal("20.5"));
         row.setDate(f.parse("02/09/2014"));
         row.setDescription("taxi fare");
         row.setExpense(expense);
@@ -143,7 +144,7 @@ public class ExpenseRowSeleniumTests {
         assertEquals(1, rowRepository.count());
         String desc = "new description";
         String date = "03/09/2014";
-        Double amount = 12.5;
+        BigDecimal amount = new BigDecimal("12.5");
 
         driver.get(EXPENSES_URI + expense.getId());
 
@@ -171,7 +172,7 @@ public class ExpenseRowSeleniumTests {
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         assertEquals(date, f.format(updated.getDate()));
-        assertEquals(amount, updated.getAmount(), 0.001);
+        assertEquals(amount.stripTrailingZeros(), updated.getAmount().stripTrailingZeros());
         assertEquals(desc, updated.getDescription());
 
         // Check that the page has the updated Expense.
@@ -208,7 +209,7 @@ public class ExpenseRowSeleniumTests {
 
         String desc = "new description";
         String date = "03/09/2014";
-        Double amount = 30.4;
+        BigDecimal amount = new BigDecimal("30.4");
 
         driver.get(EXPENSES_URI + expense.getId());
 
@@ -234,7 +235,7 @@ public class ExpenseRowSeleniumTests {
                 EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
 
         assertEquals(date, f.format(row.getDate()));
-        assertEquals(amount, row.getAmount(), 0.001);
+        assertEquals(amount.stripTrailingZeros(), row.getAmount().stripTrailingZeros());
         assertEquals(desc, row.getDescription());
 
         // Check that the page has the correct information.

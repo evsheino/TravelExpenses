@@ -1,5 +1,6 @@
 package wad.selenium;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
@@ -228,7 +229,7 @@ public class ExpenseSeleniumTests {
         assertEquals(startDate, f.format(expense.getStartDate()));
         assertEquals(endDate, f.format(expense.getEndDate()));
         assertEquals(desc, expense.getDescription());
-        assertEquals(0, expense.getAmount(), 0.001);
+        assertEquals(new BigDecimal(0), expense.getAmount());
 
         // Check that the page has the correct information.
         String content = driver.getPageSource();
