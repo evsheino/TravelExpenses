@@ -54,7 +54,7 @@ public class ReceiptController {
         return new Receipt();
     }
 
-    @RequestMapping(value = "/{expenseId}", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public String listReceipts(@PathVariable Long expenseId, Model model) {
         Expense expense = expenseService.getExpense(expenseId);
         User currentUser = userService.getCurrentUser();
@@ -69,45 +69,37 @@ public class ReceiptController {
         return "/expenses/" + expense.getId();
     }
     
-    // Remember to add receipt name checking (no two receipts of same name).
     @RequestMapping(method = RequestMethod.POST)
     public String addReceipt(@RequestParam("file") MultipartFile file, @PathVariable Long expenseId) throws IOException {
         Receipt receipt = new Receipt();
         Expense expense = expenseRepository.findOne(expenseId);
 
-        //expense.getReceipts().add(receipt);
-
-        if (receiptService.checkReceiptName(file.getName())) {
-            return "redirect:/expenses/" + expense.getId();
-        } else {
-                    receipt.setName(file.getName());
+        receipt.setName(file.getName());
         receipt.setMediaType(file.getContentType());
         receipt.setSize(file.getSize());
         receipt.setContent(file.getBytes());
         receipt.setSubmitted(new Date());
         receipt.setExpense(expense);
-        
+
         receiptRepository.save(receipt);
-        }
-        //expenseRepository.save(expense);
 
         return "redirect:/expenses/" + expense.getId();
     }
-
+    
     @RequestMapping(value = "/{receiptId}/delete", method = RequestMethod.POST)
     public String deleteReceipt(@PathVariable Long receiptId, @PathVariable Long expenseId) {
         Expense expense = expenseRepository.findOne(expenseId);
         Receipt receipt = receiptRepository.findOne(receiptId);
-
+        
         User currentUser = userService.getCurrentUser();
-
+        
         if (expense == null || !expense.isEditableBy(currentUser)) {
             throw new ResourceNotFoundException();
         }
-
+        
         expense.getReceipts().remove(receipt);
         receiptRepository.delete(receipt);
-
+        
         return "redirect:/expenses/" + expense.getId();
     }
 }
