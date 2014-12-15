@@ -196,7 +196,12 @@ public class ExpensesController {
 
     @RequestMapping(value="/{id}/send", method = RequestMethod.GET)
     public String viewBeforeSend(Model model, @PathVariable Long id) {
-        model.addAttribute("expense", expenseService.getExpense(id));
+        Expense expense = expenseService.getExpense(id);
+
+        if (expense == null || !expense.isEditableBy(userService.getCurrentUser()))
+            throw new ResourceNotFoundException();
+
+        model.addAttribute("expense", expense);
         return "expenses/confirmSend";
     }
 }
