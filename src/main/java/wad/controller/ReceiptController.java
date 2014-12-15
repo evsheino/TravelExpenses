@@ -7,8 +7,10 @@ package wad.controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
 import wad.repository.ReceiptRepository;
+import wad.service.ExpenseService;
+import wad.service.ReceiptService;
 import wad.service.UserService;
 
 /**
@@ -39,9 +43,31 @@ public class ReceiptController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ExpenseService expenseService;
+
+    @Autowired
+    private ReceiptService receiptService;
+
     @ModelAttribute("receipt")
     private Receipt getReceipt() {
         return new Receipt();
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public String listReceipts(@PathVariable Long expenseId, Model model) {
+        Expense expense = expenseService.getExpense(expenseId);
+        User currentUser = userService.getCurrentUser();
+
+        if (expense == null || !expense.isViewableBy(currentUser)) {
+            throw new ResourceNotFoundException();
+        }
+
+//        List<Receipt> list = expense.getReceipts();
+        List<Receipt> list = receiptRepository.findAll();       // Olemassa vain testi mielessä. Poista kun toiminto toimii.
+        model.addAttribute("receipts", list);
+
+        return "/expenses/" + expense.getId();
     }
 
     // Remember to add receipt name checking (no two receipts of same name).
@@ -50,6 +76,7 @@ public class ReceiptController {
         Receipt receipt = new Receipt();
         Expense expense = expenseRepository.findOne(expenseId);
 
+        //expense.getReceipts().add(receipt);
         receipt.setName(file.getName());
         receipt.setMediaType(file.getContentType());
         receipt.setSize(file.getSize());
@@ -57,11 +84,9 @@ public class ReceiptController {
         receipt.setSubmitted(new Date());
         receipt.setExpense(expense);
 
-        //expense.getReceipts().add(receipt);
-
         receiptRepository.save(receipt);
-        //expenseRepository.save(expense);
 
+        //expenseRepository.save(expense);
         return "redirect:/expenses/" + expense.getId();
     }
 

@@ -1,6 +1,7 @@
 package wad.controller;
 
 import java.util.Date;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.ExpenseRow;
+import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.CommentRepository;
 import wad.repository.ExpenseRowRepository;
@@ -72,7 +74,7 @@ public class ExpensesController {
     public String listExpenses(Model model, @RequestParam(required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
 
         Page<Expense> page = null;
-        if(status == null) {
+        if (status == null) {
             page = expenseService.getPagedExpenses(pageNumber, DEFAULT_PAGE_SIZE);
         } else {
             model.addAttribute("status", status.toString());
@@ -82,29 +84,30 @@ public class ExpensesController {
         model.addAttribute("paging", new PagingHelper(page));
         model.addAttribute("page", page);
 
-
         return "expenses/list";
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String showExpense(Model model, @PathVariable Long id) {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
 
-        if (expense == null || !expense.isViewableBy(currentUser))
+        if (expense == null || !expense.isViewableBy(currentUser)) {
             throw new ResourceNotFoundException();
+        }
 
         model.addAttribute("statuses", Expense.Status.values());
         model.addAttribute("expense", expense);
         model.addAttribute("expenseRow", new ExpenseRow());
 
-        if (expense.isEditableBy(currentUser))
+        if (expense.isEditableBy(currentUser)) {
             return "expenses/edit";
-        else
+        } else {
             return "expenses/view";
+        }
     }
 
-    @RequestMapping(value="/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newExpense(Model model) {
         model.addAttribute("expense", new Expense());
         return "expenses/new";
@@ -122,8 +125,9 @@ public class ExpensesController {
 
         expenseValidator.validate(expense, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return "expenses/new";
+        }
 
         expense = expenseService.saveExpense(expense);
         status.setComplete();
@@ -136,8 +140,9 @@ public class ExpensesController {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
 
-        if (expense == null || !expense.isEditableBy(currentUser))
+        if (expense == null || !expense.isEditableBy(currentUser)) {
             throw new ResourceNotFoundException();
+        }
 
         expenseService.deleteExpense(expense);
         status.setComplete();
@@ -151,11 +156,13 @@ public class ExpensesController {
 
         User currentUser = userService.getCurrentUser();
 
-        if (expense == null || !expense.isEditableBy(currentUser))
+        if (expense == null || !expense.isEditableBy(currentUser)) {
             throw new ResourceNotFoundException();
+        }
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return "expenses/edit";
+        }
 
         expense = expenseService.saveExpense(expense);
         status.setComplete();
@@ -168,8 +175,9 @@ public class ExpensesController {
         Expense expense = expenseService.getExpense(id);
         User currentUser = userService.getCurrentUser();
 
-        if (expense == null || !expense.isViewableBy(currentUser))
+        if (expense == null || !expense.isViewableBy(currentUser)) {
             throw new ResourceNotFoundException();
+        }
 
         Comment comment = new Comment(expense, currentUser, commentText, new Date());
         commentRepository.save(comment);
