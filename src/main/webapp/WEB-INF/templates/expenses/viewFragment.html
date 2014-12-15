@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="row table-header">
-                    <div class="medium-3 columns">
+                    <div class="medium-2 columns">
                         Employee
                     </div>
                     <div class="medium-2 columns">
@@ -34,25 +34,30 @@
                     <div class="medium-2 columns">
                         End date
                     </div>
+                    <div class="medium-2 columns">
+                        Amount
+                    </div>
                     <div class="medium-3 columns">
                         Modified
                     </div>
-                    <div class="medium-2 columns">
+                    <div class="medium-1 columns">
                         Status
                     </div>
                 </div>
 
                 <div class="table-rows">
                     <div class="row table-row">
-                        <div class="medium-3 columns" th:text="${expense.user.name}">
+                        <div class="medium-2 columns" th:text="${expense.user.name}">
                         </div>
                         <div class="medium-2 columns" th:text="${#calendars.format(expense.startDate,'dd.MM.yyyy')}">
                         </div>
                         <div class="medium-2 columns" th:text="${#calendars.format(expense.endDate,'dd.MM.yyyy')}">
                         </div>
+                        <div class="medium-2 columns" th:text="${expense.amount}">
+                        </div>
                         <div class="medium-3 columns" th:text="${#calendars.format(expense.modified,'dd.MM.yyyy HH:mm')}" >
                         </div>
-                        <div class="medium-2 columns" th:text="${expense.status}">
+                        <div class="medium-1 columns" th:text="${expense.status}">
                         </div>
                     </div>
                     <div class="row table-row">

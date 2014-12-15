@@ -179,6 +179,15 @@ public class ExpenseControllerTests {
         assertNotNull(res.getModelAndView().getModel().get("expense"));
     }
 
+    private void testViewExpenseBeforeSendPageCanBeViewedBy(String username) throws Exception {
+        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId() + "/send").with(user(username)))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("expense"))
+                .andExpect(view().name("expenses/confirmSend")).andReturn();
+
+        assertNotNull(res.getModelAndView().getModel().get("expense"));
+    }
+
     @Test
     public void ownerCanViewExpense() throws Exception {
         testExpenseEditFormCanBeViewedBy(USERNAME);
@@ -195,7 +204,7 @@ public class ExpenseControllerTests {
     }
 
     @Test
-    public void NonOwnerUserCannotViewExpense() throws Exception {
+    public void nonOwnerUserCannotViewExpense() throws Exception {
         mockMvc.perform(get("/expenses/" + expense.getId()).with(user(USERNAME2)))
                 .andExpect(status().is4xxClientError());
     }
@@ -502,4 +511,57 @@ public class ExpenseControllerTests {
         assertEquals(text, comment.getText());
     }
 
+    @Test
+    public void viewExpenseBeforeSendPageWorks() throws Exception {
+        mockMvc.perform(get("/expenses/" + expense.getId() + "/send").session(session))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void ownerCanViewExpenseBeforeSendPage() throws Exception {
+        testViewExpenseBeforeSendPageCanBeViewedBy(USERNAME);
+    }
+
+    @Test
+    public void adminCanViewExpenseBeforeSendPage() throws Exception {
+        testViewExpenseBeforeSendPageCanBeViewedBy(ADMIN_USERNAME);
+    }
+
+    @Test
+    public void nonOwnerUserCannotViewExpenseBeforeSendPage() throws Exception {
+        mockMvc.perform(get("/expenses/" + expense.getId() + "/send").with(user(USERNAME2)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void supervisorCannotViewExpenseBeforeSendPage() throws Exception {
+        mockMvc.perform(get("/expenses/" + expense.getId() + "/send").with(user(SUPERVISOR_USERNAME)))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void ownerCanSendExpenseForApproval() throws Exception {
+        assertEquals(Expense.Status.DRAFT, expense.getStatus());
+
+        String url = "/expenses/" + expense.getId() + "/send";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses/"));
+
+        expense = expenseRepository.findOne(expense.getId());
+        assertEquals(Expense.Status.SENT, expense.getStatus());
+    }
+
+    @Test
+    public void nonOwnerCannotSendExpenseForApproval() throws Exception {
+        assertEquals(Expense.Status.DRAFT, expense.getStatus());
+        session = createSession(USERNAME2, PASSWORD2, expense);
+
+        String url = "/expenses/" + expense.getId() + "/send";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is4xxClientError());
+
+        expense = expenseRepository.findOne(expense.getId());
+        assertEquals(Expense.Status.DRAFT, expense.getStatus());
+    }
 }

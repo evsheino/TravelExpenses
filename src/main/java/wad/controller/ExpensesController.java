@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import wad.service.UserService;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.SessionStatus;
@@ -20,7 +19,6 @@ import wad.domain.ExpenseRow;
 import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.CommentRepository;
-import wad.repository.ExpenseRowRepository;
 import wad.service.ExpenseService;
 import wad.util.PagingHelper;
 import wad.validator.ExpenseValidator;
@@ -41,9 +39,6 @@ public class ExpensesController {
 
     @Autowired
     private ExpenseService expenseService;
-
-    @Autowired
-    private ExpenseRowRepository expenseRowRepository;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -171,8 +166,7 @@ public class ExpensesController {
     }
 
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST)
-    public String addComment(@PathVariable Long id, SessionStatus status, String commentText) {
-        Expense expense = expenseService.getExpense(id);
+    public String addComment(@PathVariable Long id, @ModelAttribute Expense expense, SessionStatus status, String commentText) {
         User currentUser = userService.getCurrentUser();
 
         if (expense == null || !expense.isViewableBy(currentUser)) {
@@ -185,5 +179,31 @@ public class ExpensesController {
         status.setComplete();
 
         return "redirect:/expenses/" + expense.getId();
+    }
+
+    @RequestMapping(value = "/{id}/send", method = RequestMethod.POST)
+    public String sendForApproval(@PathVariable Long id, @ModelAttribute Expense expense, SessionStatus status) {
+        User currentUser = userService.getCurrentUser();
+
+        if (expense == null || !expense.isEditableBy(currentUser))
+            throw new ResourceNotFoundException();
+
+        expense.setStatus(Expense.Status.SENT);
+        expenseService.saveExpense(expense);
+
+        status.setComplete();
+
+        return "redirect:/expenses/";
+    }
+
+    @RequestMapping(value="/{id}/send", method = RequestMethod.GET)
+    public String viewBeforeSend(Model model, @PathVariable Long id) {
+        Expense expense = expenseService.getExpense(id);
+
+        if (expense == null || !expense.isEditableBy(userService.getCurrentUser()))
+            throw new ResourceNotFoundException();
+
+        model.addAttribute("expense", expense);
+        return "expenses/confirmSend";
     }
 }

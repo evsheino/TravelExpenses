@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.repository.CommentRepository;
-import wad.repository.ExpenseRepository;
 import wad.service.ExpenseService;
 import wad.service.UserService;
 import wad.util.PagingHelper;

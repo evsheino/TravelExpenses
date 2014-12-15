@@ -40,11 +40,11 @@ public class ExpenseRowController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String addExpenseRow (@PathVariable Long expenseId, @ModelAttribute ExpenseRow expenseRow,
+    public String addExpenseRow (@PathVariable Long expenseId, @ModelAttribute Expense expense, @ModelAttribute ExpenseRow expenseRow,
             BindingResult bindingResult, RedirectAttributes attrs) {
 
         User user = userService.getCurrentUser();
-        Expense expense = expenseService.getExpense(expenseId);
+        //Expense expense = expenseService.getExpense(expenseId);
 
         if (expense == null || !expense.isEditableBy(user))
             throw new ResourceNotFoundException();

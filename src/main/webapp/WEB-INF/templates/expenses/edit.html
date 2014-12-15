@@ -64,8 +64,9 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <label id="edit-form-submit" class="button radius" for="edit-form-submit-input"><i class="fi-save"></i> Save</label>
+                            <a th:href="@{/expenses/} + ${expense.id} + @{/send}" id="send-button" class="button radius"><i class="fi-mail"></i> Send for approval</a>
                             <a href="#" id="delete-button" data-reveal-id="delete-confirm" class="button alert radius"><i class="fi-trash"></i> Delete</a>
                             
                             <div id="delete-confirm" class="reveal-modal" data-reveal="true" data-options="dismiss_modal_class:close-reveal-modal, .reveal-close;">
@@ -76,6 +77,20 @@
                             <form id="delete-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/delete}">
                                 <input class="button radius small" type="submit" value="Delete" />
                             </form>
+
+                            <fieldset>
+                                <legend style="background: none;">Photo/Scan of receipt</legend>
+                                <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/receipts/}" enctype="multipart/form-data">
+                                    <div class="row">
+                                        <div class="medium-4 columns">
+                                            <input type="file" name="file"/>
+                                        </div>
+                                        <div class="medium-2 columns">
+                                            <input type="submit" class="button radius tiny" value="Add receipt"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </fieldset>
 
                             <div th:include="expenses/commentListFragment :: commentListWithAddForm" />
 

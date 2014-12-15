@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Expense</title>
+    </head>
+    <body>
+
+        <div layout:fragment="content">
+
+            <div class="row page-topic">
+                <div class="medium-12 columns">
+                    <h1>Confirm send</h1>
+                </div>
+            </div>
+
+            <div class="row index-wrapper">
+                <div class="medium-12 columns">
+
+                    <div th:include="expenses/viewFragment :: viewExpense" />
+
+                    <div class="row buttons">
+                        <div class="medium-12 columns">
+                            <label id="send-form-submit-label" class="button radius small" for="send-form-submit"><i class="fi-mail"></i> Send</label>
+                            <a th:href="@{/expenses/} + ${expense.id}" id="cancel-button" class="button radius small"><i class="fi-arrow-left"></i> Back</a>
+                        </div>
+                    </div>
+
+                    <form id="send-form" hidden="hidden" method="POST" th:action="@{/expenses/} + ${expense.id} + @{/send}">
+                        <input id="send-form-submit" class="button" type="submit" value="Send" />
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

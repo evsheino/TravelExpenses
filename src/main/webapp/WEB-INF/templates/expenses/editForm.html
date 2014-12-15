@@ -102,6 +102,7 @@
                 <input id="edit-form-submit-input" type="submit" hidden="hidden" />
             </form>
 
+            <!--
             <fieldset>
                 <legend style="background: none;">Photo/Scan of receipt</legend>
             <form th:method="POST" th:action="@{/expenses/} + ${expense.id} + @{/receipts/}" enctype="multipart/form-data">
@@ -115,7 +116,7 @@
                 </div>
             </form>
             </fieldset>
-            
+           -->
             
         <div>
             <table>
@@ -141,6 +142,7 @@
                 </tbody>
             </table>
         </div>            
+
             <!-- Hidden row delete form -->
             <form hidden="hidden" id="delete-row-form" method="POST" th:action="@{/}" >
                 <input class="button" type="submit radius small" value="Delete" />
