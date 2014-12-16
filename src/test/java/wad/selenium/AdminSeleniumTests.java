@@ -50,6 +50,10 @@ public class AdminSeleniumTests {
     private static final String USER_1_USERNAME = "testuser_1";
     private static final String USER_1_PASSWORD = "password_1";
 
+    private static final String USER_2_NAME = "Test User 2";
+    private static final String USER_2_USERNAME = "testuser_2";
+    private static final String USER_2_PASSWORD = USER_2_USERNAME;
+
     private static final String ADMIN_1_NAME = "Admin User 1";
     private static final String ADMIN_1_USERNAME = "admin_user_1";
     private static final String ADMIN_1_PASSWORD = "admin_user_1";
@@ -95,9 +99,9 @@ public class AdminSeleniumTests {
         assertTrue(driver.getPageSource().contains("Sign in"));
 
         WebElement element = driver.findElement(By.name("username"));
-        element.sendKeys(USER_1_USERNAME);
+        element.sendKeys(username);
         element = driver.findElement(By.name("password"));
-        element.sendKeys(USER_1_PASSWORD);
+        element.sendKeys(password);
 
         element = driver.findElement(By.id("login-form"));
         element.submit();
@@ -146,6 +150,52 @@ public class AdminSeleniumTests {
         assertTrue(savedUser.getPasswordExpired());
         assertTrue(savedUser.isUser());
         assertTrue(savedUser.isSupervisor());
+        assertTrue(savedUser.isAdmin());
+    }
+
+    @Test
+    public void adminCanAddUser() throws Exception {
+        driver.get(ADMIN_BASE_URI + "/user/new");
+
+        WebElement element = driver.findElement(By.name("name"));
+        element.sendKeys(USER_2_NAME);
+
+        element = driver.findElement(By.name("username"));
+        element.sendKeys(USER_2_USERNAME);
+
+        //element = driver.findElement(By.id("force-password"));
+        //assertFalse(element.isSelected());
+        //element.click();
+
+        element = driver.findElement(By.id("role-user"));
+        element.click();
+
+        element = driver.findElement(By.id("role-admin"));
+        element.click();
+
+        element = driver.findElement(By.id("admin-user-data-form-submit"));
+        element.click();
+
+
+        assertEquals(USERS_URI, driver.getCurrentUrl());
+
+
+        //String source = driver.getPageSource();
+        //assertTrue(source.contains("/admin/user/"+ user.getId()));
+        //assertTrue(source.contains("/admin/user/"+ admin.getId()));
+
+//        WebElement element = driver.findElement(By.xpath("//a[@href=\"/admin/user/"+ user.getId() +"\"]"));
+//        element.click();
+
+        //assertEquals(ADMIN_BASE_URI + "/user/"+ user.getId(), driver.getCurrentUrl());
+
+
+
+
+        User savedUser = userRepository.findByUsername(USER_2_USERNAME);
+        assertTrue(savedUser.getPasswordExpired());
+        assertTrue(savedUser.isUser());
+        assertFalse(savedUser.isSupervisor());
         assertTrue(savedUser.isAdmin());
     }
 

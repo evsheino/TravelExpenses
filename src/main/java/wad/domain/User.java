@@ -47,6 +47,9 @@ public class User extends AbstractPersistable<Long> {
     }
 
     public boolean hasRole(Authority.Role role) {
+        if(authorities == null || authorities.isEmpty()) {
+            return false;
+        }
         for (Authority auth : this.getAuthorities()) {
             if (auth.isRole(role)) {
                 return true;

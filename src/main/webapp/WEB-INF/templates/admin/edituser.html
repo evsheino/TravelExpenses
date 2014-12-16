@@ -28,7 +28,9 @@
         <div class="medium-12 columns">
 
         <div class="admin-user-data">
-        <form data-abide="" id="admin-user-data-form" method="POST" th:action="@{/admin/user/} + ${user.id} + @{/save}">
+        <form data-abide="" id="admin-user-data-form"
+              th:with="targetUrl=(${user.id != null}? @{/admin/user/} + ${user.id} + @{/save} : @{/admin/user/new/save})"
+              method="POST" th:action="@{${targetUrl}}">
             <input type="hidden" id="id" name="id" th:value="${user.id}"/>
             <div class="row">
                 <div class="medium-12 columns">
@@ -42,23 +44,6 @@
                     </div>
                 </div>
             </div>
-
-            <!--
-            <div class="row" th:if="${user.id == null}">
-                <div class="medium-6 columns">
-                    <div class="password-field">
-                        <label>Password <small>required</small> <input type="password" id="password" name="password" placeholder="Password" required="" autocomplete="off"/> </label>
-                        <small class="error">Your password must match the requirements</small>
-                    </div>
-                </div>
-                <div class="medium-6 columns">
-                    <div class="password-confirmation-field">
-                        <label>Repeat password <small>required</small> <input type="password" required="" placeholder="Repeat password" data-equalto="password" autocomplete="off"/> </label>
-                        <small class="error">The password did not match</small>
-                    </div>
-                </div>
-            </div>
-            -->
 
             <div class="row" th:if="${user.id != null}">
                 <div class="medium-12 columns">
@@ -84,8 +69,8 @@
                 <div class="medium-12 columns">
                     <label>Supervisor</label>
                     <div class="switch radius">
-                        <input id="role-admin" type="checkbox" name="roles" value="ROLE_SUPERVISOR" th:checked="${user.isSupervisor()}"/>
-                        <label for="role-admin"></label>
+                        <input id="role-supervisor" type="checkbox" name="roles" value="ROLE_SUPERVISOR" th:checked="${user.isSupervisor()}"/>
+                        <label for="role-supervisor"></label>
                     </div>
                 </div>
             </div>
@@ -94,8 +79,8 @@
                 <div class="medium-12 columns">
                     <label>Admin</label>
                     <div class="switch radius">
-                        <input id="role-supervisor" type="checkbox" name="roles" value="ROLE_ADMIN" th:checked="${user.isAdmin()}"/>
-                        <label for="role-supervisor"></label>
+                        <input id="role-admin" type="checkbox" name="roles" value="ROLE_ADMIN" th:checked="${user.isAdmin()}"/>
+                        <label for="role-admin"></label>
                     </div>
                 </div>
             </div>
@@ -106,7 +91,7 @@
                     <a href="#" class="button radius" id="admin-user-data-form-submit">Save</a>
                     <a href="#" class="button radius" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
                 </div>
-                <div class="medium-2 columns">
+                <div class="medium-2 columns" th:if="${user.id != null}">
                     <a href="#" class="button radius" th:href="@{/admin/user/} + ${user.id} + @{/resetpassword}">Reset password</a>
                 </div>
             </div>
