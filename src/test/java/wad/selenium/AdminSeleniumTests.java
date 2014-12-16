@@ -163,10 +163,6 @@ public class AdminSeleniumTests {
         element = driver.findElement(By.name("username"));
         element.sendKeys(USER_2_USERNAME);
 
-        //element = driver.findElement(By.id("force-password"));
-        //assertFalse(element.isSelected());
-        //element.click();
-
         element = driver.findElement(By.id("role-user"));
         element.click();
 
@@ -176,21 +172,7 @@ public class AdminSeleniumTests {
         element = driver.findElement(By.id("admin-user-data-form-submit"));
         element.click();
 
-
         assertEquals(USERS_URI, driver.getCurrentUrl());
-
-
-        //String source = driver.getPageSource();
-        //assertTrue(source.contains("/admin/user/"+ user.getId()));
-        //assertTrue(source.contains("/admin/user/"+ admin.getId()));
-
-//        WebElement element = driver.findElement(By.xpath("//a[@href=\"/admin/user/"+ user.getId() +"\"]"));
-//        element.click();
-
-        //assertEquals(ADMIN_BASE_URI + "/user/"+ user.getId(), driver.getCurrentUrl());
-
-
-
 
         User savedUser = userRepository.findByUsername(USER_2_USERNAME);
         assertTrue(savedUser.getPasswordExpired());

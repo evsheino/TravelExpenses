@@ -11,7 +11,6 @@ import wad.service.UserService;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -65,25 +64,15 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
-    private Authority.Role[] parseRoles(String ... roles) {
-        Authority.Role[] userRoles = new Authority.Role[roles.length];
-        for(int i = 0; i < roles.length; i++) {
-            userRoles[i] = Authority.Role.valueOf(roles[i]);
-        }
-        return userRoles;
-    }
-
     @RequestMapping(value="/user/{id}/resetpassword", method = RequestMethod.GET)
     public String resetPassword(Model model, @PathVariable Long id) {
         User user = userRepository.findOne(id);
-        //UUID uuid = UUID.randomUUID();
+        String tempPassword = new BigInteger(130, new SecureRandom()).toString(32);
 
-        String uuid = new BigInteger(130, new SecureRandom()).toString(32);
-
-        user.setPassword(uuid);
+        user.setPassword(tempPassword);
         user.setPasswordExpired(Boolean.TRUE);
         user = userRepository.save(user);
-        model.addAttribute("uuid", uuid);
+        model.addAttribute("tempPassword", tempPassword);
         model.addAttribute("user", user);
         return "/admin/resetpassword";
     }
