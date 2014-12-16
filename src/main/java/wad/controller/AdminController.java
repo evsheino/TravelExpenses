@@ -9,6 +9,10 @@ import wad.domain.User;
 import wad.repository.UserRepository;
 import wad.service.UserService;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.UUID;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -56,6 +60,24 @@ public class AdminController {
     public String editUser(Model model, @PathVariable Long id) {
         model.addAttribute("user", userRepository.findOne(id));
         return "admin/edituser";
+    }
+
+    @RequestMapping(value="/user/{id}/resetpassword", method = RequestMethod.GET)
+    public String resetPassword(Model model, @PathVariable Long id) {
+        User user = userRepository.findOne(id);
+        //UUID uuid = UUID.randomUUID();
+
+        String uuid = new BigInteger(130, new SecureRandom()).toString(32);
+
+        user.setPassword(uuid);
+        user.setPasswordExpired(Boolean.TRUE);
+        userRepository.save(user);
+
+        model.addAttribute("uuid", uuid);
+        model.addAttribute("user", user);
+        // Create password save it to user and set force change password
+
+        return "/admin/resetpassword";
     }
 
     @RequestMapping(value="/user/{id}/save", method = RequestMethod.POST)

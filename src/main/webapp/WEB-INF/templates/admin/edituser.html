@@ -101,10 +101,13 @@
             </div>
 
             <div class="row">
-                <div class="medium-12 columns">
+                <div class="medium-10 columns">
                     <input type="submit" style="display: none; visibility: hidden;"/>
                     <a href="#" class="button radius" id="admin-user-data-form-submit">Save</a>
                     <a href="#" class="button radius" id="admin-user-data-form-cancel" style="background-color: red;" th:href="@{/admin/users}">Cancel</a>
+                </div>
+                <div class="medium-2 columns">
+                    <a href="#" class="button radius" th:href="@{/admin/user/} + ${user.id} + @{/resetpassword}">Reset password</a>
                 </div>
             </div>
         </form>
