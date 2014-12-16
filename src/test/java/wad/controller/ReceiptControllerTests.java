@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author teemu
  */
 
 
-
-/*
 package wad.controller;
 
 import java.text.SimpleDateFormat;
@@ -19,13 +11,13 @@ import java.util.Date;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -43,17 +35,13 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 import wad.Application;
 import wad.domain.Authority;
-import wad.domain.Comment;
 import wad.domain.Expense;
 import wad.domain.ExpenseRow;
 import wad.domain.Receipt;
 import wad.domain.User;
-import wad.repository.CommentRepository;
 import wad.repository.ExpenseRepository;
-import wad.repository.ExpenseRowRepository;
 import wad.repository.ReceiptRepository;
 
 
@@ -94,14 +82,8 @@ public class ReceiptControllerTests {
     private ExpenseRepository expenseRepository;
 
     @Autowired
-    private CommentRepository commentRepository;
-
-    @Autowired
     private ReceiptRepository receiptRepository;
     
-    @Autowired
-    private ExpenseRowRepository rowRepository;    
-            
     @Autowired
     private UserService userService;
 
@@ -117,12 +99,12 @@ public class ReceiptControllerTests {
 
     private ExpenseRow row;
     private ExpenseRow unsavedRow;
+
+    private MockMultipartFile file;
     
-    private long initialRowCount;    
-
-    private long initialExpenseCount;
-
     private MockHttpSession session;
+
+    private long initialReceiptCount;
 
     @Before
     public void setUp() throws Exception {
@@ -158,17 +140,14 @@ public class ReceiptControllerTests {
         unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 
-        row = new ExpenseRow();
-        row.setAmount(20.0);
-        row.setDate(f.parse("21/09/2014"));
-        row.setDescription("row description");
+        String filename = "receipt.pdf";
+        String name = "file";
+        String type = "application/pdf";
+        String content = "this is not a valid pdf but whatever";
 
-        unsavedRow = new ExpenseRow();
-        unsavedRow.setAmount(34.5);
-        unsavedRow.setDate(f.parse("22/09/2014"));
-        unsavedRow.setDescription("unsaved row description");
+        file = new MockMultipartFile(name, filename, type, content.getBytes());
 
-        initialRowCount = rowRepository.count();
+        initialReceiptCount = receiptRepository.count();
     }  
     
     private MockHttpSession createSession(String username, String password, Expense exp) throws Exception {
@@ -186,11 +165,11 @@ public class ReceiptControllerTests {
     
     @After
     public void cleanup() {
-        userRepository.deleteAll();
+        receiptRepository.deleteAll();
         expenseRepository.deleteAll();
-        rowRepository.deleteAll();
+        userRepository.deleteAll();
     }
-    
+
     
     @Test
     public void postAddNewReceiptToTheExpense() throws Exception {
@@ -201,14 +180,11 @@ public class ReceiptControllerTests {
         session = createSession(USERNAME, PASSWORD, expense);
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
-        String url = "/expenses/" + expense.getId() + "/rows";
+        String url = "/expenses/" + expense.getId() + "/receipts";
 
-        // Miten testillä tehdään lisääminen???
-        MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
-                .param("amount", unsavedRow.getAmount().toString())
-                .param("date", f.format(unsavedRow.getDate()))
-                .param("description", unsavedRow.getDescription()))
+        MvcResult res = mockMvc.perform(fileUpload(url).file(file).session(session).with(csrf()))
                 .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses/" + expense.getId()))
                 .andReturn();
 
         assertEquals("There should be a new Receipt in the database after creating a new one.",
@@ -216,13 +192,36 @@ public class ReceiptControllerTests {
 
         Receipt posted = receiptRepository.findAll().get(0);
 
-        assertEquals("redirect:/expenses/" + expense.getId(), res.getModelAndView().getViewName());
-
-        // Toinen muutettava kohta.
-        assertEquals(unsavedRow.getAmount(), posted.getAmount());
-        assertEquals(unsavedRow.getDescription(), posted.getDescription());
-        assertEquals(f.format(unsavedRow.getDate()), f.format(posted.getDate()));
-        assertEquals(expense.getId(), posted.getExpense().getId());
+        assertEquals(file.getContentType(), posted.getMediaType());
+        assertEquals(expense, posted.getExpense());
+        assertEquals(file.getSize(), (long) posted.getSize());
+        assertEquals(f.format(new Date()), f.format(posted.getSubmitted()));
+        assertEquals(new String(file.getBytes()), new String(posted.getContent()));
     }    
+
+    @Test
+    public void deleteReceiptDeletesReceipt() throws Exception {
+        expense = expenseRepository.save(expense);
+        session = createSession(USERNAME, PASSWORD, expense);
+
+        Receipt receipt = new Receipt();
+        receipt.setContent(file.getBytes());
+        receipt.setExpense(expense);
+        receipt.setMediaType(file.getContentType());
+        receipt.setName(file.getName());
+        receipt.setSize(file.getSize());
+        receipt.setSubmitted(new Date());
+
+        receipt = receiptRepository.save(receipt);
+
+        assertEquals(initialReceiptCount + 1, receiptRepository.count());
+
+        String url = "/expenses/" + expense.getId() + "/receipts/" + receipt.getId() + "/delete";
+        mockMvc.perform(post(url).session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses/" + expense.getId()));
+
+        assertEquals("After deleting a Receipt, there should be one less Receipt in the database.",
+                initialReceiptCount, receiptRepository.count());
+    }
 }
-*/
