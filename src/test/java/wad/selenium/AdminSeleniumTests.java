@@ -39,12 +39,8 @@ public class AdminSeleniumTests {
 
     private final String LOGIN_URI = "http://localhost:8080/login";
 
-    private final String DATE_FORMAT = "dd/MM/yyyy";
-
     private final String ADMIN_BASE_URI = "http://localhost:8080/admin";
     private final String USERS_URI = ADMIN_BASE_URI + "/users";
-
-    private final String DESCRIPTION = "blaa blaa blah";
 
     private static final String USER_1_NAME = "Test User 1";
     private static final String USER_1_USERNAME = "testuser_1";
@@ -52,7 +48,6 @@ public class AdminSeleniumTests {
 
     private static final String USER_2_NAME = "Test User 2";
     private static final String USER_2_USERNAME = "testuser_2";
-    private static final String USER_2_PASSWORD = USER_2_USERNAME;
 
     private static final String ADMIN_1_NAME = "Admin User 1";
     private static final String ADMIN_1_USERNAME = "admin_user_1";
@@ -87,7 +82,6 @@ public class AdminSeleniumTests {
     public void setUp() throws Exception {
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
         admin = userService.createUser(ADMIN_1_NAME, ADMIN_1_USERNAME, ADMIN_1_PASSWORD, Authority.Role.ROLE_USER, Authority.Role.ROLE_ADMIN);
-        // Use FirefoxDriver for JavaScript support.
         driver = new FirefoxDriver();
         performLogin(ADMIN_1_USERNAME, ADMIN_1_PASSWORD);
 

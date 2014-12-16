@@ -26,12 +26,10 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @ActiveProfiles("test")
 public class AccountSettingsSeleniumTests {
-
     private final String LOGIN_URI = "http://localhost:8080/login";
     private final String LOGOUT_URI = "http://localhost:8080/logout";
 
     private final String ACCOUNT_SETTINGS_URI = "http://localhost:8080/account";
-    //private final String USERS_URI = ADMIN_BASE_URI + "/users";
 
     private static final String USER_1_NAME = "Test User 1";
     private static final String USER_1_USERNAME = "testuser_1";
@@ -64,10 +62,8 @@ public class AccountSettingsSeleniumTests {
     @Before
     public void setUp() throws Exception {
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
-        // Use FirefoxDriver for JavaScript support.
         driver = new FirefoxDriver();
         performLogin(USER_1_USERNAME, USER_1_PASSWORD);
-
     }
 
     private void performLogin(String username, String password) {
@@ -114,7 +110,6 @@ public class AccountSettingsSeleniumTests {
         // Login with old password fails
         performLogin(USER_1_USERNAME, USER_1_PASSWORD);
         assertTrue(driver.getPageSource().contains("Invalid username and password."));
-        //assertEquals(ACCOUNT_SETTINGS_URI +"?error", driver.getCurrentUrl());
 
         // Login with new password
         performLogin(USER_1_USERNAME, USER_1_NEW_PASSWORD);

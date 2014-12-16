@@ -46,13 +46,11 @@ public class AccountSettingsController {
     @RequestMapping(value = "/password/save", method = RequestMethod.POST)
     public String changePassword(HttpServletRequest request, @RequestParam String newPassword) {
         User user = userService.getCurrentUser();
-
         user.setPassword(newPassword);
         user.setPasswordExpired(Boolean.FALSE);
         userRepository.save(user);
 
         request.getSession().setAttribute(ForcePasswordChangeAuthenticationSuccessHandler.SESSION_KEY_FORCE_PASSWORD_CHANGE, Boolean.FALSE);
-
         return "redirect:/index";
     }
 
