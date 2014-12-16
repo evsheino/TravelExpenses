@@ -35,7 +35,7 @@
                             <div class="row table-row" th:each="receipt : ${receipts}">
                                 <div class="medium-3 columns">
                                     <span class="show-for-small-only small-table-header">Name: </span>
-                                    <a th:href="@{/receipts/{id}(id=${receipt.id})}"><span th:text="${receipt.name}">receipt name</span></a>
+                                    <a th:href="@{/expenses/{expenseId}/receipts/{id}(expenseId=${expense.id}, id=${receipt.id})}"><span th:text="${receipt.name}">receipt name</span></a>
                                 </div>
                                 <div class="medium-1 columns">
                                     <span class="show-for-small-only small-table-header">Size: </span>
