@@ -46,7 +46,7 @@ public class User extends AbstractPersistable<Long> {
         setPassword(password);
     }
 
-    private boolean hasRole(Authority.Role role) {
+    public boolean hasRole(Authority.Role role) {
         for (Authority auth : this.getAuthorities()) {
             if (auth.isRole(role)) {
                 return true;

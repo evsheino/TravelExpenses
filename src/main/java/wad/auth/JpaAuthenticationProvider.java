@@ -37,6 +37,10 @@ public class JpaAuthenticationProvider implements AuthenticationProvider {
             };
         }
 
+        if(user.getAuthorities().isEmpty()) {
+            throw new AuthenticationException("User " + username + " lacks sufficient authorities to log in the system.") {};
+        }
+
         return new UsernamePasswordAuthenticationToken(user.getUsername(), password, user.getAuthorities());
     }
 

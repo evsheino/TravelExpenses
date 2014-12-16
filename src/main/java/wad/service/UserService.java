@@ -38,8 +38,10 @@ public class UserService {
         // Delete old authorities
         authorityRepository.deleteAuthoritiesByUser(user);
         //Assign new authorities
-        for(Authority.Role role : roles) {
-            user.getAuthorities().add(new Authority(user, role));
+        if(roles != null) {
+            for(Authority.Role role : roles) {
+                user.getAuthorities().add(new Authority(user, role));
+            }
         }
         return userRepository.save(user);
     }
