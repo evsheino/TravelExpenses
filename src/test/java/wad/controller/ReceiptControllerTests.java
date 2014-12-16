@@ -95,12 +95,11 @@ public class ReceiptControllerTests {
     private User supervisor;
 
     private Expense expense;
-    private Expense unsavedExpense;
 
     private ExpenseRow row;
-    private ExpenseRow unsavedRow;
 
     private MockMultipartFile file;
+    private Receipt receipt;
     
     private MockHttpSession session;
 
@@ -131,14 +130,9 @@ public class ReceiptControllerTests {
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
+        expense = expenseRepository.save(expense);
 
-        unsavedExpense = new Expense();
-        unsavedExpense.setUser(user);
-        unsavedExpense.setStartDate(f.parse("01/10/2014"));
-        unsavedExpense.setEndDate(f.parse("20/11/2014"));
-        unsavedExpense.setDescription("blaa blaa");
-        unsavedExpense.setStatus(Expense.Status.DRAFT);
-        unsavedExpense.setModified(new Date());
+        session = createSession(USERNAME, PASSWORD, expense);
 
         String filename = "receipt.pdf";
         String name = "file";
@@ -146,6 +140,14 @@ public class ReceiptControllerTests {
         String content = "this is not a valid pdf but whatever";
 
         file = new MockMultipartFile(name, filename, type, content.getBytes());
+
+        receipt = new Receipt();
+        receipt.setContent(file.getBytes());
+        receipt.setExpense(expense);
+        receipt.setMediaType(file.getContentType());
+        receipt.setName(file.getName());
+        receipt.setSize(file.getSize());
+        receipt.setSubmitted(new Date());
 
         initialReceiptCount = receiptRepository.count();
     }  
@@ -170,14 +172,21 @@ public class ReceiptControllerTests {
         userRepository.deleteAll();
     }
 
+    @Test
+    public void userCanGetReceipt() throws Exception {
+        receipt = receiptRepository.save(receipt);
+
+        MvcResult res = mockMvc.perform(get("/expenses/" + expense.getId() + "/receipts/" + receipt.getId()).session(session))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        assertEquals(new String(file.getBytes()), res.getResponse().getContentAsString());
+    }
     
     @Test
     public void postAddNewReceiptToTheExpense() throws Exception {
         receiptRepository.deleteAll();
         assertEquals(0, receiptRepository.count());
-
-        expense = expenseRepository.save(expense);
-        session = createSession(USERNAME, PASSWORD, expense);
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         String url = "/expenses/" + expense.getId() + "/receipts";
@@ -201,17 +210,6 @@ public class ReceiptControllerTests {
 
     @Test
     public void deleteReceiptDeletesReceipt() throws Exception {
-        expense = expenseRepository.save(expense);
-        session = createSession(USERNAME, PASSWORD, expense);
-
-        Receipt receipt = new Receipt();
-        receipt.setContent(file.getBytes());
-        receipt.setExpense(expense);
-        receipt.setMediaType(file.getContentType());
-        receipt.setName(file.getName());
-        receipt.setSize(file.getSize());
-        receipt.setSubmitted(new Date());
-
         receipt = receiptRepository.save(receipt);
 
         assertEquals(initialReceiptCount + 1, receiptRepository.count());
