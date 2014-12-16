@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,7 +25,6 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wad.domain.Expense;
-import wad.domain.ExpenseRow;
 import wad.domain.Receipt;
 import wad.domain.User;
 import wad.repository.ExpenseRepository;
@@ -62,6 +65,23 @@ public class ReceiptController {
     @ModelAttribute("receipt")
     private Receipt getReceipt() {
         return new Receipt();
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> showReceipt(@PathVariable Long expenseId, @PathVariable Long id) {
+        Receipt receipt = receiptRepository.findOne(id);
+        Expense expense = expenseService.getExpense(expenseId);
+
+        if (expense == null || !expense.isViewableBy(userService.getCurrentUser())) {
+            throw new ResourceNotFoundException();
+        }
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(receipt.getMediaType()));
+        headers.setContentLength(receipt.getSize());
+        headers.add("Content-Disposition", "attachment; filename=" + receipt.getName());
+
+        return new ResponseEntity<>(receipt.getContent(), headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.POST)
