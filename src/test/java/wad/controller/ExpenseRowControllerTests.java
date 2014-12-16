@@ -135,10 +135,7 @@ public class ExpenseRowControllerTests {
         row.setDate(f.parse("21/09/2014"));
         row.setDescription("row description");
 
-        unsavedRow = new ExpenseRow();
-        unsavedRow.setAmount(new BigDecimal("34.5"));
-        unsavedRow.setDate(f.parse("22/09/2014"));
-        unsavedRow.setDescription("unsaved row description");
+        unsavedRow = new ExpenseRow(null, new BigDecimal("34.5"), "usaved row description", f.parse("22/09/2014"));
 
         initialRowCount = rowRepository.count();
     }
