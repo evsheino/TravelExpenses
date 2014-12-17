@@ -38,11 +38,11 @@ public class ExpenseService {
        expenseRepository.delete(exp);
     }
 
-    public Expense createExpense(Date startDate, Date endDate, double amount, String description, Expense.Status status) {
-        return createExpense(userService.getCurrentUser(), startDate, endDate, amount, description, status);
+    public Expense createExpense(Date startDate, Date endDate, String description, Expense.Status status) {
+        return createExpense(userService.getCurrentUser(), startDate, endDate, description, status);
     }
 
-    public Expense createExpense(User user, Date startDate, Date endDate, double amount, String description, Expense.Status status) {
+    public Expense createExpense(User user, Date startDate, Date endDate, String description, Expense.Status status) {
         Expense e = new Expense();
         e.setStartDate(startDate);
         e.setEndDate(endDate);

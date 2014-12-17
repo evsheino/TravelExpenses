@@ -57,7 +57,7 @@ public class DevProfile extends BaseProfile {
     private void generateExpenses(User user, int numOfExpenses, Expense.Status status) {
         user.setExpenses(new ArrayList<Expense>());
         for(int i = 0; i < numOfExpenses; i++) {
-            Expense e = expenseService.createExpense(user, new Date(), new Date(), (i^2), user.getName() + " blaab", status);
+            Expense e = expenseService.createExpense(user, new Date(), new Date(), user.getName() + " blaab", status);
             generateExpenseRows(e, i);
         }
     }

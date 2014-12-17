@@ -88,7 +88,7 @@ public class ExpenseSeleniumTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
-        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("02/09/2014"), 20.0, DESCRIPTION, Expense.Status.DRAFT);
+        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("02/09/2014"), DESCRIPTION, Expense.Status.DRAFT);
 
         driver.get(LOGIN_URI);
 
@@ -110,7 +110,7 @@ public class ExpenseSeleniumTests {
         userRepository.deleteAll();
         driver.quit();
     }
-    
+
     @Test
     public void expensePageHasCorrectInformation() throws Exception {
         driver.get(EXPENSES_URI + expense.getId());

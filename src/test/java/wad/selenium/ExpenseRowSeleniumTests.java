@@ -91,7 +91,7 @@ public class ExpenseRowSeleniumTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
-        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), 20.0, DESCRIPTION, Expense.Status.DRAFT);
+        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), DESCRIPTION, Expense.Status.DRAFT);
 
         row = new ExpenseRow();
         row.setAmount(new BigDecimal("20.5"));
@@ -125,7 +125,7 @@ public class ExpenseRowSeleniumTests {
         rowRepository.deleteAll();
         driver.quit();
     }
-    
+
     @Test
     public void expensePageHasCorrectRowInformation() throws Exception {
         driver.get(EXPENSES_URI + expense.getId());
@@ -203,7 +203,7 @@ public class ExpenseRowSeleniumTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         expenseRepository.deleteAll();
-        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), 20.0, DESCRIPTION, Expense.Status.DRAFT);
+        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("04/09/2014"), DESCRIPTION, Expense.Status.DRAFT);
 
         assertEquals(0, rowRepository.count());
 
