@@ -85,6 +85,8 @@ public class ExpenseTests {
         expense.setDescription("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
+        expense.setComments(null);
+        expense.setExpenseRows(null);
         expense = expenseRepository.save(expense);
     }
 
