@@ -209,6 +209,24 @@ public class ReceiptControllerTests {
     }    
 
     @Test
+    public void uploadWithUnsupportedContentTypeIsNowSaved() throws Exception {
+        assertEquals(initialReceiptCount, receiptRepository.count());
+
+        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+        String url = "/expenses/" + expense.getId() + "/receipts";
+
+        file = new MockMultipartFile("file", "virus.exe", "application/octet-stream", "virus".getBytes());
+
+        MvcResult res = mockMvc.perform(fileUpload(url).file(file).session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/expenses/" + expense.getId()))
+                .andReturn();
+
+        assertEquals("There should not be a new Receipt in the database after trying to upload one with an unsupported content type.",
+                initialReceiptCount, receiptRepository.count());
+    }    
+
+    @Test
     public void deleteReceiptDeletesReceipt() throws Exception {
         receipt = receiptRepository.save(receipt);
 
