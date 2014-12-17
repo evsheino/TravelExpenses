@@ -123,6 +123,11 @@
                     <maxmem>256m</maxmem>
                     <!-- aggregated reports for multi-module projects -->
                     <aggregate>true</aggregate>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>wad/profiles/*</exclude>
+                        </excludes>
+                    </instrumentation>
                 </configuration>
             </plugin>
             <!-- kopioidaan testien käännösvaiheessa templatet target-kansioon;
