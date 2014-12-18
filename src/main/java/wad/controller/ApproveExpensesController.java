@@ -69,7 +69,6 @@ public class ApproveExpensesController {
 
         Comment comment = new Comment(expense, userService.getCurrentUser(), commentText, new Date());
         commentRepository.save(comment);
-        //expense.getComments().add(comment);
 
         updateStatus(expense, Expense.Status.REJECTED);
         return "redirect:/expenses/approve/list";
@@ -81,6 +80,7 @@ public class ApproveExpensesController {
     }
 
     private void updateStatus(Expense expense, Expense.Status status) {
+        expense.setSupervisor(userService.getCurrentUser());
         expense.setStatus(status);
         expenseService.saveExpense(expense);
     }

@@ -165,6 +165,7 @@ public class ApproveExpensesControllerTests {
         expense = expenseRepository.findOne(expense.getId());
 
         assertEquals(Expense.Status.APPROVED, expense.getStatus());
+        assertEquals(supervisor.getId(), expense.getSupervisor().getId());
     }
 
     @Test
@@ -184,6 +185,7 @@ public class ApproveExpensesControllerTests {
         Comment comment = commentRepository.findAll().get(0);
 
         assertEquals(Expense.Status.REJECTED, expense.getStatus());
+        assertEquals(supervisor.getId(), expense.getSupervisor().getId());
         assertEquals(text, comment.getText());
     }
 
