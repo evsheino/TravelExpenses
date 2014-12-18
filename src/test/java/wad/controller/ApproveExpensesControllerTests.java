@@ -117,7 +117,7 @@ public class ApproveExpensesControllerTests {
         expense.setUser(user);
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.SENT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
@@ -126,7 +126,7 @@ public class ApproveExpensesControllerTests {
         unsavedExpense.setUser(user);
         unsavedExpense.setStartDate(f.parse("01/10/2014"));
         unsavedExpense.setEndDate(f.parse("20/11/2014"));
-        unsavedExpense.setDescription("blaa blaa");
+        unsavedExpense.setSummary("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 

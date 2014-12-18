@@ -119,7 +119,7 @@ public class ExpenseSeleniumTests {
 
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
-        assertTrue(content.contains(expense.getDescription()));
+        assertTrue(content.contains(expense.getSummary()));
         assertTrue(content.contains(expense.getAmount().toString()));
         assertTrue(content.contains(f.format(expense.getStartDate())));
         assertTrue(content.contains(f.format(expense.getEndDate())));
@@ -135,7 +135,7 @@ public class ExpenseSeleniumTests {
 
         driver.get(EXPENSES_URI + expense.getId());
 
-        WebElement element = driver.findElement(By.name("description"));
+        WebElement element = driver.findElement(By.name("summary"));
         element.clear();
         element.sendKeys(desc);
         element = driver.findElement(By.name("startDate"));
@@ -160,12 +160,12 @@ public class ExpenseSeleniumTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         assertEquals(startDate, f.format(updated.getStartDate()));
         assertEquals(endDate, f.format(updated.getEndDate()));
-        assertEquals(desc, updated.getDescription());
+        assertEquals(desc, updated.getSummary());
 
         // Check that the page has the updated Expense.
         String content = driver.getPageSource();
 
-        assertTrue(content.contains(updated.getDescription()));
+        assertTrue(content.contains(updated.getSummary()));
         assertTrue(content.contains(updated.getAmount().toString()));
         assertTrue(content.contains(f.format(updated.getStartDate())));
         assertTrue(content.contains(f.format(updated.getEndDate())));
@@ -204,7 +204,7 @@ public class ExpenseSeleniumTests {
 
         driver.get(EXPENSES_URI + "new");
 
-        WebElement element = driver.findElement(By.name("description"));
+        WebElement element = driver.findElement(By.name("summary"));
         element.clear();
         element.sendKeys(desc);
         element = driver.findElement(By.name("startDate"));
@@ -228,13 +228,13 @@ public class ExpenseSeleniumTests {
         SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         assertEquals(startDate, f.format(expense.getStartDate()));
         assertEquals(endDate, f.format(expense.getEndDate()));
-        assertEquals(desc, expense.getDescription());
+        assertEquals(desc, expense.getSummary());
         assertEquals(new BigDecimal(0), expense.getAmount());
 
         // Check that the page has the correct information.
         String content = driver.getPageSource();
 
-        assertTrue(content.contains(expense.getDescription()));
+        assertTrue(content.contains(expense.getSummary()));
         assertTrue(content.contains(expense.getAmount().toString()));
         assertTrue(content.contains(f.format(expense.getStartDate())));
         assertTrue(content.contains(f.format(expense.getEndDate())));
@@ -284,7 +284,7 @@ public class ExpenseSeleniumTests {
 
         SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy");
 
-        assertTrue(content.contains(expense.getDescription()));
+        assertTrue(content.contains(expense.getSummary()));
         assertTrue(content.contains(f.format(expense.getStartDate())));
         assertTrue(content.contains(f.format(expense.getEndDate())));
         assertTrue(content.contains(expense.getAmount().toString()));

@@ -118,7 +118,7 @@ public class ExpenseRowControllerTests {
         expense.setUser(user);
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
 
@@ -126,7 +126,7 @@ public class ExpenseRowControllerTests {
         unsavedExpense.setUser(user);
         unsavedExpense.setStartDate(f.parse("01/10/2014"));
         unsavedExpense.setEndDate(f.parse("20/11/2014"));
-        unsavedExpense.setDescription("blaa blaa");
+        unsavedExpense.setSummary("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 
@@ -280,7 +280,7 @@ public class ExpenseRowControllerTests {
         String desc = "do not delete this";
 
         expense.setStatus(Expense.Status.DRAFT);
-        expense.setDescription("expense desc");
+        expense.setSummary("expense desc");
         expense = expenseRepository.save(expense);
 
         row.setExpense(expense);

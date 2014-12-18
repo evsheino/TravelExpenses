@@ -34,7 +34,7 @@ public class Expense extends AbstractPersistable<Long> {
     }
 
     @NotBlank
-    private String description;
+    private String summary;
 
     @NotNull
     private Status status;
@@ -155,12 +155,12 @@ public class Expense extends AbstractPersistable<Long> {
         this.user = user;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public Status getStatus() {

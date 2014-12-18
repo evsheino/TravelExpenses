@@ -127,7 +127,7 @@ public class ReceiptControllerTests {
         expense.setUser(user);
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);

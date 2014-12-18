@@ -58,7 +58,7 @@
                         </div>
                         <div class="medium-5 columns">
                             <span class="show-for-small-only small-table-header">Description: </span>
-                            <span th:text="${expense.description}">description</span>
+                            <span th:text="${expense.summary}">summary</span>
                         </div>
                         <div class="medium-1 columns">
                             <span th:text="${#numbers.formatDecimal(expense.amount, 0, 'COMMA', 2, 'POINT')}"></span>

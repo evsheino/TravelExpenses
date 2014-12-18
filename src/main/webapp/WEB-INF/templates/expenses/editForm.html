@@ -27,11 +27,11 @@
                         <input type="text" readonly="readonly" th:value="${expense.amount}" />
                     </label>
                 </div>
-                <div class="description-field" th:classappend="${#fields.hasErrors('description')} ? error">
+                <div class="summary-field" th:classappend="${#fields.hasErrors('summary')} ? error">
                     <label>Description
-                        <input type="text" required="required" th:field="*{description}" th:errorclass="error" />
+                        <input type="text" required="required" th:field="*{summary}" th:errorclass="error" />
                     </label>
-                    <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid description</small>
+                    <small class="error" th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}">Invalid summary</small>
                 </div>
                 <div class="date-field" th:classappend="${#fields.hasErrors('startDate')} ? error">
                     <label>Start date

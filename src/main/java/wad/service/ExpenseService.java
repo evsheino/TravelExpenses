@@ -48,7 +48,7 @@ public class ExpenseService {
         e.setEndDate(endDate);
         e.setModified(e.getStartDate());
         e.setUser(user);
-        e.setDescription(description);
+        e.setSummary(description);
         e.setStatus(status );
         return expenseRepository.save(e);
     }

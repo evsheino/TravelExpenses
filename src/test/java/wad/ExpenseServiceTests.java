@@ -72,7 +72,7 @@ public class ExpenseServiceTests {
         expense.setUser(user);
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
     }
@@ -124,7 +124,7 @@ public class ExpenseServiceTests {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Date d = sdf.parse("21/12/2012");
 
-        expense.setDescription("blah");
+        expense.setSummary("blah");
         expense.setStartDate(d);
         expense.setEndDate(d);
         expense.setStatus(Expense.Status.APPROVED);
@@ -155,7 +155,7 @@ public class ExpenseServiceTests {
             e.setUser(user);
             e.setStartDate(new Date());
             e.setEndDate(new Date());
-            e.setDescription("blaa blaa" + i);
+            e.setSummary("blaa blaa" + i);
             e.setStatus(Expense.Status.DRAFT);
             e.setModified(new Date());
 

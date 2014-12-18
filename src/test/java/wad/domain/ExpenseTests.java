@@ -82,7 +82,7 @@ public class ExpenseTests {
         expense.setUser(user);
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense.setComments(null);

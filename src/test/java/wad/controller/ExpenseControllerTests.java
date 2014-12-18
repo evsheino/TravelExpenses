@@ -116,7 +116,7 @@ public class ExpenseControllerTests {
         expense.setUser(user);
         expense.setStartDate(f.parse("20/09/2014"));
         expense.setEndDate(f.parse("29/09/2014"));
-        expense.setDescription("blaa blaa");
+        expense.setSummary("blaa blaa");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
@@ -125,7 +125,7 @@ public class ExpenseControllerTests {
         unsavedExpense.setUser(user);
         unsavedExpense.setStartDate(f.parse("01/10/2014"));
         unsavedExpense.setEndDate(f.parse("20/11/2014"));
-        unsavedExpense.setDescription("blaa blaa");
+        unsavedExpense.setSummary("blaa blaa");
         unsavedExpense.setStatus(Expense.Status.DRAFT);
         unsavedExpense.setModified(new Date());
 
@@ -219,7 +219,7 @@ public class ExpenseControllerTests {
 
         Expense resFromModel = (Expense) res.getModelAndView().getModel().get("expense");
         assertEquals(expense.getAmount(), resFromModel.getAmount());
-        assertEquals(expense.getDescription(), resFromModel.getDescription());
+        assertEquals(expense.getSummary(), resFromModel.getSummary());
         assertEquals(f.format(expense.getStartDate()), f.format(resFromModel.getStartDate()));
         assertEquals(f.format(expense.getEndDate()), f.format(resFromModel.getEndDate()));
         assertEquals(expense.getModified(), resFromModel.getModified());
@@ -239,7 +239,7 @@ public class ExpenseControllerTests {
                 .param("user", user.getId().toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
-                .param("description", desc))
+                .param("summary", desc))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl(url));
 
@@ -251,7 +251,7 @@ public class ExpenseControllerTests {
 
         assertEquals(f.parse(startDate), posted.getStartDate());
         assertEquals(f.parse(endDate), posted.getEndDate());
-        assertEquals(desc, posted.getDescription());
+        assertEquals(desc, posted.getSummary());
         assertEquals(user, posted.getUser());
     }
 
@@ -272,7 +272,7 @@ public class ExpenseControllerTests {
                 .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
-                .param("description", desc))
+                .param("summary", desc))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -291,7 +291,7 @@ public class ExpenseControllerTests {
                 .param("status", status.toString())
                 .param("startDate", startDate)
                 .param("endDate", endDate)
-                .param("description", desc))
+                .param("summary", desc))
                 .andExpect(status().is3xxRedirection());
 
         Expense posted = expenseRepository.findOne(expense.getId());
@@ -309,7 +309,7 @@ public class ExpenseControllerTests {
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 .param("endDate", f.format(unsavedExpense.getEndDate()))
-                .param("description", unsavedExpense.getDescription()))
+                .param("summary", unsavedExpense.getSummary()))
                 .andExpect(status().is3xxRedirection()).andReturn();
 
         assertEquals("There should be a new Expense in the database after creating an Expense.",
@@ -320,7 +320,7 @@ public class ExpenseControllerTests {
         assertEquals("redirect:" + url + posted.getId(), res.getModelAndView().getViewName());
 
         assertEquals(unsavedExpense.getAmount(), posted.getAmount());
-        assertEquals(unsavedExpense.getDescription(), posted.getDescription());
+        assertEquals(unsavedExpense.getSummary(), posted.getSummary());
         assertEquals(unsavedExpense.getUser(), posted.getUser());
         assertEquals(f.format(unsavedExpense.getStartDate()), f.format(posted.getStartDate()));
         assertEquals(f.format(unsavedExpense.getEndDate()), f.format(posted.getEndDate()));
@@ -376,7 +376,7 @@ public class ExpenseControllerTests {
                 .param("status", unsavedExpense.getStatus().toString())
                 // Missing startDate
                 .param("endDate", f.format(unsavedExpense.getEndDate()))
-                .param("description", unsavedExpense.getDescription()))
+                .param("summary", unsavedExpense.getSummary()))
                 .andReturn();
 
         assertEquals("There should not be a new Expense in the database after trying to create an Expense without a start date.",
@@ -397,7 +397,7 @@ public class ExpenseControllerTests {
                 .param("status", unsavedExpense.getStatus().toString())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
                 // Missing endDate
-                .param("description", unsavedExpense.getDescription()))
+                .param("summary", unsavedExpense.getSummary()))
                 .andReturn();
 
         assertEquals("There should not be a new Expense in the database after trying to create an Expense without an end date.",
@@ -425,14 +425,14 @@ public class ExpenseControllerTests {
         String desc = "do not delete this";
 
         expense.setStatus(Expense.Status.DRAFT);
-        expense.setDescription(desc);
+        expense.setSummary(desc);
         expenseRepository.save(expense);
 
         expense = new Expense();
         expense.setUser(user);
         expense.setStartDate(new Date());
         expense.setEndDate(new Date());
-        expense.setDescription("DELETE THIS");
+        expense.setSummary("DELETE THIS");
         expense.setStatus(Expense.Status.DRAFT);
         expense.setModified(new Date());
         expense = expenseRepository.save(expense);
@@ -451,9 +451,9 @@ public class ExpenseControllerTests {
         assertNull("After deleting an Expense, the deleted Expense should not be in the database.",
                 expenseRepository.findOne(id));
 
-        String actualDesc = expenseRepository.findAll().get(0).getDescription();
+        String actualDesc = expenseRepository.findAll().get(0).getSummary();
 
-        assertEquals("After deleting the other Expense, the one left in the database should have the description '"
+        assertEquals("After deleting the other Expense, the one left in the database should have the summary '"
                 + desc + "', but instead had '" + actualDesc + "'" , desc, actualDesc);
 
     }

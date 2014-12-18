@@ -11,11 +11,11 @@
             <form id="add-expense-form" method="POST" th:object="${expense}" th:action="@{/expenses/}">
                 <div class="row">
                     <div class="medium-12 columns">
-                        <div class="description-field" th:classappend="${#fields.hasErrors('description')} ? error">
+                        <div class="summary-field" th:classappend="${#fields.hasErrors('summary')} ? error">
                             <label>Description
-                                <input type="text" required="required" th:field="*{description}" th:errorclass="error" />
+                                <input type="text" required="required" th:field="*{summary}" th:errorclass="error" />
                             </label>
-                            <small class="error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Incorrect date</small>
+                            <small class="error" th:if="${#fields.hasErrors('summary')}" th:errors="*{summary}">Incorrect date</small>
                         </div>
                     </div>
                 </div>
