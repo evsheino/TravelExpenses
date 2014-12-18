@@ -29,7 +29,6 @@ import wad.repository.UserRepository;
 import wad.service.UserService;
 
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 import wad.Application;
 import wad.domain.Authority;
 import wad.domain.Comment;
@@ -95,6 +94,8 @@ public class ExpenseControllerTests {
 
     private MockHttpSession session;
 
+    private SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+
     @Before
     public void setUp() throws Exception {
         assertEquals(0, expenseRepository.count());
@@ -110,8 +111,6 @@ public class ExpenseControllerTests {
         supervisor = userService.createUser(SUPERVISOR_NAME, SUPERVISOR_USERNAME, SUPERVISOR_PASSWORD, Authority.Role.ROLE_SUPERVISOR);
 
         userRepository.save(user);
-
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         expense = new Expense();
         expense.setUser(user);
@@ -218,7 +217,6 @@ public class ExpenseControllerTests {
 
         assertNotNull(res.getModelAndView().getModel().get("expense"));
 
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         Expense resFromModel = (Expense) res.getModelAndView().getModel().get("expense");
         assertEquals(expense.getAmount(), resFromModel.getAmount());
         assertEquals(expense.getDescription(), resFromModel.getDescription());
@@ -250,7 +248,6 @@ public class ExpenseControllerTests {
 
         // Check that the Expense was updated.
         Expense posted = expenseRepository.findAll().get(0);
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         assertEquals(f.parse(startDate), posted.getStartDate());
         assertEquals(f.parse(endDate), posted.getEndDate());
@@ -307,7 +304,6 @@ public class ExpenseControllerTests {
         assertEquals(0, expenseRepository.count());
 
         session = createSession(USERNAME, PASSWORD, new Expense());
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
         String url = "/expenses/";
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
@@ -355,7 +351,6 @@ public class ExpenseControllerTests {
 
         session = createSession(USERNAME, PASSWORD, new Expense());
         String url = "/expenses/";
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("startDate", f.format(unsavedExpense.getStartDate()))
@@ -376,7 +371,6 @@ public class ExpenseControllerTests {
 
         session = createSession(USERNAME, PASSWORD, new Expense());
         String url = "/expenses/";
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("status", unsavedExpense.getStatus().toString())
@@ -398,7 +392,6 @@ public class ExpenseControllerTests {
 
         session = createSession(USERNAME, PASSWORD, new Expense());
         String url = "/expenses/";
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
 
         MvcResult res = mockMvc.perform(post(url).session(session).with(csrf())
                 .param("status", unsavedExpense.getStatus().toString())
@@ -497,18 +490,24 @@ public class ExpenseControllerTests {
     public void addCommentAddsCommentToExpense() throws Exception {
         assertEquals(0, commentRepository.count());
 
-        String text = "New comment";
+        Comment comment = new Comment();
+        comment.setCreated(new Date());
+        comment.setExpense(expense);
+        comment.setText("New comment");
+        comment.setUser(user);
 
         String url = "/expenses/" + expense.getId() + "/comments";
         mockMvc.perform(post(url).session(session).with(csrf())
-                .param("commentText", text))
+                .param("commentText", comment.getText()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/expenses/" + expense.getId()));
 
         assertEquals(1, commentRepository.count());
-        Comment comment = commentRepository.findAll().get(0);
-        assertEquals(expense.getId(), comment.getExpense().getId());
-        assertEquals(text, comment.getText());
+        Comment posted = commentRepository.findAll().get(0);
+        assertEquals(comment.getExpense().getId(), posted.getExpense().getId());
+        assertEquals(comment.getText(), posted.getText());
+        assertEquals(f.format(comment.getCreated()), f.format(posted.getCreated()));
+        assertEquals(comment.getUser().getId(), posted.getUser().getId());
     }
 
     @Test

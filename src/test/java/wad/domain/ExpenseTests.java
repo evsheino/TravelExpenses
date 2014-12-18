@@ -87,6 +87,7 @@ public class ExpenseTests {
         expense.setModified(new Date());
         expense.setComments(null);
         expense.setExpenseRows(null);
+        expense.setReceipts(null);
         expense = expenseRepository.save(expense);
     }
 
