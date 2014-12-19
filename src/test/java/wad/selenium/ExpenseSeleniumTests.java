@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.runner.RunWith;
@@ -36,12 +37,22 @@ import wad.service.UserService;
 @ActiveProfiles("test")
 public class ExpenseSeleniumTests {
 
-    private final String DATE_FORMAT = "dd/MM/yyyy";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
-    private final String EXPENSES_URI = "http://localhost:8080/expenses/";
-    private final String DESCRIPTION = "blaa blaa blah";
+    private static final String INDEX_URI = "http://localhost:8080/index";
+    private static final String EXPENSES_URI = "http://localhost:8080/expenses/";
 
-    private final String LOGIN_URI = "http://localhost:8080/login";
+    private static final String XPATH_REPLACE_PATTERN = "REPLACE";
+    private static final String INDEX_EXPENCES_LINK_XPATH_TEMPLATE = "//a[@href=\"/expenses?status="+ XPATH_REPLACE_PATTERN +"\"]";
+    private static final String EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH = "//button[@data-dropdown=\"expense-type\"]";
+    private static final String EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE = "//ul[@id=\"expense-type\"]/li[*]/a[@href=\"/expenses" + XPATH_REPLACE_PATTERN + "\"]";
+
+    private static final String SUMMARY_DRAFT = "This is the description";
+    private static final String SUMMARY_SENT = "blaa blaa blah";
+    private static final String SUMMARY_REJECTED = "Please fix something";
+    private static final String SUMMARY_APPROVED = "Yay this is good stuff.";
+
+    private static final String LOGIN_URI = "http://localhost:8080/login";
 
     private static final String USER_1_NAME = "Test User 1";
     private static final String USER_1_USERNAME = "testuser_1";
@@ -65,8 +76,12 @@ public class ExpenseSeleniumTests {
     @Autowired
     private CommentRepository commentRepository;
 
-    private Expense expense;
     private User user;
+
+    private Expense draftExpense;
+    private Expense sentExpense;
+    private Expense rejectedExpense;
+    private Expense approvedExpense;
 
     @BeforeClass
     public static void onetimeSetUp() {
@@ -82,14 +97,21 @@ public class ExpenseSeleniumTests {
 
     @Before
     public void setUp() throws Exception {
+
+        user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
+        draftExpense = expenseService.createExpense(user, DATE_FORMAT.parse("01/09/2014"), DATE_FORMAT.parse("02/09/2014"), SUMMARY_DRAFT, Expense.Status.DRAFT);
+        sentExpense = expenseService.createExpense(user, DATE_FORMAT.parse("01/10/2014"), DATE_FORMAT.parse("02/10/2014"), SUMMARY_SENT, Expense.Status.SENT);
+        rejectedExpense = expenseService.createExpense(user, DATE_FORMAT.parse("01/11/2014"), DATE_FORMAT.parse("02/11/2014"), SUMMARY_REJECTED, Expense.Status.REJECTED);
+        approvedExpense = expenseService.createExpense(user, DATE_FORMAT.parse("01/12/2014"), DATE_FORMAT.parse("02/12/2014"), SUMMARY_APPROVED, Expense.Status.APPROVED);
+
         // Use FirefoxDriver for JavaScript support.
         driver = new FirefoxDriver();
 
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
+        performLogin();
 
-        user = userService.createUser(USER_1_NAME, USER_1_USERNAME, USER_1_PASSWORD, Authority.Role.ROLE_USER);
-        expense = expenseService.createExpense(user, f.parse("01/09/2014"), f.parse("02/09/2014"), DESCRIPTION, Expense.Status.DRAFT);
+    }
 
+    public void performLogin() {
         driver.get(LOGIN_URI);
 
         assertTrue(driver.getPageSource().contains("Sign in"));
@@ -111,29 +133,146 @@ public class ExpenseSeleniumTests {
         driver.quit();
     }
 
+
+    @Test
+    public void indexPageHasRecentExpensesFromAllCategories() throws Exception {
+        driver.get(INDEX_URI);
+
+        String src = driver.getPageSource();
+        assertTrue(src.contains(SUMMARY_DRAFT));
+        assertTrue(src.contains(SUMMARY_SENT));
+        assertTrue(src.contains(SUMMARY_REJECTED));
+        assertTrue(src.contains(SUMMARY_APPROVED));
+
+        // View draft
+        driver.get(INDEX_URI);
+        WebElement element = driver.findElement(By.xpath(INDEX_EXPENCES_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, Expense.Status.DRAFT.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertTrue(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View sent
+        driver.get(INDEX_URI);
+        element = driver.findElement(By.xpath(INDEX_EXPENCES_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, Expense.Status.SENT.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertTrue(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View rejected
+        driver.get(INDEX_URI);
+        element = driver.findElement(By.xpath(INDEX_EXPENCES_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, Expense.Status.REJECTED.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertTrue(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View approved
+        driver.get(INDEX_URI);
+        element = driver.findElement(By.xpath(INDEX_EXPENCES_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, Expense.Status.APPROVED.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertTrue(src.contains(SUMMARY_APPROVED));
+    }
+
+    @Test
+    public void expensesPageHasCategories() throws Exception {
+        driver.get(EXPENSES_URI);
+
+        String src = driver.getPageSource();
+        assertTrue(src.contains(SUMMARY_DRAFT));
+        assertTrue(src.contains(SUMMARY_SENT));
+        assertTrue(src.contains(SUMMARY_REJECTED));
+        assertTrue(src.contains(SUMMARY_APPROVED));
+
+        // View draft
+        WebElement element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH));
+        element.click();
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, "?status=" + Expense.Status.DRAFT.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertTrue(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View sent
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH));
+        element.click();
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, "?status=" + Expense.Status.SENT.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertTrue(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View rejected
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH));
+        element.click();
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, "?status=" + Expense.Status.REJECTED.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertTrue(src.contains(SUMMARY_REJECTED));
+        assertFalse(src.contains(SUMMARY_APPROVED));
+
+        // View approved
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH));
+        element.click();
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, "?status=" + Expense.Status.APPROVED.toString())));
+        element.click();
+        src = driver.getPageSource();
+        assertFalse(src.contains(SUMMARY_DRAFT));
+        assertFalse(src.contains(SUMMARY_SENT));
+        assertFalse(src.contains(SUMMARY_REJECTED));
+        assertTrue(src.contains(SUMMARY_APPROVED));
+
+        // View all
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_BUTTON_XPATH));
+        element.click();
+        element = driver.findElement(By.xpath(EXPENSES_TYPE_DROPDOWN_LINK_XPATH_TEMPLATE.replace(XPATH_REPLACE_PATTERN, "")));
+        element.click();
+        src = driver.getPageSource();
+        assertTrue(src.contains(SUMMARY_DRAFT));
+        assertTrue(src.contains(SUMMARY_SENT));
+        assertTrue(src.contains(SUMMARY_REJECTED));
+        assertTrue(src.contains(SUMMARY_APPROVED));
+
+    }
+
     @Test
     public void expensePageHasCorrectInformation() throws Exception {
-        driver.get(EXPENSES_URI + expense.getId());
+        driver.get(EXPENSES_URI + draftExpense.getId());
 
         String content = driver.getPageSource();
 
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
-
-        assertTrue(content.contains(expense.getSummary()));
-        assertTrue(content.contains(expense.getAmount().toString()));
-        assertTrue(content.contains(f.format(expense.getStartDate())));
-        assertTrue(content.contains(f.format(expense.getEndDate())));
-        assertTrue(content.contains(expense.getUser().getName()));
+        assertTrue(content.contains(draftExpense.getSummary()));
+        assertTrue(content.contains(draftExpense.getAmount().toString()));
+        assertTrue(content.contains(DATE_FORMAT.format(draftExpense.getStartDate())));
+        assertTrue(content.contains(DATE_FORMAT.format(draftExpense.getEndDate())));
+        assertTrue(content.contains(draftExpense.getUser().getName()));
     }
 
     @Test
     public void expenseEditPageAllowsUserToEditExpense() throws Exception {
-        assertEquals(1, expenseRepository.count());
+        assertEquals(4, expenseRepository.count());
         String desc = "new description";
         String startDate = "09/09/2010";
         String endDate = "21/09/2010";
 
-        driver.get(EXPENSES_URI + expense.getId());
+        driver.get(EXPENSES_URI + draftExpense.getId());
 
         WebElement element = driver.findElement(By.name("summary"));
         element.clear();
@@ -148,18 +287,17 @@ public class ExpenseSeleniumTests {
         element = driver.findElement(By.id("edit-form-submit"));
         element.click();
 
-        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
-                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+        assertEquals("The user should be redirected to the draftExpense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + draftExpense.getId(), driver.getCurrentUrl());
 
-        assertEquals("There should be exactly 1 Expense in the database after editing the only existing Expense.",
-                1, expenseRepository.count());
+        assertEquals("There should be exactly 4 Expense in the database after editing expense.",
+                4, expenseRepository.count());
 
         // Check that the Expense has been updated in the database.
-        Expense updated = expenseRepository.findOne(expense.getId());
+        Expense updated = expenseRepository.findOne(draftExpense.getId());
 
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
-        assertEquals(startDate, f.format(updated.getStartDate()));
-        assertEquals(endDate, f.format(updated.getEndDate()));
+        assertEquals(startDate, DATE_FORMAT.format(updated.getStartDate()));
+        assertEquals(endDate, DATE_FORMAT.format(updated.getEndDate()));
         assertEquals(desc, updated.getSummary());
 
         // Check that the page has the updated Expense.
@@ -167,15 +305,15 @@ public class ExpenseSeleniumTests {
 
         assertTrue(content.contains(updated.getSummary()));
         assertTrue(content.contains(updated.getAmount().toString()));
-        assertTrue(content.contains(f.format(updated.getStartDate())));
-        assertTrue(content.contains(f.format(updated.getEndDate())));
+        assertTrue(content.contains(DATE_FORMAT.format(updated.getStartDate())));
+        assertTrue(content.contains(DATE_FORMAT.format(updated.getEndDate())));
         assertTrue(content.contains(updated.getUser().getName()));
     }
 
     @Test
-    public void userCanDeleteExpenseWithStatusSAVED() throws Exception {
+    public void userCanDeleteExpenseWithStatusDRAFT() throws Exception {
 
-        driver.get(EXPENSES_URI + expense.getId());
+        driver.get(EXPENSES_URI + draftExpense.getId());
 
         WebElement element = driver.findElement(By.id("delete-button"));
         element.click();
@@ -187,11 +325,11 @@ public class ExpenseSeleniumTests {
         element = driver.findElement(By.id("delete-confirm-button"));
         element.click();
 
-        assertEquals("The user should be redirected to the expense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+        assertEquals("The user should be redirected to the draftExpense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
                 EXPENSES_URI, driver.getCurrentUrl() + "/");
 
-        assertEquals("There should be no Expenses in the database after deleting the only existing Expense.",
-                0, expenseRepository.count());
+        assertEquals("There should be 3 Expenses in the database after deleting the one Expense.",
+                3, expenseRepository.count());
     }
 
     @Test
@@ -222,12 +360,11 @@ public class ExpenseSeleniumTests {
 
         Expense expense = expenseRepository.findAll().get(0);
 
-        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+        assertEquals("The user should be redirected to the draftExpense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
                 EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
 
-        SimpleDateFormat f = new SimpleDateFormat(DATE_FORMAT);
-        assertEquals(startDate, f.format(expense.getStartDate()));
-        assertEquals(endDate, f.format(expense.getEndDate()));
+        assertEquals(startDate, DATE_FORMAT.format(expense.getStartDate()));
+        assertEquals(endDate, DATE_FORMAT.format(expense.getEndDate()));
         assertEquals(desc, expense.getSummary());
         assertEquals(new BigDecimal(0), expense.getAmount());
 
@@ -236,8 +373,8 @@ public class ExpenseSeleniumTests {
 
         assertTrue(content.contains(expense.getSummary()));
         assertTrue(content.contains(expense.getAmount().toString()));
-        assertTrue(content.contains(f.format(expense.getStartDate())));
-        assertTrue(content.contains(f.format(expense.getEndDate())));
+        assertTrue(content.contains(DATE_FORMAT.format(expense.getStartDate())));
+        assertTrue(content.contains(DATE_FORMAT.format(expense.getEndDate())));
         assertTrue(content.contains(expense.getUser().getName()));
     }
 
@@ -245,7 +382,7 @@ public class ExpenseSeleniumTests {
     public void userCanAddANewComment() throws Exception {
         String text = "new comment";
 
-        driver.get(EXPENSES_URI + expense.getId());
+        driver.get(EXPENSES_URI + draftExpense.getId());
 
         WebElement element = driver.findElement(By.id("commentText"));
         element.clear();
@@ -259,8 +396,8 @@ public class ExpenseSeleniumTests {
 
         Comment comment = commentRepository.findAll().get(0);
 
-        assertEquals("The user should be redirected to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
-                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+        assertEquals("The user should be redirected to the draftExpense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + draftExpense.getId(), driver.getCurrentUrl());
 
         assertEquals(text, comment.getText());
 
@@ -272,50 +409,50 @@ public class ExpenseSeleniumTests {
 
     @Test
     public void expenseEditPageHasSendButtonThatTakesToConfirmSendPage() throws Exception {
-        driver.get(EXPENSES_URI + expense.getId());
+        driver.get(EXPENSES_URI + draftExpense.getId());
 
         WebElement element = driver.findElement(By.id("send-button"));
         element.click();
 
-        assertEquals("The user should be taken to the expense send confirmation page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
-                EXPENSES_URI + expense.getId() + "/send", driver.getCurrentUrl());
+        assertEquals("The user should be taken to the draftExpense send confirmation page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + draftExpense.getId() + "/send", driver.getCurrentUrl());
 
         String content = driver.getPageSource();
 
         SimpleDateFormat f = new SimpleDateFormat("dd.MM.yyyy");
 
-        assertTrue(content.contains(expense.getSummary()));
-        assertTrue(content.contains(f.format(expense.getStartDate())));
-        assertTrue(content.contains(f.format(expense.getEndDate())));
-        assertTrue(content.contains(expense.getAmount().toString()));
-        assertTrue(content.contains(expense.getUser().getName()));
+        assertTrue(content.contains(draftExpense.getSummary()));
+        assertTrue(content.contains(f.format(draftExpense.getStartDate())));
+        assertTrue(content.contains(f.format(draftExpense.getEndDate())));
+        assertTrue(content.contains(draftExpense.getAmount().toString()));
+        assertTrue(content.contains(draftExpense.getUser().getName()));
     }
 
     @Test
     public void confirmSendPageAllowsUserToSendExpenseForApproval() throws Exception {
-        driver.get(EXPENSES_URI + expense.getId() + "/send");
+        driver.get(EXPENSES_URI + draftExpense.getId() + "/send");
 
         WebElement element = driver.findElement(By.id("send-form-submit-label"));
         element.click();
 
-        assertEquals("The user should be taken to the expense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+        assertEquals("The user should be taken to the draftExpense list. Instead, was redirected to " + driver.getCurrentUrl() + ".",
                 EXPENSES_URI, driver.getCurrentUrl());
 
-        expense = expenseRepository.findOne(expense.getId());
-        assertEquals(expense.getStatus(), Expense.Status.SENT);
+        draftExpense = expenseRepository.findOne(draftExpense.getId());
+        assertEquals(draftExpense.getStatus(), Expense.Status.SENT);
     }
 
     @Test
     public void confirmSendPageHasABackButton() throws Exception {
-        driver.get(EXPENSES_URI + expense.getId() + "/send");
+        driver.get(EXPENSES_URI + draftExpense.getId() + "/send");
 
         WebElement element = driver.findElement(By.id("cancel-button"));
         element.click();
 
-        assertEquals("The user should be taken to the expense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
-                EXPENSES_URI + expense.getId(), driver.getCurrentUrl());
+        assertEquals("The user should be taken to the draftExpense's page. Instead, was redirected to " + driver.getCurrentUrl() + ".",
+                EXPENSES_URI + draftExpense.getId(), driver.getCurrentUrl());
 
-        expense = expenseRepository.findOne(expense.getId());
-        assertEquals(expense.getStatus(), Expense.Status.DRAFT);
+        draftExpense = expenseRepository.findOne(draftExpense.getId());
+        assertEquals(draftExpense.getStatus(), Expense.Status.DRAFT);
     }
 }

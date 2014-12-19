@@ -38,18 +38,18 @@ public class ExpenseService {
        expenseRepository.delete(exp);
     }
 
-    public Expense createExpense(Date startDate, Date endDate, String description, Expense.Status status) {
-        return createExpense(userService.getCurrentUser(), startDate, endDate, description, status);
+    public Expense createExpense(Date startDate, Date endDate, String summary, Expense.Status status) {
+        return createExpense(userService.getCurrentUser(), startDate, endDate, summary, status);
     }
 
-    public Expense createExpense(User user, Date startDate, Date endDate, String description, Expense.Status status) {
+    public Expense createExpense(User user, Date startDate, Date endDate, String summary, Expense.Status status) {
         Expense e = new Expense();
         e.setStartDate(startDate);
         e.setEndDate(endDate);
         e.setModified(e.getStartDate());
         e.setUser(user);
-        e.setSummary(description);
-        e.setStatus(status );
+        e.setSummary(summary);
+        e.setStatus(status);
         return expenseRepository.save(e);
     }
 
@@ -84,9 +84,6 @@ public class ExpenseService {
     }
 
     public Page<Expense> getPagedExpensesByUser(User user, Expense.Status status, Integer pageNumber, Integer perPage) {
-        if(status == null) {
-            status = Expense.Status.DRAFT;
-        }
 
         if(pageNumber == null) {
             pageNumber = 1;

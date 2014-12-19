@@ -68,7 +68,7 @@ public class ExpensesController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String listExpenses(Model model, @RequestParam(required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
+    public String listExpenses(Model model, @RequestParam(value = "status", required = false) Expense.Status status, @RequestParam(required = false) Integer pageNumber) {
 
         Page<Expense> page = null;
         if (status == null) {
